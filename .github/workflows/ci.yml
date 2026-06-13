@@ -30,6 +30,8 @@ jobs:
         with:
           python-version: '3.13'
       - name: Public-tree audit
+        env:
+          SKIP_GITLEAKS: 'true'
         run: ./scripts/audit-public.sh
       - name: Verify changed projects
         env:

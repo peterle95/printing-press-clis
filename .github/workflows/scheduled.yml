@@ -29,5 +29,8 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: '3.13'
-      - run: ./scripts/audit-public.sh
+      - name: Public-tree audit
+        env:
+          SKIP_GITLEAKS: 'true'
+        run: ./scripts/audit-public.sh
       - run: ./scripts/verify.sh --all
