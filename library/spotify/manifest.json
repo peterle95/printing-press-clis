@@ -1,0 +1,37 @@
+{
+  "manifest_version": "0.3",
+  "name": "spotify-pp-cli",
+  "display_name": "Spotify Library Organizer",
+  "version": "0.1.0",
+  "description": "Personal Spotify library organizer CLI using the official Spotify Web API.",
+  "author": {
+    "name": "CLI Printing Press"
+  },
+  "license": "Apache-2.0",
+  "server": {
+    "type": "binary",
+    "entry_point": "bin/spotify-pp-cli"
+  },
+  "user_config": {
+    "spotify_client_id": {
+      "type": "string",
+      "title": "SPOTIFY_CLIENT_ID",
+      "description": "Spotify Developer app client ID.",
+      "sensitive": true,
+      "required": true
+    },
+    "spotify_redirect_uri": {
+      "type": "string",
+      "title": "SPOTIFY_REDIRECT_URI",
+      "description": "Optional localhost redirect URI allowlisted in the Spotify Developer app.",
+      "required": false
+    }
+  },
+  "compatibility": {
+    "platforms": [
+      "darwin",
+      "linux",
+      "win32"
+    ]
+  }
+}

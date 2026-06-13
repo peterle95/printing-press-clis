@@ -1,0 +1,29 @@
+openapi: 3.0.3
+info:
+  title: get in IT Public Search
+  version: "1.0.0"
+  description: Public get in IT HTML job search pages.
+servers:
+  - url: https://www.get-in-it.de
+paths:
+  /jobsuche:
+    get:
+      operationId: searchJobs
+      summary: Fetch get in IT search results
+      tags: [search]
+      parameters:
+        - name: search
+          in: query
+          schema: {type: string}
+        - name: location
+          in: query
+          schema: {type: string}
+        - name: page
+          in: query
+          schema: {type: integer}
+      responses:
+        "200":
+          description: HTML page.
+          content:
+            text/html:
+              schema: {type: string}

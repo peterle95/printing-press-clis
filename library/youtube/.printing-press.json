@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-05-16T07:32:48.810345088Z",
+  "printing_press_version": "4.6.1",
+  "api_name": "youtube",
+  "display_name": "Youtube Data",
+  "cli_name": "youtube-pp-cli",
+  "owner": "peter-moelzer",
+  "printer_name": "Peter Moelzer",
+  "spec_url": "https://api.apis.guru/v2/specs/googleapis.com/youtube/v3/openapi.json",
+  "spec_path": "spec.json",
+  "spec_format": "openapi3",
+  "spec_checksum": "sha256:80c56500052356e9b24a76523ff330267d5d58f182ec7c993fa8b13f74dfde5e",
+  "mcp_binary": "youtube-pp-mcp",
+  "mcp_tool_count": 76,
+  "mcp_ready": "full",
+  "api_version": "v3",
+  "auth_type": "bearer_token",
+  "auth_env_vars": [
+    "YOUTUBE_DATA_OAUTH2C"
+  ]
+}

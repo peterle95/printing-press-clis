@@ -1,0 +1,27 @@
+{
+  "manifest_version": "0.3",
+  "name": "doctolib-pp-mcp",
+  "display_name": "Doctolib Website Search",
+  "version": "4.6.1",
+  "description": "Search Doctolib for doctors and practices with available appointment slots, plus raw website search endpoints.",
+  "author": {
+    "name": "CLI Printing Press"
+  },
+  "license": "Apache-2.0",
+  "server": {
+    "type": "binary",
+    "entry_point": "bin/doctolib-pp-mcp",
+    "mcp_config": {
+      "command": "${__dirname}/bin/doctolib-pp-mcp",
+      "args": []
+    }
+  },
+  "compatibility": {
+    "claude_desktop": ">=1.0.0",
+    "platforms": [
+      "darwin",
+      "linux",
+      "win32"
+    ]
+  }
+}

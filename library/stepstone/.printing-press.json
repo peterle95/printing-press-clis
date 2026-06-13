@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-06-09T18:32:09.218444367Z",
+  "printing_press_version": "4.6.1",
+  "api_name": "stepstone",
+  "display_name": "Stepstone Public Search",
+  "cli_name": "stepstone-pp-cli",
+  "owner": "peter-moelzer",
+  "printer_name": "Peter Moelzer",
+  "spec_path": "spec.yaml",
+  "spec_format": "openapi3",
+  "spec_checksum": "sha256:9d66bcc91638c2854b5b9c242143861f227832a1062945f273cf944f01f97692",
+  "mcp_binary": "stepstone-pp-mcp",
+  "mcp_tool_count": 2,
+  "mcp_public_tool_count": 2,
+  "mcp_ready": "full",
+  "api_version": "1.0.0",
+  "auth_type": "none"
+}

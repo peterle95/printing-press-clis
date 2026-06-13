@@ -1,0 +1,21 @@
+provider: vbb_transport_rest
+base_url: https://v6.vbb.transport.rest
+home:
+  label: home
+  address: "Examplestr. 1, 10115 Berlin"
+  latitude: null
+  longitude: null
+defaults:
+  radius_meters: 1000
+  departure_window_minutes: 20
+  refresh_seconds: 30
+  walking_speed: normal
+  safety_buffer_minutes: 5
+  modes:
+    suburban: true
+    subway: true
+    tram: true
+    bus: true
+    ferry: false
+    express: false
+    regional: true

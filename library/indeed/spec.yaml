@@ -1,0 +1,42 @@
+openapi: 3.0.3
+info:
+  title: Indeed Public Surface Check
+  version: "1.0.0"
+  description: Indeed robots/search reachability checker. Search pages may return 403 from this environment.
+servers:
+  - url: https://de.indeed.com
+paths:
+  /robots.txt:
+    get:
+      operationId: robots
+      summary: Fetch Indeed robots.txt
+      tags: [policy]
+      responses:
+        "200":
+          description: robots.txt
+          content:
+            text/plain:
+              schema: {type: string}
+  /jobs:
+    get:
+      operationId: searchJobs
+      summary: Probe Indeed public jobs search
+      tags: [search]
+      parameters:
+        - name: q
+          in: query
+          schema: {type: string}
+        - name: l
+          in: query
+          schema: {type: string}
+        - name: fromage
+          in: query
+          schema: {type: integer}
+      responses:
+        "200":
+          description: HTML page.
+          content:
+            text/html:
+              schema: {type: string}
+        "403":
+          description: Forbidden by the site.

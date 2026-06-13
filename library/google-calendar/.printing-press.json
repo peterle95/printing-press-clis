@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-05-17T12:16:48.230040833Z",
+  "printing_press_version": "4.6.1",
+  "api_name": "google-calendar",
+  "display_name": "Calendar",
+  "cli_name": "google-calendar-pp-cli",
+  "owner": "peter-moelzer",
+  "printer_name": "Peter Moelzer",
+  "spec_url": "https://api.apis.guru/v2/specs/googleapis.com/calendar/v3/openapi.json",
+  "mcp_binary": "google-calendar-pp-mcp",
+  "mcp_tool_count": 37,
+  "mcp_ready": "full",
+  "api_version": "v3",
+  "auth_type": "bearer_token",
+  "auth_env_vars": [
+    "CALENDAR_OAUTH2C"
+  ]
+}

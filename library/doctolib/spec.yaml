@@ -1,0 +1,232 @@
+openapi: 3.0.3
+info:
+  title: Doctolib Website Search API
+  version: 0.1.0
+  description: Public website endpoints used by Doctolib's patient search pages.
+servers:
+  - url: https://www.doctolib.de
+paths:
+  "/{keyword_slug}/{place_slug}":
+    get:
+      operationId: getSearchPage
+      summary: Fetch a public Doctolib search results page
+      description: Returns the SEO search page for a specialty or reason in a location.
+      parameters:
+        - name: keyword_slug
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Doctolib keyword or specialty slug, for example allgemeinmedizin.
+        - name: place_slug
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Doctolib place slug, for example berlin.
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+          description: Search result page number.
+      responses:
+        "200":
+          description: HTML search page.
+          content:
+            text/html:
+              schema:
+                type: string
+        "404":
+          description: Search page was not found.
+  /search/availabilities.json:
+    get:
+      operationId: getAvailabilities
+      summary: Fetch appointment slot availability
+      description: Returns available appointment slots for a visit motive, agendas, practice, insurance sector, and start date.
+      parameters:
+        - name: start_date_time
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date-time
+          description: Start date-time for availability lookup.
+        - name: limit
+          in: query
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+          description: Maximum number of slots or days to return.
+        - name: telehealth
+          in: query
+          required: false
+          schema:
+            type: boolean
+            default: false
+          description: Whether to search telehealth appointments.
+        - name: visit_motive_id
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: Doctolib visit motive identifier.
+        - name: agenda_ids
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Hyphen-separated agenda identifiers.
+        - name: insurance_sector
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [public, private]
+          description: Insurance sector filter.
+        - name: practice_ids
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Hyphen-separated practice identifiers.
+      responses:
+        "200":
+          description: Availability data.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                properties:
+                  availabilities:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                  total:
+                    type: integer
+                  next_slot:
+                    nullable: true
+  /patient-health-search/api/v1/filters:
+    get:
+      operationId: getPatientSearchFilters
+      summary: Fetch available patient-search filters
+      parameters:
+        - name: keyword
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Keyword or specialty slug.
+        - name: country
+          in: query
+          required: true
+          schema:
+            type: string
+            default: de
+          description: Country code.
+        - name: insuranceSector
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [public, private]
+          description: Optional insurance-sector filter.
+      responses:
+        "200":
+          description: Filter definitions.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  additionalProperties: true
+  /patient-health-search/api/v1/ssn-search:
+    post:
+      operationId: searchHealthcareProviders
+      summary: Search healthcare providers
+      description: Patient health search endpoint used by Doctolib's frontend for specialty/symptom navigation.
+      parameters:
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+          description: Zero-based page number.
+        - name: sessionData
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Frontend session data value when present in the search URL.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+              properties:
+                administrativeArea:
+                  type: string
+                location:
+                  type: object
+                  additionalProperties: true
+                filters:
+                  type: object
+                  additionalProperties: true
+      responses:
+        "200":
+          description: Healthcare provider search results.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                properties:
+                  total:
+                    type: integer
+                  healthcareProviders:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+  /patient-health-search/api/v1/search-qualification/qualification-step:
+    get:
+      operationId: getSearchQualificationStep
+      summary: Fetch search qualification options
+      parameters:
+        - name: keyword_id
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Keyword identifier.
+        - name: qualification_option_id
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Qualification option identifier.
+        - name: locale
+          in: query
+          required: true
+          schema:
+            type: string
+            default: DE
+          description: Uppercase locale.
+      responses:
+        "200":
+          description: Search qualification step data.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true

@@ -1,0 +1,81 @@
+openapi: 3.0.3
+info:
+  title: BerlinStartupJobs Search
+  version: "1.0.0"
+  description: Public HTML search pages for BerlinStartupJobs.
+servers:
+  - url: https://berlinstartupjobs.com
+paths:
+  /engineering/:
+    get:
+      operationId: engineering
+      summary: Engineering jobs page
+      tags: [search]
+      responses:
+        "200":
+          description: HTML page.
+          content:
+            text/html:
+              schema:
+                type: string
+  /engineering/page/{page}/:
+    get:
+      operationId: engineeringPage
+      summary: Engineering jobs pagination page
+      tags: [search]
+      parameters:
+        - name: page
+          in: path
+          required: true
+          schema:
+            type: integer
+            minimum: 2
+      responses:
+        "200":
+          description: HTML page.
+          content:
+            text/html:
+              schema:
+                type: string
+  /skill-areas/{skill}/:
+    get:
+      operationId: skillArea
+      summary: Skill area page
+      tags: [search]
+      parameters:
+        - name: skill
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: HTML page.
+          content:
+            text/html:
+              schema:
+                type: string
+  /skill-areas/{skill}/page/{page}/:
+    get:
+      operationId: skillAreaPage
+      summary: Skill area pagination page
+      tags: [search]
+      parameters:
+        - name: skill
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: page
+          in: path
+          required: true
+          schema:
+            type: integer
+            minimum: 2
+      responses:
+        "200":
+          description: HTML page.
+          content:
+            text/html:
+              schema:
+                type: string

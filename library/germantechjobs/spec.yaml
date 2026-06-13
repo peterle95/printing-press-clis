@@ -1,0 +1,41 @@
+openapi: 3.0.3
+info:
+  title: GermanTechJobs Public Search
+  version: "1.0.0"
+  description: Public GermanTechJobs HTML and RSS search surfaces.
+servers:
+  - url: https://germantechjobs.de
+paths:
+  /rss:
+    get:
+      operationId: rss
+      summary: Fetch GermanTechJobs RSS feed
+      tags: [feed]
+      responses:
+        "200":
+          description: RSS XML feed.
+          content:
+            application/rss+xml:
+              schema: {type: string}
+            text/xml:
+              schema: {type: string}
+  /en/jobs/{skill}/{location}:
+    get:
+      operationId: searchJobs
+      summary: Fetch GermanTechJobs search results
+      tags: [search]
+      parameters:
+        - name: skill
+          in: path
+          required: true
+          schema: {type: string}
+        - name: location
+          in: path
+          required: true
+          schema: {type: string}
+      responses:
+        "200":
+          description: HTML page.
+          content:
+            text/html:
+              schema: {type: string}

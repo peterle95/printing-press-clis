@@ -1,0 +1,51 @@
+version: 2
+project_name: germantechjobs-pp-cli
+changelog:
+  disable: true
+builds:
+  - id: germantechjobs-pp-cli
+    main: ./cmd/germantechjobs-pp-cli
+    binary: germantechjobs-pp-cli
+    env:
+      - CGO_ENABLED=0
+    ldflags:
+      - -s -w -X germantechjobs-pp-cli/internal/cli.version={{ .Version }}
+    targets:
+      - darwin_amd64
+      - darwin_arm64
+      - linux_amd64
+      - linux_arm64
+      - windows_amd64
+      - windows_arm64
+  - id: germantechjobs-pp-mcp
+    main: ./cmd/germantechjobs-pp-mcp
+    binary: germantechjobs-pp-mcp
+    env:
+      - CGO_ENABLED=0
+    ldflags:
+      - -s -w
+    targets:
+      - darwin_amd64
+      - darwin_arm64
+      - linux_amd64
+      - linux_arm64
+      - windows_amd64
+      - windows_arm64
+archives:
+  - formats: [tar.gz]
+    name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    format_overrides:
+      - goos: windows
+        formats: [zip]
+checksum:
+  name_template: checksums.txt
+brews:
+  - name: germantechjobs-pp-cli
+    repository:
+      owner: peter-moelzer
+      name: homebrew-tap
+    homepage: "https://github.com/peter-moelzer/germantechjobs-pp-cli"
+    description: "Public GermanTechJobs HTML and RSS search surfaces."
+    install: |
+      bin.install "germantechjobs-pp-cli"
+      bin.install "germantechjobs-pp-mcp"

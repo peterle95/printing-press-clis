@@ -1,0 +1,39 @@
+{
+  "manifest_version": "0.3",
+  "name": "meetup-pp-mcp",
+  "display_name": "Meetup Graphql Search",
+  "version": "4.6.1",
+  "description": "Find public Meetup software-development networking events, with a raw GraphQL escape hatch.",
+  "author": {
+    "name": "CLI Printing Press"
+  },
+  "license": "Apache-2.0",
+  "server": {
+    "type": "binary",
+    "entry_point": "bin/meetup-pp-mcp",
+    "mcp_config": {
+      "command": "${__dirname}/bin/meetup-pp-mcp",
+      "args": [],
+      "env": {
+        "MEETUP_GRAPHQL_SEARCH_BEARER_AUTH": "${user_config.meetup_graphql_search_bearer_auth}"
+      }
+    }
+  },
+  "user_config": {
+    "meetup_graphql_search_bearer_auth": {
+      "type": "string",
+      "title": "MEETUP_GRAPHQL_SEARCH_BEARER_AUTH",
+      "description": "Optional bearer token for account-specific Meetup GraphQL fields. Public event search does not require it.",
+      "sensitive": true,
+      "required": false
+    }
+  },
+  "compatibility": {
+    "claude_desktop": ">=1.0.0",
+    "platforms": [
+      "darwin",
+      "linux",
+      "win32"
+    ]
+  }
+}

@@ -1,0 +1,58 @@
+# Printing Press runtime state
+/manuscripts/
+/.runstate/
+/workspaces/
+/library/.google
+/library/.mail
+
+# Local operator instructions
+/AGENTS.override.md
+**/AGENTS.override.md
+
+# Credentials and private runtime data
+**/.env
+!**/.env.example
+**/*token*.json
+**/*credential*.json
+**/*cookie*.json
+**/*.session
+**/*.db
+**/*.db-shm
+**/*.db-wal
+**/*.sqlite
+**/*.sqlite-shm
+**/*.sqlite-wal
+**/accounts.yaml
+**/local.properties
+
+# Build and dependency output
+**/bin/
+**/build/
+**/dist/
+**/node_modules/
+**/.gradle/
+**/.kotlin/
+**/.gocache/
+**/.cache/
+**/.pytest_cache/
+**/__pycache__/
+**/.venv/
+**/coverage/
+**/coverage.out
+**/*.test
+**/*.tsbuildinfo
+
+# Debug, generated, and editor state
+**/debug/
+**/.idea/
+**/.vscode/
+**/.DS_Store
+*.log
+go.work
+go.work.sum
+
+# Older generated CLIs may leave host binaries at project root.
+/library/doctolib/doctolib
+/library/google-calendar/gcal
+/library/meetup/meetup
+/library/youtube/youtube

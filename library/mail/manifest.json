@@ -1,0 +1,37 @@
+{
+  "manifest_version": "0.3",
+  "name": "mail-pp-cli",
+  "display_name": "Unified Mail",
+  "version": "0.1.0",
+  "description": "Unified Printing Press mail CLI for Gmail API, Proton Bridge IMAP/SMTP, and Proton Export Tool EML archives.",
+  "author": {
+    "name": "CLI Printing Press"
+  },
+  "license": "Apache-2.0",
+  "server": {
+    "type": "binary",
+    "entry_point": "bin/mail-pp-cli"
+  },
+  "user_config": {
+    "google_oauth_client_json": {
+      "type": "string",
+      "title": "Google OAuth client JSON",
+      "description": "Path to the Gmail OAuth Desktop client JSON.",
+      "required": false,
+      "sensitive": true
+    },
+    "mail_accounts_yaml": {
+      "type": "string",
+      "title": "MAIL_PP_ACCOUNTS",
+      "description": "Optional path to the unified mail accounts YAML.",
+      "required": false
+    }
+  },
+  "compatibility": {
+    "platforms": [
+      "darwin",
+      "linux",
+      "win32"
+    ]
+  }
+}

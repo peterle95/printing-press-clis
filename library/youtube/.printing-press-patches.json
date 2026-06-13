@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "applied_at": "2026-05-17",
+  "base_run_id": "2026-05-16T07:32:48.810345088Z",
+  "base_printing_press_version": "4.6.1",
+  "patches": [
+    {
+      "id": "shared-google-oauth",
+      "summary": "Use shared Printing Press Google OAuth desktop credentials and token files for YouTube authentication.",
+      "reason": "The generated CLI previously used hand-rolled OAuth/token storage and broad scopes; this patch uses Google OAuth libraries with local token refresh from the shared .google directory, force-refreshes once after a 401, and supports WSL-friendly --no-browser URL printing.",
+      "files": [
+        "internal/config/config.go",
+        "internal/config/config_test.go",
+        "internal/cli/auth.go",
+        "internal/client/client.go",
+        "internal/cli/doctor.go",
+        "internal/cli/helpers.go",
+        "README.md",
+        ".gitignore"
+      ],
+      "validated_outcome": "go test ./... and make build passed on 2026-05-17."
+    },
+    {
+      "id": "youtube-pagination-cursor-case",
+      "summary": "Preserve YouTube's case-sensitive pageToken parameter and stop repeated-cursor pagination loops.",
+      "reason": "The generator emitted a lowercased pagetoken cursor for --all, causing YouTube to ignore page advancement and re-fetch the same page repeatedly.",
+      "files": [
+        "internal/cli/helpers.go",
+        "internal/cli/sync.go",
+        "internal/cli/pagination_test.go"
+      ],
+      "validated_outcome": "go test ./... passed on 2026-05-18."
+    },
+    {
+      "id": "recent-subscription-uploads-workflow",
+      "summary": "Add a workflow that finds recent uploads from subscribed channels and can add them to a playlist.",
+      "reason": "The YouTube Data API does not expose notification tray or bell settings, so this local workflow implements efficient upload discovery while making notification prompts fail closed through the workflow notifications alias; newly created playlists skip duplicate checks to conserve quota, and All-bell filtering requires a persisted or explicit channel-ID file.",
+      "files": [
+        "internal/cli/channel_workflow.go",
+        "internal/cli/workflow_recent_subscription_uploads.go",
+        "internal/cli/workflow_recent_subscription_uploads_test.go",
+        "internal/cli/which.go",
+        "README.md",
+        "SKILL.md",
+        "AGENTS.md"
+      ],
+      "validated_outcome": "go test ./... passed on 2026-05-18."
+    }
+  ]
+}

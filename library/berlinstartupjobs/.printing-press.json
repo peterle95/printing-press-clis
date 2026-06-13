@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-06-09T18:29:04.805399956Z",
+  "printing_press_version": "4.6.1",
+  "api_name": "berlinstartupjobs",
+  "display_name": "Berlinstartupjobs Search",
+  "cli_name": "berlinstartupjobs-pp-cli",
+  "owner": "peter-moelzer",
+  "printer_name": "Peter Moelzer",
+  "spec_path": "spec.yaml",
+  "spec_format": "openapi3",
+  "spec_checksum": "sha256:493e5e68e2705fa1637d28a072bb6ccd9fdb49b4ac0851186532565d782eec08",
+  "mcp_binary": "berlinstartupjobs-pp-mcp",
+  "mcp_tool_count": 4,
+  "mcp_public_tool_count": 4,
+  "mcp_ready": "full",
+  "api_version": "1.0.0",
+  "auth_type": "none"
+}

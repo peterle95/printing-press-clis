@@ -1,0 +1,75 @@
+openapi: 3.0.3
+info:
+  title: Arbeitnow Job Board API
+  version: "1.0.0"
+  description: Public job board API for current roles from Arbeitnow.
+servers:
+  - url: https://www.arbeitnow.com/api
+paths:
+  /job-board-api:
+    get:
+      operationId: listJobs
+      summary: List current jobs
+      description: Returns a paginated list of current job postings.
+      tags:
+        - jobs
+      parameters:
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+          description: Results page number.
+      responses:
+        "200":
+          description: Job feed page.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/JobsPage"
+components:
+  schemas:
+    JobsPage:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Job"
+        links:
+          type: object
+          additionalProperties: true
+        meta:
+          type: object
+          additionalProperties: true
+      additionalProperties: true
+    Job:
+      type: object
+      properties:
+        slug:
+          type: string
+        company_name:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        remote:
+          type: boolean
+        url:
+          type: string
+          format: uri
+        tags:
+          type: array
+          items:
+            type: string
+        job_types:
+          type: array
+          items:
+            type: string
+        location:
+          type: string
+        created_at:
+          type: integer
+      additionalProperties: true

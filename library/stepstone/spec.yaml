@@ -1,0 +1,70 @@
+openapi: 3.0.3
+info:
+  title: StepStone Public Search
+  version: "1.0.0"
+  description: Public StepStone HTML job search pages.
+servers:
+  - url: https://www.stepstone.de
+paths:
+  /jobs/{role}/in-{location}:
+    get:
+      operationId: searchJobs
+      summary: Fetch StepStone search results
+      tags: [search]
+      parameters:
+        - name: role
+          in: path
+          required: true
+          schema: {type: string}
+        - name: location
+          in: path
+          required: true
+          schema: {type: string}
+        - name: radius
+          in: query
+          schema: {type: integer}
+        - name: sort
+          in: query
+          schema: {type: integer}
+        - name: action
+          in: query
+          schema: {type: string}
+      responses:
+        "200":
+          description: HTML page.
+          content:
+            text/html:
+              schema: {type: string}
+  /jobs/{role}/in-{location}/{page}:
+    get:
+      operationId: searchJobsPage
+      summary: Fetch StepStone search results page
+      tags: [search]
+      parameters:
+        - name: role
+          in: path
+          required: true
+          schema: {type: string}
+        - name: location
+          in: path
+          required: true
+          schema: {type: string}
+        - name: page
+          in: path
+          required: true
+          schema: {type: integer}
+        - name: radius
+          in: query
+          schema: {type: integer}
+        - name: sort
+          in: query
+          schema: {type: integer}
+        - name: action
+          in: query
+          schema: {type: string}
+      responses:
+        "200":
+          description: HTML page.
+          content:
+            text/html:
+              schema: {type: string}

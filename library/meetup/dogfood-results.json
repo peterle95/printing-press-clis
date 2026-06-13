@@ -1,0 +1,95 @@
+{
+  "dir": "\u003ccli-dir\u003e/meetup",
+  "spec_path": "\u003crunstate\u003e/meetup-openapi.yaml",
+  "verdict": "WARN",
+  "path_check": {
+    "tested": 1,
+    "valid": 1,
+    "valid_pct": 100
+  },
+  "auth_check": {
+    "spec_scheme": "bearer token format (expects \"Bearer \" prefix)",
+    "generated_format": "Bearer ",
+    "match": true,
+    "detail": "spec and generated client both use \"Bearer\""
+  },
+  "browser_session_check": {
+    "required": false,
+    "pass": true,
+    "detail": "browser-session auth not required"
+  },
+  "dead_flags": {
+    "total": 18,
+    "dead": 0
+  },
+  "dead_functions": {
+    "total": 49,
+    "dead": 5,
+    "items": [
+      "emitTruncationWarning",
+      "extractPaginatedItems",
+      "extractResponseData",
+      "paginatedGet",
+      "rawAtPath"
+    ]
+  },
+  "pipeline_check": {
+    "sync_calls_domain": false,
+    "search_calls_domain": false,
+    "domain_tables": 0,
+    "detail": "sync Upsert calls not found; search methods not found"
+  },
+  "example_check": {
+    "tested": 3,
+    "with_examples": 3,
+    "valid_examples": 3,
+    "detail": "3/3 commands have examples"
+  },
+  "wiring_check": {
+    "command_tree": {
+      "defined": 21,
+      "registered": 21
+    },
+    "config_consistency": {
+      "consistent": true
+    },
+    "workflow_completeness": {
+      "skipped": true,
+      "total_steps": 0,
+      "mapped_steps": 0,
+      "detail": "no workflow_verify.yaml found"
+    }
+  },
+  "novel_features_check": {
+    "planned": 0,
+    "found": 0,
+    "skipped": true
+  },
+  "mcp_surface_parity": {
+    "state": "runtime_walking",
+    "pass": true,
+    "detail": "MCP surface mirrors the Cobra tree at runtime"
+  },
+  "reimplementation_check": {
+    "checked": 0,
+    "exempted_via_store": 0,
+    "skipped": true
+  },
+  "source_client_check": {
+    "checked": 0,
+    "skipped": true
+  },
+  "print_json_filtered_check": {
+    "checked": 13
+  },
+  "test_presence": {
+    "checked": 0
+  },
+  "naming_check": {
+    "checked": 13
+  },
+  "issues": [
+    "5 dead helper functions found",
+    "sync uses generic Upsert only"
+  ]
+}

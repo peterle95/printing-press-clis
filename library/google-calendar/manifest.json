@@ -1,0 +1,39 @@
+{
+  "manifest_version": "0.3",
+  "name": "google-calendar-pp-mcp",
+  "display_name": "Calendar",
+  "version": "4.6.1",
+  "description": "Calendar API surface as MCP tools.",
+  "author": {
+    "name": "CLI Printing Press"
+  },
+  "license": "Apache-2.0",
+  "server": {
+    "type": "binary",
+    "entry_point": "bin/google-calendar-pp-mcp",
+    "mcp_config": {
+      "command": "${__dirname}/bin/google-calendar-pp-mcp",
+      "args": [],
+      "env": {
+        "CALENDAR_OAUTH2C": "${user_config.calendar_oauth2c}"
+      }
+    }
+  },
+  "user_config": {
+    "calendar_oauth2c": {
+      "type": "string",
+      "title": "CALENDAR_OAUTH2C",
+      "description": "Sets CALENDAR_OAUTH2C for the Calendar MCP server.",
+      "sensitive": true,
+      "required": true
+    }
+  },
+  "compatibility": {
+    "claude_desktop": ">=1.0.0",
+    "platforms": [
+      "darwin",
+      "linux",
+      "win32"
+    ]
+  }
+}

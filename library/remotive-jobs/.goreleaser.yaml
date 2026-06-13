@@ -1,0 +1,51 @@
+version: 2
+project_name: remotive-jobs-pp-cli
+changelog:
+  disable: true
+builds:
+  - id: remotive-jobs-pp-cli
+    main: ./cmd/remotive-jobs-pp-cli
+    binary: remotive-jobs-pp-cli
+    env:
+      - CGO_ENABLED=0
+    ldflags:
+      - -s -w -X remotive-jobs-pp-cli/internal/cli.version={{ .Version }}
+    targets:
+      - darwin_amd64
+      - darwin_arm64
+      - linux_amd64
+      - linux_arm64
+      - windows_amd64
+      - windows_arm64
+  - id: remotive-jobs-pp-mcp
+    main: ./cmd/remotive-jobs-pp-mcp
+    binary: remotive-jobs-pp-mcp
+    env:
+      - CGO_ENABLED=0
+    ldflags:
+      - -s -w
+    targets:
+      - darwin_amd64
+      - darwin_arm64
+      - linux_amd64
+      - linux_arm64
+      - windows_amd64
+      - windows_arm64
+archives:
+  - formats: [tar.gz]
+    name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    format_overrides:
+      - goos: windows
+        formats: [zip]
+checksum:
+  name_template: checksums.txt
+brews:
+  - name: remotive-jobs-pp-cli
+    repository:
+      owner: peter-moelzer
+      name: homebrew-tap
+    homepage: "https://github.com/peter-moelzer/remotive-jobs-pp-cli"
+    description: "Public API for searching current remote jobs from Remotive."
+    install: |
+      bin.install "remotive-jobs-pp-cli"
+      bin.install "remotive-jobs-pp-mcp"

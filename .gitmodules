@@ -1,0 +1,3 @@
+[submodule "external/cli-printing-press"]
+	path = external/cli-printing-press
+	url = https://github.com/mvanhorn/cli-printing-press.git

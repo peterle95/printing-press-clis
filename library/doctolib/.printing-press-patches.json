@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "applied_at": "2026-05-16",
+  "base_run_id": "generated_at:2026-05-16T08:29:50.863968146Z",
+  "base_printing_press_version": "4.6.1",
+  "patches": [
+    {
+      "id": "proktologe-reason-alias",
+      "summary": "Map common German proctologist terms to Doctolib's proktologie specialty slug.",
+      "reason": "Doctolib does not serve /proktologe/<city> search pages, while /proktologie/<city> has the expected keyword metadata and provider results.",
+      "files": [
+        "internal/cli/find_doctors.go",
+        "internal/cli/find_doctors_test.go"
+      ],
+      "validated_outcome": "go test ./... passed; live proktologe Berlin search returned Dr. med. Paul Bogen with first slot 2026-05-18T11:30:00.000+02:00."
+    }
+  ]
+}

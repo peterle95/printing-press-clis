@@ -1,0 +1,94 @@
+openapi: 3.0.3
+info:
+  title: Remotive Jobs API
+  version: "1.0.0"
+  description: Public API for searching current remote jobs from Remotive.
+servers:
+  - url: https://remotive.com/api
+paths:
+  /remote-jobs:
+    get:
+      operationId: listRemoteJobs
+      summary: Search remote jobs
+      description: Returns current remote job listings. Use search for role keywords such as frontend, front end, React, TypeScript, or software developer.
+      tags:
+        - jobs
+      parameters:
+        - name: search
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Keyword search across job titles and descriptions.
+        - name: category
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Remotive category slug, for example software-dev.
+        - name: company_name
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Company name filter.
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+          description: Maximum number of jobs to return when supported by the API.
+      responses:
+        "200":
+          description: Search results.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/JobsResponse"
+components:
+  schemas:
+    JobsResponse:
+      type: object
+      properties:
+        job-count:
+          type: integer
+        jobs:
+          type: array
+          items:
+            $ref: "#/components/schemas/Job"
+      additionalProperties: true
+    Job:
+      type: object
+      properties:
+        id:
+          oneOf:
+            - type: integer
+            - type: string
+        url:
+          type: string
+          format: uri
+        title:
+          type: string
+        company_name:
+          type: string
+        company_logo:
+          type: string
+        category:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+        job_type:
+          type: string
+        publication_date:
+          type: string
+        candidate_required_location:
+          type: string
+        salary:
+          type: string
+        description:
+          type: string
+      additionalProperties: true

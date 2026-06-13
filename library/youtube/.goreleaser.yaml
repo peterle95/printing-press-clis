@@ -1,0 +1,51 @@
+version: 2
+project_name: youtube-pp-cli
+changelog:
+  disable: true
+builds:
+  - id: youtube-pp-cli
+    main: ./cmd/youtube-pp-cli
+    binary: youtube-pp-cli
+    env:
+      - CGO_ENABLED=0
+    ldflags:
+      - -s -w -X youtube-pp-cli/internal/cli.version={{ .Version }}
+    targets:
+      - darwin_amd64
+      - darwin_arm64
+      - linux_amd64
+      - linux_arm64
+      - windows_amd64
+      - windows_arm64
+  - id: youtube-pp-mcp
+    main: ./cmd/youtube-pp-mcp
+    binary: youtube-pp-mcp
+    env:
+      - CGO_ENABLED=0
+    ldflags:
+      - -s -w
+    targets:
+      - darwin_amd64
+      - darwin_arm64
+      - linux_amd64
+      - linux_arm64
+      - windows_amd64
+      - windows_arm64
+archives:
+  - formats: [tar.gz]
+    name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    format_overrides:
+      - goos: windows
+        formats: [zip]
+checksum:
+  name_template: checksums.txt
+brews:
+  - name: youtube-pp-cli
+    repository:
+      owner: peter-moelzer
+      name: homebrew-tap
+    homepage: "https://github.com/peter-moelzer/youtube-pp-cli"
+    description: "The YouTube Data API v3 is an API that provides access to YouTube data, such as videos, playlists, and channels."
+    install: |
+      bin.install "youtube-pp-cli"
+      bin.install "youtube-pp-mcp"

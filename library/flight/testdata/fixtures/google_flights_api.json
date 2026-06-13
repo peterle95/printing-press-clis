@@ -1,0 +1,72 @@
+{
+  "search_metadata": {
+    "google_flights_url": "https://www.google.com/travel/flights/search?q=fixture",
+    "status": "Success"
+  },
+  "best_flights": [
+    {
+      "price": 88,
+      "total_duration": 65,
+      "flights": [
+        {
+          "departure_airport": {
+            "id": "BER",
+            "time": "2026-07-10 08:00"
+          },
+          "arrival_airport": {
+            "id": "CPH",
+            "time": "2026-07-10 09:05"
+          },
+          "airline": "SAS",
+          "flight_number": "SK1674",
+          "duration": 65,
+          "extensions": ["Carbon emissions estimate unavailable"]
+        }
+      ],
+      "layovers": []
+    }
+  ],
+  "other_flights": [
+    {
+      "price": "$72",
+      "total_duration": 540,
+      "flights": [
+        {
+          "departure_airport": {
+            "id": "BER",
+            "time": "2026-07-10 22:00"
+          },
+          "arrival_airport": {
+            "id": "AMS",
+            "time": "2026-07-10 23:30"
+          },
+          "airline": "KLM",
+          "flight_number": "KL1780",
+          "duration": 90,
+          "overnight": true,
+          "extensions": ["Separate tickets"]
+        },
+        {
+          "departure_airport": {
+            "id": "AMS",
+            "time": "2026-07-11 07:45"
+          },
+          "arrival_airport": {
+            "id": "CPH",
+            "time": "2026-07-11 09:15"
+          },
+          "airline": "KLM",
+          "flight_number": "KL1267",
+          "duration": 90
+        }
+      ],
+      "layovers": [
+        {
+          "id": "AMS",
+          "duration": 495,
+          "overnight": true
+        }
+      ]
+    }
+  ]
+}

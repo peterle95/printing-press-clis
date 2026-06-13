@@ -1,0 +1,29 @@
+{
+  "manifest_version": "0.3",
+  "name": "windy-weather-pp-cli",
+  "display_name": "Windy Weather",
+  "version": "0.1.0",
+  "description": "Local Berlin rain and weather-risk CLI using the public Windy.com web interface through Playwright.",
+  "author": {
+    "name": "CLI Printing Press"
+  },
+  "license": "Apache-2.0",
+  "server": {
+    "type": "binary",
+    "entry_point": "bin/windy-weather-pp-cli"
+  },
+  "user_config": {
+    "windy_weather_config": {
+      "type": "string",
+      "title": "WINDY_WEATHER_CONFIG",
+      "description": "Optional path to a windy-weather-pp-cli JSON config file.",
+      "required": false
+    }
+  },
+  "compatibility": {
+    "platforms": [
+      "linux",
+      "win32"
+    ]
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "projects": [
+    {"name": "airbnb", "path": "library/airbnb", "runtimes": ["go"]},
+    {"name": "arbeitnow-jobs", "path": "library/arbeitnow-jobs", "runtimes": ["go"]},
+    {"name": "ba-jobsuche", "path": "library/ba-jobsuche", "runtimes": ["go"]},
+    {"name": "berlinstartupjobs", "path": "library/berlinstartupjobs", "runtimes": ["go"]},
+    {"name": "doctolib", "path": "library/doctolib", "runtimes": ["go"]},
+    {"name": "englishjobs", "path": "library/englishjobs", "runtimes": ["go"]},
+    {"name": "flight", "path": "library/flight", "runtimes": ["go"]},
+    {"name": "germantechjobs", "path": "library/germantechjobs", "runtimes": ["go"]},
+    {"name": "getinit", "path": "library/getinit", "runtimes": ["go"]},
+    {"name": "google-calendar", "path": "library/google-calendar", "runtimes": ["go"]},
+    {"name": "indeed", "path": "library/indeed", "runtimes": ["go"]},
+    {"name": "job-research-cli", "path": "library/job-research-cli", "runtimes": ["python"]},
+    {"name": "kleinanzeigen-pp-cli", "path": "library/kleinanzeigen-pp-cli", "runtimes": ["node"]},
+    {"name": "linkedin", "path": "library/linkedin", "runtimes": ["go"]},
+    {"name": "mail", "path": "library/mail", "runtimes": ["go"]},
+    {"name": "meetup", "path": "library/meetup", "runtimes": ["go"]},
+    {"name": "remotive-jobs", "path": "library/remotive-jobs", "runtimes": ["go"]},
+    {"name": "spotify", "path": "library/spotify", "runtimes": ["go"]},
+    {"name": "stepstone", "path": "library/stepstone", "runtimes": ["go"]},
+    {"name": "transit", "path": "library/transit", "runtimes": ["go"]},
+    {"name": "windy-weather-pp-cli", "path": "library/windy-weather-pp-cli", "runtimes": ["go", "node"]},
+    {"name": "xing", "path": "library/xing", "runtimes": ["go"]},
+    {"name": "youtube", "path": "library/youtube", "runtimes": ["go"]}
+  ]
+}

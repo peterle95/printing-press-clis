@@ -1,0 +1,95 @@
+openapi: 3.0.3
+info:
+  title: Meetup GraphQL Search API
+  version: 0.1.0
+  description: Read-only wrapper for Meetup's public GraphQL search endpoint, focused on finding software-development networking events.
+servers:
+  - url: https://api.meetup.com
+paths:
+  /gql-ext:
+    post:
+      operationId: executeGraphQL
+      summary: Execute a Meetup GraphQL request
+      description: |
+        Executes a GraphQL query against Meetup's current API endpoint. The
+        endpoint supports anonymous read-only eventSearch requests for public
+        discovery and bearer-token authenticated requests for account-specific
+        data.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GraphQLRequest"
+      responses:
+        "200":
+          description: GraphQL response envelope.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GraphQLResponse"
+        "400":
+          description: Invalid GraphQL request.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GraphQLResponse"
+        "401":
+          description: Authentication is required for the requested field.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GraphQLResponse"
+        "429":
+          description: Meetup rate limit exceeded.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GraphQLResponse"
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: OAuth2 access token
+  schemas:
+    GraphQLRequest:
+      type: object
+      required:
+        - query
+      properties:
+        query:
+          type: string
+          description: GraphQL query or mutation document.
+        variables:
+          type: object
+          additionalProperties: true
+          description: GraphQL variables object.
+        operationName:
+          type: string
+          description: Optional GraphQL operation name.
+    GraphQLResponse:
+      type: object
+      additionalProperties: true
+      properties:
+        data:
+          type: object
+          nullable: true
+          additionalProperties: true
+        errors:
+          type: array
+          items:
+            $ref: "#/components/schemas/GraphQLError"
+    GraphQLError:
+      type: object
+      additionalProperties: true
+      properties:
+        message:
+          type: string
+        path:
+          type: array
+          items:
+            type: string
+        extensions:
+          type: object
+          additionalProperties: true

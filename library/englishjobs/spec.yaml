@@ -1,0 +1,31 @@
+openapi: 3.0.3
+info:
+  title: EnglishJobs.de Public Search
+  version: "1.0.0"
+  description: Public EnglishJobs.de HTML job search pages.
+servers:
+  - url: https://englishjobs.de
+paths:
+  /jobs/{role}/in-{location}:
+    get:
+      operationId: searchJobs
+      summary: Fetch EnglishJobs.de search results
+      tags: [search]
+      parameters:
+        - name: role
+          in: path
+          required: true
+          schema: {type: string}
+        - name: location
+          in: path
+          required: true
+          schema: {type: string}
+        - name: page
+          in: query
+          schema: {type: integer}
+      responses:
+        "200":
+          description: HTML page.
+          content:
+            text/html:
+              schema: {type: string}

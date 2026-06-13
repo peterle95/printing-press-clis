@@ -1,0 +1,19 @@
+openapi: 3.0.3
+info:
+  title: LinkedIn Public Surface Check
+  version: "1.0.0"
+  description: LinkedIn robots/surface checker. Automated job scraping is not enabled without permission.
+servers:
+  - url: https://www.linkedin.com
+paths:
+  /robots.txt:
+    get:
+      operationId: robots
+      summary: Fetch LinkedIn robots.txt
+      tags: [policy]
+      responses:
+        "200":
+          description: robots.txt
+          content:
+            text/plain:
+              schema: {type: string}

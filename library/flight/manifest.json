@@ -1,0 +1,59 @@
+{
+  "manifest_version": "0.3",
+  "name": "flight-pp-cli",
+  "display_name": "Flight Search",
+  "version": "0.1.0",
+  "description": "Printing Press flight-search CLI using official APIs, affiliate APIs, and safe deep links.",
+  "author": {
+    "name": "CLI Printing Press"
+  },
+  "license": "Apache-2.0",
+  "server": {
+    "type": "binary",
+    "entry_point": "bin/flight-pp-cli"
+  },
+  "user_config": {
+    "amadeus_client_id": {
+      "type": "string",
+      "title": "AMADEUS_CLIENT_ID",
+      "description": "Amadeus API client ID.",
+      "sensitive": true,
+      "required": false
+    },
+    "amadeus_client_secret": {
+      "type": "string",
+      "title": "AMADEUS_CLIENT_SECRET",
+      "description": "Amadeus API client secret.",
+      "sensitive": true,
+      "required": false
+    },
+    "kiwi_api_key": {
+      "type": "string",
+      "title": "KIWI_API_KEY",
+      "description": "Kiwi Tequila API key.",
+      "sensitive": true,
+      "required": false
+    },
+    "serpapi_key": {
+      "type": "string",
+      "title": "SERPAPI_KEY",
+      "description": "SerpApi key for optional Google Flights API mode.",
+      "sensitive": true,
+      "required": false
+    },
+    "searchapi_key": {
+      "type": "string",
+      "title": "SEARCHAPI_KEY",
+      "description": "SearchAPI key for optional Google Flights API mode.",
+      "sensitive": true,
+      "required": false
+    }
+  },
+  "compatibility": {
+    "platforms": [
+      "darwin",
+      "linux",
+      "win32"
+    ]
+  }
+}

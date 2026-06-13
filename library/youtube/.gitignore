@@ -1,0 +1,11 @@
+# PATCH: Ignore shared/local credential material for the generated YouTube CLI.
+../.google/
+.google/
+secrets/
+data/
+tokens/
+credentials/
+*.sqlite
+*token*.json
+*oauth-client*.json
+.env

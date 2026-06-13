@@ -1,0 +1,14 @@
+title = "Printing Press public repository"
+
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "Upstream submodule and ignored local runtime or build data"
+paths = [
+  '''^external/cli-printing-press/''',
+  '''^manuscripts/''',
+  '''^\.runstate/''',
+  '''^library/\.(google|mail)(/|$)''',
+  '''(^|/)(\.venv|bin|build|dist|node_modules)(/|$)''',
+]

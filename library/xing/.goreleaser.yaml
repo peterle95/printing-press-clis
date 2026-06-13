@@ -1,0 +1,51 @@
+version: 2
+project_name: xing-pp-cli
+changelog:
+  disable: true
+builds:
+  - id: xing-pp-cli
+    main: ./cmd/xing-pp-cli
+    binary: xing-pp-cli
+    env:
+      - CGO_ENABLED=0
+    ldflags:
+      - -s -w -X xing-pp-cli/internal/cli.version={{ .Version }}
+    targets:
+      - darwin_amd64
+      - darwin_arm64
+      - linux_amd64
+      - linux_arm64
+      - windows_amd64
+      - windows_arm64
+  - id: xing-pp-mcp
+    main: ./cmd/xing-pp-mcp
+    binary: xing-pp-mcp
+    env:
+      - CGO_ENABLED=0
+    ldflags:
+      - -s -w
+    targets:
+      - darwin_amd64
+      - darwin_arm64
+      - linux_amd64
+      - linux_arm64
+      - windows_amd64
+      - windows_arm64
+archives:
+  - formats: [tar.gz]
+    name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    format_overrides:
+      - goos: windows
+        formats: [zip]
+checksum:
+  name_template: checksums.txt
+brews:
+  - name: xing-pp-cli
+    repository:
+      owner: peter-moelzer
+      name: homebrew-tap
+    homepage: "https://github.com/peter-moelzer/xing-pp-cli"
+    description: "XING robots/surface checker. Automated /jobs/search scraping is not enabled because robots disallows it."
+    install: |
+      bin.install "xing-pp-cli"
+      bin.install "xing-pp-mcp"

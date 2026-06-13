@@ -1,0 +1,9 @@
+.google/
+secrets/
+data/
+tokens/
+credentials/
+*.sqlite
+*token*.json
+*oauth-client*.json
+.env

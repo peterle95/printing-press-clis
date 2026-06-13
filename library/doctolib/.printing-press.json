@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-05-16T08:29:50.863968146Z",
+  "printing_press_version": "4.6.1",
+  "api_name": "doctolib",
+  "display_name": "Doctolib Website Search",
+  "cli_name": "doctolib-pp-cli",
+  "owner": "peter-moelzer",
+  "printer_name": "Peter Moelzer",
+  "spec_path": "spec.yaml",
+  "spec_format": "openapi3",
+  "spec_checksum": "sha256:837c326042600fbf331335454abfbf8ed737b30d8b2459ba410f8a37964c542d",
+  "mcp_binary": "doctolib-pp-mcp",
+  "mcp_tool_count": 4,
+  "mcp_public_tool_count": 4,
+  "mcp_ready": "full",
+  "api_version": "0.1.0",
+  "auth_type": "none"
+}

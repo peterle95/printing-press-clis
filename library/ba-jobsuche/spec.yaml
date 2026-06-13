@@ -1,0 +1,55 @@
+openapi: 3.0.3
+info:
+  title: BA Jobsuche API
+  version: "1.0.0"
+  description: Official Bundesagentur fuer Arbeit Jobsuche endpoint.
+servers:
+  - url: https://rest.arbeitsagentur.de/jobboerse/jobsuche-service/pc/v6
+paths:
+  /jobs:
+    get:
+      operationId: searchJobs
+      summary: Search BA Jobsuche jobs
+      tags: [jobs]
+      parameters:
+        - name: X-API-Key
+          in: header
+          required: true
+          schema:
+            type: string
+            default: jobboerse-jobsuche
+        - name: was
+          in: query
+          schema:
+            type: string
+        - name: wo
+          in: query
+          schema:
+            type: string
+        - name: umkreis
+          in: query
+          schema:
+            type: integer
+        - name: veroeffentlichtseit
+          in: query
+          schema:
+            type: integer
+        - name: page
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+        - name: size
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+      responses:
+        "200":
+          description: BA Jobsuche JSON results.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true

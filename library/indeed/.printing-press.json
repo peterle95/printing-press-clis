@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-06-09T18:32:10.838141958Z",
+  "printing_press_version": "4.6.1",
+  "api_name": "indeed",
+  "display_name": "Indeed Public Surface",
+  "cli_name": "indeed-pp-cli",
+  "owner": "peter-moelzer",
+  "printer_name": "Peter Moelzer",
+  "spec_path": "spec.yaml",
+  "spec_format": "openapi3",
+  "spec_checksum": "sha256:9e7b76360d7d76407c7e42ec088dbc1850db62e24c07c92191546730f280e8a2",
+  "mcp_binary": "indeed-pp-mcp",
+  "mcp_tool_count": 2,
+  "mcp_public_tool_count": 2,
+  "mcp_ready": "full",
+  "api_version": "1.0.0",
+  "auth_type": "none"
+}

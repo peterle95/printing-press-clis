@@ -1,0 +1,97 @@
+sources:
+  bundesagentur:
+    enabled: true
+    type: api
+    base_url: "https://rest.arbeitsagentur.de/jobboerse/jobsuche-service"
+    api_key_env: JOB_RESEARCH_BUNDESAGENTUR_API_KEY
+    default_api_key: jobboerse-jobsuche
+    rate_limit_per_minute: 30
+    cooldown_seconds: 2
+
+  arbeitnow:
+    enabled: true
+    type: api
+    base_url: "https://www.arbeitnow.com/api/job-board-api"
+    rate_limit_per_minute: 20
+    cooldown_seconds: 3
+
+  adzuna:
+    enabled: false
+    type: api
+    requires_api_key: true
+    app_id_env: ADZUNA_APP_ID
+    app_key_env: ADZUNA_APP_KEY
+    country: de
+    base_url: "https://api.adzuna.com/v1/api"
+    rate_limit_per_minute: 20
+    cooldown_seconds: 3
+
+  themuse:
+    enabled: true
+    type: api
+    base_url: "https://www.themuse.com/api/public/jobs"
+    rate_limit_per_minute: 20
+    cooldown_seconds: 3
+
+  remoteok:
+    enabled: false
+    type: api
+    base_url: "https://remoteok.com/api"
+    rate_limit_per_minute: 10
+    cooldown_seconds: 6
+
+  greenhouse:
+    enabled: false
+    type: api
+    board_tokens: []
+    base_url: "https://boards-api.greenhouse.io/v1/boards"
+    rate_limit_per_minute: 20
+    cooldown_seconds: 3
+
+  lever:
+    enabled: false
+    type: api
+    company_slugs: []
+    base_url: "https://api.lever.co/v0/postings"
+    rate_limit_per_minute: 20
+    cooldown_seconds: 3
+
+  linkedin:
+    enabled: true
+    type: manual_search_link
+
+  xing:
+    enabled: true
+    type: manual_search_link
+
+  indeed:
+    enabled: true
+    type: manual_search_link
+
+  stepstone:
+    enabled: true
+    type: manual_search_link
+
+  glassdoor:
+    enabled: true
+    type: manual_search_link
+
+  monster:
+    enabled: true
+    type: manual_search_link
+
+  google_jobs:
+    enabled: true
+    type: manual_search_link
+
+  kununu:
+    enabled: true
+    type: manual_search_link
+
+  wellfound:
+    enabled: false
+    type: manual_search_link
+
+  github_jobs:
+    enabled: false
+    type: manual_search_link

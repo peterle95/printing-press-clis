@@ -1,0 +1,19 @@
+{
+  "name": "kleinanzeigen-pp-cli",
+  "version": "0.1.0",
+  "description": "Personal browser-assisted Kleinanzeigen CLI for safe local search, watches, and message drafting.",
+  "bin": {
+    "kleinanzeigen-pp-cli": "dist/index.js"
+  },
+  "auth": {
+    "type": "playwright-persistent-browser-profile",
+    "password_storage": "none"
+  },
+  "safety": {
+    "bulk_messaging": false,
+    "requires_explicit_send_confirmation": true,
+    "bypasses_captcha_or_bot_checks": false,
+    "browser_opens_by_default": false,
+    "search_watch_browser_ack": "USER_REQUESTED_BROWSER"
+  }
+}

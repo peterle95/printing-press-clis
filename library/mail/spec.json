@@ -1,0 +1,79 @@
+{
+  "name": "mail-pp-cli",
+  "version": "0.1.0",
+  "type": "hand-authored-printing-press-cli",
+  "providers": [
+    {
+      "name": "gmail-api",
+      "normalized_provider": "gmail",
+      "transport": "official Gmail API",
+      "auth": "Google OAuth per account",
+      "commands": [
+        "inbox",
+        "search",
+        "read",
+        "draft",
+        "send",
+        "archive",
+        "label"
+      ]
+    },
+    {
+      "name": "proton-bridge-imap-smtp",
+      "normalized_provider": "proton",
+      "transport": "local Proton Mail Bridge IMAP/SMTP",
+      "auth": "Bridge username plus password_command",
+      "commands": [
+        "inbox",
+        "search",
+        "read",
+        "draft",
+        "send"
+      ]
+    },
+    {
+      "name": "proton-export-eml",
+      "normalized_provider": "proton",
+      "transport": "local EML archive from official Proton Mail Export Tool",
+      "auth": "handled by Proton Mail Export Tool outside mail-pp-cli",
+      "commands": [
+        "inbox",
+        "search",
+        "read",
+        "summarize",
+        "export-refresh",
+        "export-automate",
+        "draft-local-eml"
+      ],
+      "secret_storage": "Windows user DPAPI via local password_command, outside repository",
+      "retention": "refresh keeps only locally exported messages dated within the requested window, default 21 days",
+      "send_support": "not available on Proton Free without paid Bridge/SMTP"
+    }
+  ],
+  "message_id_format": "<provider>:<account>:<provider-message-id>",
+  "reply_threading": {
+    "gmail": "Replies preserve Gmail threadId and RFC Message-ID/References headers.",
+    "commands": [
+      "write-reply --create-draft",
+      "draft --reply-to",
+      "send --reply-to"
+    ]
+  },
+  "account_config": {
+    "default_path": "~/.local/share/printing-press/mail-private/accounts.yaml",
+    "accounts": [
+      "gmail-main",
+      "gmail-alt",
+      "proton-free"
+    ]
+  },
+  "safety": {
+    "no_webmail_scraping": true,
+    "send_only_on_explicit_send_command": true,
+    "send_requires_preview_and_confirm_send": true,
+    "summarize_never_sends": true,
+    "write_reply_defaults_to_no_send": true,
+    "no_background_sending": true,
+    "no_paid_feature_bypass": true
+  }
+}

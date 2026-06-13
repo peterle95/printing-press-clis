@@ -1,0 +1,19 @@
+openapi: 3.0.3
+info:
+  title: XING Public Surface Check
+  version: "1.0.0"
+  description: XING robots/surface checker. Automated /jobs/search scraping is not enabled because robots disallows it.
+servers:
+  - url: https://www.xing.com
+paths:
+  /robots.txt:
+    get:
+      operationId: robots
+      summary: Fetch XING robots.txt
+      tags: [policy]
+      responses:
+        "200":
+          description: robots.txt
+          content:
+            text/plain:
+              schema: {type: string}

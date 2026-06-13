@@ -1,0 +1,24 @@
+{
+  "default_location": {
+    "name": "Berlin city center",
+    "latitude": 52.520,
+    "longitude": 13.405,
+    "zoom": 10,
+    "timezone": "Europe/Berlin",
+    "windy_url": "https://www.windy.com/-Rain-thunder-rain?rain,52.520,13.405,10,p:cities,m:e6Fagxs"
+  },
+  "thresholds": {
+    "rain_risk": "medium",
+    "strong_wind_kmh": 35,
+    "cold_temperature_c": 5,
+    "hot_temperature_c": 30
+  },
+  "cache": {
+    "enabled": true,
+    "ttl_minutes": 20
+  },
+  "browser": {
+    "headless": true,
+    "timeout_ms": 45000
+  }
+}

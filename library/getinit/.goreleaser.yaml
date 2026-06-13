@@ -1,0 +1,51 @@
+version: 2
+project_name: getinit-pp-cli
+changelog:
+  disable: true
+builds:
+  - id: getinit-pp-cli
+    main: ./cmd/getinit-pp-cli
+    binary: getinit-pp-cli
+    env:
+      - CGO_ENABLED=0
+    ldflags:
+      - -s -w -X getinit-pp-cli/internal/cli.version={{ .Version }}
+    targets:
+      - darwin_amd64
+      - darwin_arm64
+      - linux_amd64
+      - linux_arm64
+      - windows_amd64
+      - windows_arm64
+  - id: getinit-pp-mcp
+    main: ./cmd/getinit-pp-mcp
+    binary: getinit-pp-mcp
+    env:
+      - CGO_ENABLED=0
+    ldflags:
+      - -s -w
+    targets:
+      - darwin_amd64
+      - darwin_arm64
+      - linux_amd64
+      - linux_arm64
+      - windows_amd64
+      - windows_arm64
+archives:
+  - formats: [tar.gz]
+    name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    format_overrides:
+      - goos: windows
+        formats: [zip]
+checksum:
+  name_template: checksums.txt
+brews:
+  - name: getinit-pp-cli
+    repository:
+      owner: peter-moelzer
+      name: homebrew-tap
+    homepage: "https://github.com/peter-moelzer/getinit-pp-cli"
+    description: "Public get in IT HTML job search pages."
+    install: |
+      bin.install "getinit-pp-cli"
+      bin.install "getinit-pp-mcp"

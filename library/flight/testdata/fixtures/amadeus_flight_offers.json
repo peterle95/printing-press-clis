@@ -1,0 +1,96 @@
+{
+  "data": [
+    {
+      "id": "1",
+      "price": {
+        "currency": "EUR",
+        "grandTotal": "79.99"
+      },
+      "itineraries": [
+        {
+          "duration": "PT1H5M",
+          "segments": [
+            {
+              "departure": {
+                "iataCode": "BER",
+                "at": "2026-07-10T08:00:00"
+              },
+              "arrival": {
+                "iataCode": "CPH",
+                "at": "2026-07-10T09:05:00"
+              },
+              "carrierCode": "SK",
+              "number": "1674"
+            }
+          ]
+        },
+        {
+          "duration": "PT1H0M",
+          "segments": [
+            {
+              "departure": {
+                "iataCode": "CPH",
+                "at": "2026-07-14T18:00:00"
+              },
+              "arrival": {
+                "iataCode": "BER",
+                "at": "2026-07-14T19:00:00"
+              },
+              "carrierCode": "SK",
+              "number": "1677"
+            }
+          ]
+        }
+      ],
+      "travelerPricings": [
+        {
+          "fareDetailsBySegment": [
+            {
+              "includedCheckedBags": {
+                "quantity": 1
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "price": {
+        "currency": "EUR",
+        "grandTotal": "65.00"
+      },
+      "itineraries": [
+        {
+          "duration": "PT9H15M",
+          "segments": [
+            {
+              "departure": {
+                "iataCode": "BER",
+                "at": "2026-07-10T22:00:00"
+              },
+              "arrival": {
+                "iataCode": "AMS",
+                "at": "2026-07-10T23:30:00"
+              },
+              "carrierCode": "KL",
+              "number": "1780"
+            },
+            {
+              "departure": {
+                "iataCode": "AMS",
+                "at": "2026-07-11T07:45:00"
+              },
+              "arrival": {
+                "iataCode": "CPH",
+                "at": "2026-07-11T09:15:00"
+              },
+              "carrierCode": "KL",
+              "number": "1267"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

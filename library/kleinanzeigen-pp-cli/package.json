@@ -1,0 +1,33 @@
+{
+  "name": "kleinanzeigen-pp-cli",
+  "version": "0.1.0",
+  "license": "Apache-2.0",
+  "description": "Personal, browser-assisted Kleinanzeigen CLI for safe local search, watches, and message drafting.",
+  "type": "module",
+  "bin": {
+    "kleinanzeigen-pp-cli": "dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc && node scripts/postbuild.mjs",
+    "dev": "tsx src/index.ts",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "cheerio": "^1.1.2",
+    "commander": "^14.0.2",
+    "playwright": "^1.57.0",
+    "sql.js": "^1.13.0",
+    "yaml": "^2.8.2"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.1",
+    "@types/sql.js": "^1.4.9",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.14"
+  },
+  "engines": {
+    "node": ">=20.19.0"
+  }
+}

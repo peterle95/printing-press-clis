@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "applied_at": "2026-05-17",
+  "base_run_id": "2026-05-17T12:16:48.230040833Z",
+  "base_printing_press_version": "4.6.1",
+  "patches": [
+    {
+      "id": "wsl-oauth-headless-auth",
+      "summary": "Added WSL-friendly OAuth login modes and a safe token injection command.",
+      "reason": "The generated browser callback flow was fragile in WSL, docs referenced a missing set-token command, and manually writing TOML caused token quoting failures.",
+      "files": [
+        "internal/cli/auth.go",
+        "internal/cli/auth_test.go",
+        "internal/config/config.go",
+        "README.md",
+        "SKILL.md",
+        "AGENTS.md"
+      ],
+      "validated_outcome": "make test and make build pass."
+    }
+  ]
+}

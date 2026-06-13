@@ -1,0 +1,23 @@
+{
+  "manifest_version": "0.3",
+  "name": "transit-pp-cli",
+  "display_name": "Berlin Transit",
+  "version": "0.1.0",
+  "description": "Printing Press CLI for Berlin VBB/BVG departures, routes, leave-time advice, and vehicle radar.",
+  "author": {
+    "name": "CLI Printing Press"
+  },
+  "license": "Apache-2.0",
+  "server": {
+    "type": "binary",
+    "entry_point": "bin/transit-pp-cli"
+  },
+  "user_config": {},
+  "compatibility": {
+    "platforms": [
+      "darwin",
+      "linux",
+      "win32"
+    ]
+  }
+}

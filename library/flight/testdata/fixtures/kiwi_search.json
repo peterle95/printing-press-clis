@@ -1,0 +1,37 @@
+{
+  "data": [
+    {
+      "id": "kiwi-1",
+      "price": 54,
+      "currency": "EUR",
+      "deep_link": "https://www.kiwi.com/deep",
+      "flyFrom": "BER",
+      "flyTo": "CPH",
+      "local_departure": "2026-07-10T06:00:00.000Z",
+      "local_arrival": "2026-07-10T07:05:00.000Z",
+      "airlines": ["FR"],
+      "duration": {
+        "departure": 3900,
+        "return": 0,
+        "total": 3900
+      },
+      "virtual_interlining": true,
+      "pnr_count": 2,
+      "bags_price": {
+        "1": 28
+      },
+      "route": [
+        {
+          "flyFrom": "BER",
+          "flyTo": "CPH",
+          "local_departure": "2026-07-10T06:00:00.000Z",
+          "local_arrival": "2026-07-10T07:05:00.000Z",
+          "airline": "FR",
+          "flight_no": 1234,
+          "return": 0,
+          "bags_recheck_required": true
+        }
+      ]
+    }
+  ]
+}

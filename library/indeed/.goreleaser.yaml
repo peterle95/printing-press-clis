@@ -1,0 +1,51 @@
+version: 2
+project_name: indeed-pp-cli
+changelog:
+  disable: true
+builds:
+  - id: indeed-pp-cli
+    main: ./cmd/indeed-pp-cli
+    binary: indeed-pp-cli
+    env:
+      - CGO_ENABLED=0
+    ldflags:
+      - -s -w -X indeed-pp-cli/internal/cli.version={{ .Version }}
+    targets:
+      - darwin_amd64
+      - darwin_arm64
+      - linux_amd64
+      - linux_arm64
+      - windows_amd64
+      - windows_arm64
+  - id: indeed-pp-mcp
+    main: ./cmd/indeed-pp-mcp
+    binary: indeed-pp-mcp
+    env:
+      - CGO_ENABLED=0
+    ldflags:
+      - -s -w
+    targets:
+      - darwin_amd64
+      - darwin_arm64
+      - linux_amd64
+      - linux_arm64
+      - windows_amd64
+      - windows_arm64
+archives:
+  - formats: [tar.gz]
+    name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    format_overrides:
+      - goos: windows
+        formats: [zip]
+checksum:
+  name_template: checksums.txt
+brews:
+  - name: indeed-pp-cli
+    repository:
+      owner: peter-moelzer
+      name: homebrew-tap
+    homepage: "https://github.com/peter-moelzer/indeed-pp-cli"
+    description: "Indeed robots/search reachability checker. Search pages may return 403 from this environment."
+    install: |
+      bin.install "indeed-pp-cli"
+      bin.install "indeed-pp-mcp"
