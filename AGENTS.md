@@ -23,6 +23,35 @@ preserves the default Printing Press library contract at
 7. Use dry-run behavior before remote mutations and follow each CLI's local
    safety contract.
 
+## Library Routing
+
+Every agent MUST use the appropriate CLI from `library/` based on the user's request. Read that project's `AGENTS.md` first before invoking its CLI.
+
+| Request type | CLI directory | Binary |
+|---|---|---|
+| Weather | `library/windy-weather-pp-cli` | `windy-weather-pp-cli` |
+| Flights | `library/flight` | `flight-pp-cli` |
+| Transit / public transport | `library/transit` | `transit-pp-cli` |
+| Music / Spotify | `library/spotify` | `spotify-pp-cli` |
+| YouTube / video | `library/youtube` | `youtube-pp-cli` |
+| Accommodation / stays | `library/airbnb` | `airbnb-pp-cli` |
+| Google Calendar | `library/google-calendar` | `google-calendar-pp-cli` |
+| Email | `library/mail` | `mail-pp-cli` |
+| Classifieds / Kleinanzeigen | `library/kleinanzeigen-pp-cli` | `kleinanzeigen-pp-cli` |
+| Events / Meetup | `library/meetup` | `meetup-pp-cli` |
+| Healthcare / Doctolib | `library/doctolib` | `doctolib-pp-cli` |
+| Jobs — multi-source research | `library/job-research-cli` | `job-research-cli` |
+| Jobs — Arbeitnow | `library/arbeitnow-jobs` | `arbeitnow-jobs-pp-cli` |
+| Jobs — BA/Bundesagentur | `library/ba-jobsuche` | `ba-jobsuche-pp-cli` |
+| Jobs — Berlin startups | `library/berlinstartupjobs` | `berlinstartupjobs-pp-cli` |
+| Jobs — English in Germany | `library/englishjobs` | `englishjobs-pp-cli` |
+| Jobs — German tech | `library/germantechjobs` | `germantechjobs-pp-cli` |
+| Jobs — Indeed | `library/indeed` | `indeed-pp-cli` |
+| Jobs — LinkedIn | `library/linkedin` | `linkedin-pp-cli` |
+| Jobs — Remotive / remote | `library/remotive-jobs` | `remotive-jobs-pp-cli` |
+| Jobs — Stepstone | `library/stepstone` | `stepstone-pp-cli` |
+| Jobs — Xing | `library/xing` | `xing-pp-cli` |
+
 ## Validation
 
 Run repository hygiene checks first:
