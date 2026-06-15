@@ -65,7 +65,37 @@ func (p *Provider) connect(ctx context.Context) (*imapclient.Client, error) {
 }
 
 func (p *Provider) Inbox(ctx context.Context, limit int) ([]ppmail.Message, error) {
-	return p.search(ctx, "", limit)
+	return p.searchFiltered(ctx, "", limit, true)
+}
+
+func (p *Provider) searchFiltered(ctx context.Context, query string, limit int, unreadOnly bool) ([]ppmail.Message, error) {
+	if limit <= 0 {
+		limit = 10
+	}
+	c, err := p.connect(ctx)
+	if err != nil {
+		return nil, err
+	}
+	defer c.Logout()
+	if _, err := c.Select("INBOX", true); err != nil {
+		return nil, fmt.Errorf("selecting INBOX: %w", err)
+	}
+	criteria := searchCriteria(query)
+	if unreadOnly {
+		criteria.WithoutFlags = []string{emimap.SeenFlag}
+	}
+	uids, err := c.UidSearch(criteria)
+	if err != nil {
+		return nil, fmt.Errorf("searching Proton Bridge IMAP: %w", err)
+	}
+	if len(uids) == 0 {
+		return nil, nil
+	}
+	sort.Slice(uids, func(i, j int) bool { return uids[i] < uids[j] })
+	if len(uids) > limit {
+		uids = uids[len(uids)-limit:]
+	}
+	return p.fetchMetadata(c, uids)
 }
 
 func (p *Provider) Search(ctx context.Context, query string, limit int) ([]ppmail.Message, error) {

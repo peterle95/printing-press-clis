@@ -10,7 +10,7 @@ import (
 )
 
 func (p *Provider) Inbox(ctx context.Context, limit int) ([]mail.Message, error) {
-	return p.withScopes(ScopeReadonly).list(ctx, "in:inbox", limit)
+	return p.withScopes(ScopeReadonly).list(ctx, "in:inbox is:unread", limit)
 }
 
 func (p *Provider) Search(ctx context.Context, query string, limit int) ([]mail.Message, error) {
