@@ -10,11 +10,11 @@ create Google Calendar events. It only returns calendar advice JSON.
 
 ## Location
 
-- Name: Berlin city center
-- Latitude: `52.520`
-- Longitude: `13.405`
+- Name: Berlin Neukölln
+- Latitude: `52.469`
+- Longitude: `13.372`
 - Timezone: `Europe/Berlin`
-- Windy URL: `https://www.windy.com/-Rain-thunder-rain?rain,52.520,13.405,10,p:cities,m:e6Fagxs`
+- Windy URL: `https://www.windy.com/-Rain-thunder-rain?rain,52.469,13.372,10,p:cities,m:e6Fagxs`
 
 ## Build
 
