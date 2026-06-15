@@ -7,7 +7,8 @@ preserves the default Printing Press library contract at
 
 ## Working Rules
 
-1. Read the target project's `AGENTS.md` before changing it.
+1. Read the target project's `AGENTS.md` before using or changing any CLI in
+   this workspace.
 2. Treat `external/cli-printing-press` as an upstream submodule. Do not fold its
    history into this repository.
 3. Keep each project independent. Do not add a root `go.work` or shared package
