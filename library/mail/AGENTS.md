@@ -14,8 +14,7 @@ Bridge, and official Proton Mail Export Tool archives.
 - Use reply-aware draft commands so providers preserve message threads.
 - Put account aliases and mailbox-specific defaults in the external accounts
   file or `AGENTS.override.md`.
-- When the user asks to check emails, only show messages with the `UNREAD`
-  label in the output.
+- When the user asks what emails they have or got (e.g. "which emails", "what emails", "check emails", "my inbox"), always return only `UNREAD` messages. Only show more (read emails, all emails) if explicitly asked.
 
 Private runtime data defaults to:
 

@@ -56,6 +56,7 @@ func Load(path string) (*Config, error) {
 		}
 		return nil, fmt.Errorf("reading account config %s: %w", resolved, err)
 	}
+	cfg.Accounts = nil
 	if err := yaml.Unmarshal(data, cfg); err != nil {
 		return nil, fmt.Errorf("parsing account config %s: %w", resolved, err)
 	}
