@@ -1,0 +1,1 @@
+{"nodes": [{"id": "pkg_example_com_structural_fail", "label": "example.com/structural-fail", "file_type": "code", "type": "package", "ecosystem": "go", "source_file": "external/cli-printing-press/testdata/golden/fixtures/verify-runtime-matrix/structural-fail-pp-cli/go.mod", "source_location": "L1"}], "edges": []}
