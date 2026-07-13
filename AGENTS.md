@@ -36,6 +36,7 @@ Every agent MUST use the appropriate CLI from `library/` based on the user's req
 | YouTube / video | `library/youtube` | `youtube-pp-cli` |
 | Accommodation / stays | `library/airbnb` | `airbnb-pp-cli` |
 | Google Calendar | `library/google-calendar` | `google-calendar-pp-cli` |
+| Trello planning / calendar scheduling | `library/trello-calendar` | `trello-calendar-pp-cli` |
 | Email | `library/mail` | `mail-pp-cli` |
 | Classifieds / Kleinanzeigen | `library/kleinanzeigen-pp-cli` | `kleinanzeigen-pp-cli` |
 | Events / Meetup | `library/meetup` | `meetup-pp-cli` |

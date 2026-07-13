@@ -24,8 +24,6 @@ def run(command: list[str], cwd: Path, env: dict[str, str] | None = None) -> Non
 def load_projects() -> list[dict[str, object]]:
     data = json.loads(WORKSPACE_FILE.read_text(encoding="utf-8"))
     projects = data.get("projects", [])
-    if len(projects) != 23:
-        raise SystemExit(f"workspace.yaml must declare exactly 23 projects, found {len(projects)}")
     return projects
 
 

@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-07-12T17:06:17.982437595Z",
+  "printing_press_version": "4.6.1",
+  "api_name": "trello-calendar",
+  "display_name": "Trello Calendar",
+  "cli_name": "trello-calendar-pp-cli",
+  "owner": "peter-moelzer",
+  "owner_name": "Peter Moelzer",
+  "spec_url": "https://developer.atlassian.com/cloud/trello/rest/",
+  "spec_path": "spec.json",
+  "spec_format": "openapi3",
+  "spec_checksum": "sha256:756e02dd85c635734e32a5d2630eec44eab015c7eb6956a07084c03f0708c145",
+  "mcp_binary": "trello-calendar-pp-mcp",
+  "mcp_tool_count": 261,
+  "mcp_ready": "partial",
+  "api_version": "0.0.1",
+  "auth_type": "composed",
+  "auth_env_vars": [
+    "TRELLO_API_KEY",
+    "TRELLO_TOKEN"
+  ],
+  "auth_env_var_specs": [
+    {
+      "name": "TRELLO_API_KEY",
+      "kind": "per_call",
+      "required": true,
+      "sensitive": true,
+      "description": "Trello API key."
+    },
+    {
+      "name": "TRELLO_TOKEN",
+      "kind": "per_call",
+      "required": true,
+      "sensitive": true,
+      "description": "Trello API token."
+    }
+  ],
+  "novel_features": [
+    {
+      "name": "Planner card inventory",
+      "command": "cards",
+      "description": "List open cards in the configured Doing list and report Google Calendar scheduling state."
+    },
+    {
+      "name": "Next-week schedule preview",
+      "command": "preview",
+      "description": "Build a complete Monday-to-Sunday capacity and availability plan without writes."
+    },
+    {
+      "name": "Idempotent Calendar scheduling",
+      "command": "schedule",
+      "description": "Confirm and create deterministic Google Calendar events with optional Trello comments."
+    },
+    {
+      "name": "Google OAuth login",
+      "command": "auth google",
+      "description": "Run a PKCE loopback OAuth flow and store the refresh token in a permission-restricted file."
+    }
+  ]
+}

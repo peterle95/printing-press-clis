@@ -1,0 +1,1 @@
+/home/ubuntu/.config/opencode/agents/test-verifier.md

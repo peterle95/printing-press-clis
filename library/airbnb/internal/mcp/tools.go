@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"time"
 
@@ -17,6 +18,7 @@ import (
 	"airbnb-pp-cli/internal/cliutil"
 	"airbnb-pp-cli/internal/config"
 	"airbnb-pp-cli/internal/mcp/cobratree"
+	"airbnb-pp-cli/internal/source/airbnb"
 	"airbnb-pp-cli/internal/store"
 	mcplib "github.com/mark3labs/mcp-go/mcp"
 	"github.com/mark3labs/mcp-go/server"
@@ -35,11 +37,12 @@ func RegisterTools(s *server.MCPServer) {
 			mcplib.WithDestructiveHintAnnotation(false),
 			mcplib.WithOpenWorldHintAnnotation(true),
 		),
-		makeAPIHandler("GET", "/rooms/{id}", []string{"id"}),
+		// PATCH: Use the Airbnb SSR scraper for MCP too; the generic JSON client cannot parse room HTML.
+		handleAirbnbListingGet,
 	)
 	s.AddTool(
 		mcplib.NewTool("airbnb_listing_search",
-			mcplib.WithDescription("Search Airbnb listings by location, dates, and guest count via the public SSR HTML page (openbnb pattern). Walks niobeClientData[0][1] Apollo cache to extract structured results. Required: location, slug. Optional: checkin, checkout, adults (plus 7 more). Returns array of airbnb_listing."),
+			mcplib.WithDescription("Search Airbnb listings by location, dates, and guest count via the public SSR HTML page (openbnb pattern). Returns only linked, date-priced listings when checkin/checkout are provided; use booking_url/platform_url in recommendations."),
 			mcplib.WithString("location", mcplib.Required(), mcplib.Description("City or area name (e.g. 'Lake Tahoe').")),
 			mcplib.WithString("checkin", mcplib.Description("Arrival date YYYY-MM-DD.")),
 			mcplib.WithString("checkout", mcplib.Description("Departure date YYYY-MM-DD.")),
@@ -56,7 +59,8 @@ func RegisterTools(s *server.MCPServer) {
 			mcplib.WithDestructiveHintAnnotation(false),
 			mcplib.WithOpenWorldHintAnnotation(true),
 		),
-		makeAPIHandler("GET", "/s/{slug}/homes", []string{"slug"}),
+		// PATCH: Use the same specialized search path as the CLI so agents get structured URLs and availability.
+		handleAirbnbListingSearch,
 	)
 	s.AddTool(
 		mcplib.NewTool("airbnb_wishlist_items",
@@ -265,6 +269,138 @@ func makeAPIHandler(method, pathTemplate string, positionalParams []string) serv
 	}
 }
 
+// PATCH: MCP Airbnb endpoint tools must call the hand-written scraper, not the generated JSON client.
+func handleAirbnbListingGet(ctx context.Context, req mcplib.CallToolRequest) (*mcplib.CallToolResult, error) {
+	args := req.GetArguments()
+	id := mcpStringArg(args, "id")
+	if id == "" {
+		return mcplib.NewToolResultError("id is required"), nil
+	}
+	checkin := mcpStringArg(args, "checkin")
+	checkout := mcpStringArg(args, "checkout")
+	if err := validateMCPDates(checkin, checkout); err != nil {
+		return mcplib.NewToolResultError(err.Error()), nil
+	}
+	listing, err := airbnb.Get(ctx, id, airbnb.GetParams{
+		Checkin:  checkin,
+		Checkout: checkout,
+		Adults:   mcpIntArg(args, "adults"),
+	})
+	if err != nil {
+		return mcplib.NewToolResultError(err.Error()), nil
+	}
+	data, _ := json.Marshal(listing)
+	return mcplib.NewToolResultText(string(data)), nil
+}
+
+func handleAirbnbListingSearch(ctx context.Context, req mcplib.CallToolRequest) (*mcplib.CallToolResult, error) {
+	args := req.GetArguments()
+	location := mcpStringArg(args, "location")
+	slug := mcpStringArg(args, "slug")
+	if slug == "" {
+		slug = location
+	}
+	if location == "" {
+		location = slug
+	}
+	if slug == "" {
+		return mcplib.NewToolResultError("location or slug is required"), nil
+	}
+	checkin := mcpStringArg(args, "checkin")
+	checkout := mcpStringArg(args, "checkout")
+	if err := validateMCPDates(checkin, checkout); err != nil {
+		return mcplib.NewToolResultError(err.Error()), nil
+	}
+	var roomTypes []string
+	for _, part := range strings.Split(mcpStringArg(args, "property_type"), ",") {
+		part = strings.TrimSpace(part)
+		if part != "" {
+			roomTypes = append(roomTypes, part)
+		}
+	}
+	listings, pagination, err := airbnb.Search(ctx, airbnb.SearchParams{
+		Slug:      slug,
+		Location:  location,
+		Checkin:   checkin,
+		Checkout:  checkout,
+		Adults:    mcpIntArg(args, "adults"),
+		Children:  mcpIntArg(args, "children"),
+		Infants:   mcpIntArg(args, "infants"),
+		Pets:      mcpIntArg(args, "pets"),
+		MinPrice:  mcpIntArg(args, "min_price"),
+		MaxPrice:  mcpIntArg(args, "max_price"),
+		RoomTypes: roomTypes,
+		Cursor:    mcpStringArg(args, "cursor"),
+	})
+	if err != nil {
+		return mcplib.NewToolResultError(err.Error()), nil
+	}
+	data, _ := json.Marshal(map[string]any{
+		"count":      len(listings),
+		"results":    listings,
+		"pagination": pagination,
+	})
+	return mcplib.NewToolResultText(string(data)), nil
+}
+
+func mcpStringArg(args map[string]any, key string) string {
+	v, ok := args[key]
+	if !ok || v == nil {
+		return ""
+	}
+	switch x := v.(type) {
+	case string:
+		return strings.TrimSpace(x)
+	default:
+		return strings.TrimSpace(fmt.Sprint(x))
+	}
+}
+
+func mcpIntArg(args map[string]any, key string) int {
+	v, ok := args[key]
+	if !ok || v == nil {
+		return 0
+	}
+	switch x := v.(type) {
+	case int:
+		return x
+	case int64:
+		return int(x)
+	case float64:
+		return int(x)
+	case json.Number:
+		n, _ := strconv.Atoi(x.String())
+		return n
+	case string:
+		n, _ := strconv.Atoi(strings.TrimSpace(x))
+		return n
+	default:
+		n, _ := strconv.Atoi(strings.TrimSpace(fmt.Sprint(x)))
+		return n
+	}
+}
+
+func validateMCPDates(checkin, checkout string) error {
+	if checkin == "" && checkout == "" {
+		return nil
+	}
+	if checkin == "" || checkout == "" {
+		return fmt.Errorf("checkin and checkout must both be set or both be empty")
+	}
+	in, err := time.Parse("2006-01-02", checkin)
+	if err != nil {
+		return fmt.Errorf("checkin %q: expected YYYY-MM-DD", checkin)
+	}
+	out, err := time.Parse("2006-01-02", checkout)
+	if err != nil {
+		return fmt.Errorf("checkout %q: expected YYYY-MM-DD", checkout)
+	}
+	if !out.After(in) {
+		return fmt.Errorf("checkout (%s) must be after checkin (%s)", checkout, checkin)
+	}
+	return nil
+}
+
 func newMCPClient() (*client.Client, error) {
 	home, _ := os.UserHomeDir()
 	cfgPath := filepath.Join(home, ".config", "airbnb-pp-cli", "config.toml")
@@ -402,6 +538,10 @@ func handleContext(_ context.Context, _ mcplib.CallToolRequest) (*mcplib.CallToo
 			},
 		},
 		"query_tips": []string{
+			// PATCH: Front-load availability/link rules for agents planning stays.
+			"For stay recommendations, call plan or airbnb_listing_search with checkin and checkout; cite booking_url or platform_url for every room.",
+			"When dates are provided, airbnb_listing_search returns only linked listings with date-specific pricing; empty results mean availability was not verified.",
+			"Direct-site candidates from web search are leads, not recommendations, unless they include a dated total and a direct URL.",
 			"Pagination uses cursor-based paging. Pass cursor parameter for subsequent pages.",
 			"Control page size with the limit parameter (default 100).",
 			"Use the sql tool for ad-hoc analysis on synced data. Run sync first to populate the local database.",
@@ -412,7 +552,7 @@ func handleContext(_ context.Context, _ mcplib.CallToolRequest) (*mcplib.CallToo
 		// to the companion CLI binary.
 		"command_mirror_capabilities": []map[string]string{
 			{"name": "Triple-source price arbitrage", "command": "cheapest", "description": "Given an Airbnb or VRBO listing URL, find the host's direct booking site and report the cheapest of three sources.", "rationale": "Composes host extraction (from listing HTML) + pluggable web-search backend (Parallel/DDG/Brave/Tavily) + price...", "via": "mcp-command-mirror"},
-			{"name": "Plan a trip composite", "command": "plan", "description": "Search Airbnb and VRBO in parallel for a city/dates/budget, then run cheapest on the top results, return a...", "rationale": "Single command turns a vacation question into a budget-optimized booking shortlist. Requires the local store join...", "via": "mcp-command-mirror"},
+			{"name": "Plan a trip composite", "command": "plan", "description": "Search Airbnb for linked, date-priced listings, run cheapest on the top results, and return platform_url/recommendation_url for every kept room.", "rationale": "Single command turns a vacation question into an availability-checked booking shortlist with citable links.", "via": "mcp-command-mirror"},
 			{"name": "Fee-breakdown comparison", "command": "compare", "description": "Side-by-side: OTA total (with cleaning + service + tax fees) vs direct booking total, with dollar and percent savings.", "rationale": "Joins the listing's fee structure (from VRBO priceSummary or Airbnb StaysPdpBookItQuery) with the direct-site price...", "via": "mcp-command-mirror"},
 			{"name": "Cross-platform same-property match", "command": "match", "description": "Given a listing on Airbnb (or VRBO), find the same property on the other platform via geocode + amenities + photo...", "rationale": "Same property listed on both platforms is a strong arbitrage signal (often different prices, fees, taxes). Requires...", "via": "mcp-command-mirror"},
 			{"name": "Price-drop watchlist", "command": "watch", "description": "Add saved listings to a watchlist with target prices; daily sync checks for drops; cron-friendly exit codes signal hits.", "rationale": "Local store + sync + diff. Vacation-rental price-drop watchers exist for hotels (Hopper) but not for STR; certainly...", "via": "mcp-command-mirror"},

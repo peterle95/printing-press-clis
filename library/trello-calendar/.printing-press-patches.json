@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "applied_at": "2026-07-12",
+  "base_run_id": "2026-07-12T17:06:17.982437595Z",
+  "base_printing_press_version": "4.6.1",
+  "patches": [
+    {
+      "id": "trello-google-calendar-workflow",
+      "summary": "Adds typed planner commands, Google OAuth/Calendar access, pure scheduling, and safe execution.",
+      "reason": "The Trello OpenAPI describes one API; the requested cross-API scheduling workflow is API-specific novel functionality.",
+      "files": [
+        "internal/cli/auth.go",
+        "internal/cli/cards.go",
+        "internal/cli/doctor.go",
+        "internal/cli/helpers.go",
+        "internal/cli/planner.go",
+        "internal/cli/root.go",
+        "internal/config/config.go",
+        "internal/googlecalendar",
+        "internal/scheduling",
+        "internal/trello",
+        "internal/workflow"
+      ],
+      "validated_outcome": "Unit tests cover planning, DST, dry-run write isolation, pagination, partial failures, and double-run idempotency."
+    },
+    {
+      "id": "trello-composed-auth-fix",
+      "summary": "Uses environment-only Trello key/token values to build the OAuth Authorization header.",
+      "reason": "Printing Press 4.6.1 emitted cookie-login code and invalid Go quoting for this two-variable composed header.",
+      "files": [
+        "internal/cli/auth.go",
+        "internal/config/config.go",
+        "spec.json"
+      ],
+      "validated_outcome": "Credentials are absent from TOML and token values are never printed."
+    }
+  ]
+}

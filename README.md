@@ -11,7 +11,7 @@ environment overrides or compatibility links.
 
 ```text
 ~/printing-press/
-├── library/                  # 23 independent CLI projects
+├── library/                  # 24 independent CLI projects
 ├── external/cli-printing-press/
 ├── scripts/                  # Bootstrap, audit, verification, installers
 ├── manuscripts/              # Local runtime state; ignored

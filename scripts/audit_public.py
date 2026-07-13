@@ -109,7 +109,7 @@ def main() -> int:
             for path in (ROOT / "library").iterdir()
             if path.is_dir() and not path.name.startswith(".")
         }
-        if len(declared) != 23 or declared != actual:
+        if declared != actual:
             failures.append(
                 f"workspace inventory mismatch: declared={len(declared)} actual={len(actual)} "
                 f"missing={sorted(actual - declared)} extra={sorted(declared - actual)}"

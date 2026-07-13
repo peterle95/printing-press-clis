@@ -52,10 +52,15 @@ type PriceBreakdown struct {
 }
 
 type Listing struct {
-	ID                     string          `json:"id,omitempty"`
-	Name                   string          `json:"name,omitempty"`
-	Title                  string          `json:"title,omitempty"`
-	URL                    string          `json:"url,omitempty"`
+	ID    string `json:"id,omitempty"`
+	Name  string `json:"name,omitempty"`
+	Title string `json:"title,omitempty"`
+	URL   string `json:"url,omitempty"`
+	// PATCH: Surface date-specific booking links and availability status so agents do not recommend unlinked or unavailable rooms.
+	BookingURL             string          `json:"booking_url,omitempty"`
+	Available              *bool           `json:"available,omitempty"`
+	AvailabilityStatus     string          `json:"availability_status,omitempty"`
+	AvailabilityReason     string          `json:"availability_reason,omitempty"`
 	City                   string          `json:"city,omitempty"`
 	Region                 string          `json:"region,omitempty"`
 	Coordinate             *Coord          `json:"coordinate,omitempty"`

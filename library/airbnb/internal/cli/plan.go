@@ -21,8 +21,9 @@ func newPlanCmd(flags *rootFlags) *cobra.Command {
 	var localFirst bool
 	var dbPath string
 	cmd := &cobra.Command{
-		Use:         "plan <city>",
-		Short:       "Search both platforms and rank options by direct-booking savings",
+		Use: "plan <city>",
+		// PATCH: Plan now promises availability-checked, linked rooms instead of unverified direct-search leads.
+		Short:       "Search for linked, date-priced rooms and rank verified options",
 		Annotations: map[string]string{"mcp:read-only": "true"},
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if len(args) == 0 {
@@ -69,7 +70,10 @@ func newPlanCmd(flags *rootFlags) *cobra.Command {
 					var obj map[string]any
 					if err := json.Unmarshal(raw, &obj); err == nil {
 						if id, ok := obj["id"].(string); ok && id != "" {
-							urls = append(urls, "https://www.airbnb.com/rooms/"+id)
+							// PATCH: Preserve the user's dates in local-first recommendations so agents always have a usable booking link.
+							if u := airbnb.BookingURL(id, checkin, checkout, guests, 0, 0, 0); u != "" {
+								urls = append(urls, u)
+							}
 						}
 					}
 				}
@@ -85,13 +89,24 @@ func newPlanCmd(flags *rootFlags) *cobra.Command {
 						listings, _, err := airbnb.Search(legCtx, airbnb.SearchParams{Location: city, Checkin: checkin, Checkout: checkout, Adults: guests})
 						var filtered []string
 						for _, l := range listings {
+							if !airbnb.ListingAvailableForRequestedDates(l) {
+								continue
+							}
 							if maxTotalPrice > 0 && l.PriceTotal > 0 && l.PriceTotal > maxTotalPrice {
 								continue
 							}
 							if budget > 0 && l.PriceBreakdown != nil && l.PriceBreakdown.Total > 0 && l.PriceBreakdown.Total > budget {
 								continue
 							}
-							filtered = append(filtered, l.URL)
+							// PATCH: Prefer date-specific booking URLs and drop unlinked search hits.
+							link := l.BookingURL
+							if link == "" {
+								link = l.URL
+							}
+							if link == "" {
+								continue
+							}
+							filtered = append(filtered, link)
 							if len(filtered) >= top(topN) {
 								break
 							}
@@ -130,7 +145,27 @@ func newPlanCmd(flags *rootFlags) *cobra.Command {
 				}
 				pt, _ := firstPlatformTotals(ch)
 				dt := cheapestDirectTotal(ch)
-				result := map[string]any{"platform_url": u, "direct_url": directURL(ch), "savings": pt - dt, "cheapest": ch.Cheapest, "listing": ch.Listing}
+				platformURL := platformURLForRecommendation(u, ch)
+				// PATCH: Plan output must keep a citable platform link and only claim savings when both totals are verified.
+				result := map[string]any{
+					"platform_url":        platformURL,
+					"recommendation_url":  platformURL,
+					"direct_url":          directURL(ch),
+					"savings":             nil,
+					"platform_total":      nullableFloat(pt),
+					"direct_total":        nullableFloat(dt),
+					"availability_status": listingStringField(ch, "availability_status"),
+					"available":           listingBoolField(ch, "available"),
+					"cheapest":            ch.Cheapest,
+					"listing":             ch.Listing,
+				}
+				if !listingBoolField(ch, "available") {
+					result["filtered_out"] = true
+					result["filter_reason"] = "date_unavailable"
+				}
+				if pt > 0 && dt > 0 {
+					result["savings"] = pt - dt
+				}
 				if maxTotalPrice > 0 && pt > 0 && pt > maxTotalPrice {
 					result["filtered_out"] = true
 					result["filter_reason"] = "exceeds_max_total_price"
@@ -143,7 +178,7 @@ func newPlanCmd(flags *rootFlags) *cobra.Command {
 			}
 			out := make([]map[string]any, 0, len(cheapest))
 			for _, r := range cheapest {
-				if filteredOut, _ := r.Value["filtered_out"].(bool); filteredOut && maxTotalPrice > 0 {
+				if filteredOut, _ := r.Value["filtered_out"].(bool); filteredOut {
 					continue
 				}
 				out = append(out, r.Value)
@@ -173,9 +208,41 @@ func top(n int) int {
 
 func directURL(ch *cheapestOutput) string {
 	if m, ok := ch.Cheapest.(map[string]any); ok {
+		if source, _ := m["source"].(string); source != "direct" {
+			return ""
+		}
 		if s, ok := m["url"].(string); ok {
 			return s
 		}
 	}
 	return ""
+}
+
+func platformURLForRecommendation(fallback string, ch *cheapestOutput) string {
+	for _, key := range []string{"booking_url", "url"} {
+		if s := listingStringField(ch, key); s != "" {
+			return s
+		}
+	}
+	return fallback
+}
+
+func listingStringField(ch *cheapestOutput, key string) string {
+	if ch == nil || ch.Listing == nil {
+		return ""
+	}
+	if s, ok := ch.Listing[key].(string); ok {
+		return s
+	}
+	return ""
+}
+
+func listingBoolField(ch *cheapestOutput, key string) bool {
+	if ch == nil || ch.Listing == nil {
+		return false
+	}
+	if b, ok := ch.Listing[key].(bool); ok {
+		return b
+	}
+	return false
 }

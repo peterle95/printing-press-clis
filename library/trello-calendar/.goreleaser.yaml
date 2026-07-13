@@ -1,0 +1,51 @@
+version: 2
+project_name: trello-calendar-pp-cli
+changelog:
+  disable: true
+builds:
+  - id: trello-calendar-pp-cli
+    main: ./cmd/trello-calendar-pp-cli
+    binary: trello-calendar-pp-cli
+    env:
+      - CGO_ENABLED=0
+    ldflags:
+      - -s -w -X trello-calendar-pp-cli/internal/cli.version={{ .Version }}
+    targets:
+      - darwin_amd64
+      - darwin_arm64
+      - linux_amd64
+      - linux_arm64
+      - windows_amd64
+      - windows_arm64
+  - id: trello-calendar-pp-mcp
+    main: ./cmd/trello-calendar-pp-mcp
+    binary: trello-calendar-pp-mcp
+    env:
+      - CGO_ENABLED=0
+    ldflags:
+      - -s -w
+    targets:
+      - darwin_amd64
+      - darwin_arm64
+      - linux_amd64
+      - linux_arm64
+      - windows_amd64
+      - windows_arm64
+archives:
+  - formats: [tar.gz]
+    name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    format_overrides:
+      - goos: windows
+        formats: [zip]
+checksum:
+  name_template: checksums.txt
+brews:
+  - name: trello-calendar-pp-cli
+    repository:
+      owner: user
+      name: homebrew-tap
+    homepage: "https://github.com/user/trello-calendar-pp-cli"
+    description: "Trello REST API surface with Trello-to-Google-Calendar scheduling workflows."
+    install: |
+      bin.install "trello-calendar-pp-cli"
+      bin.install "trello-calendar-pp-mcp"

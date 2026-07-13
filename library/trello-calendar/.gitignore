@@ -1,0 +1,10 @@
+bin/
+coverage.out
+.env
+.env.*
+!.env.example
+config.toml
+google-token.json
+*.token.json
+*.credentials.json
+*.mcpb

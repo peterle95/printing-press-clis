@@ -1,6 +1,9 @@
 package airbnb
 
-import "testing"
+import (
+	"strings"
+	"testing"
+)
 
 func TestListingFromPDPSectionsUsesTitleDefault(t *testing.T) {
 	root := map[string]any{
@@ -84,5 +87,48 @@ func TestListingFromPDPSectionsUsesTitleDefault(t *testing.T) {
 	}
 	if listing.PriceBreakdown == nil || listing.PriceBreakdown.Fees["cleaning"] != 295 {
 		t.Fatalf("PriceBreakdown cleaning fee = %#v, want 295", listing.PriceBreakdown)
+	}
+}
+
+func TestBookingURLIncludesStayDatesAndGuests(t *testing.T) {
+	u := BookingURL("37124493", "2026-05-16", "2026-05-19", 4, 1, 0, 0)
+
+	for _, want := range []string{
+		"https://www.airbnb.com/rooms/37124493",
+		"check_in=2026-05-16",
+		"check_out=2026-05-19",
+		"adults=4",
+		"children=1",
+	} {
+		if !strings.Contains(u, want) {
+			t.Fatalf("BookingURL = %q, missing %q", u, want)
+		}
+	}
+}
+
+func TestMarkAvailabilityFromPricing(t *testing.T) {
+	available := Listing{PriceBreakdown: &PriceBreakdown{Total: 250}}
+	markAvailabilityFromPricing(&available, "2026-05-16", "2026-05-19", "test")
+	if available.Available == nil || !*available.Available || available.AvailabilityStatus != "available" {
+		t.Fatalf("available listing status = %#v/%q", available.Available, available.AvailabilityStatus)
+	}
+
+	unavailable := Listing{}
+	markAvailabilityFromPricing(&unavailable, "2026-05-16", "2026-05-19", "test")
+	if unavailable.Available == nil || *unavailable.Available || unavailable.AvailabilityStatus != "unavailable" {
+		t.Fatalf("unavailable listing status = %#v/%q", unavailable.Available, unavailable.AvailabilityStatus)
+	}
+}
+
+func TestAmountFromTextParsesCurrencyCodes(t *testing.T) {
+	for input, want := range map[string]float64{
+		"DKK 1,200 total": 1200,
+		"1.200 DKK total": 1200,
+		"kr 850":          850,
+		"€1.234,56 total": 1234.56,
+	} {
+		if got := amountFromText(input); got != want {
+			t.Fatalf("amountFromText(%q) = %v, want %v", input, got, want)
+		}
 	}
 }

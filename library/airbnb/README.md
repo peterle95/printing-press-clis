@@ -65,6 +65,14 @@ Public search and listing detail need no auth. Authenticated features (Airbnb wi
 
 ## Quick Start
 
+<!-- PATCH: Document availability/link guarantees added for agent room recommendations. -->
+For room recommendations, prefer `plan` or `airbnb_listing search` with both
+`--checkin` and `--checkout`. Dated Airbnb search results are filtered to
+linked listings with date-specific pricing; cite `booking_url`,
+`platform_url`, or `recommendation_url` in the final answer. Treat direct-site
+web-search candidates as leads unless the output includes a verified dated
+total.
+
 ```bash
 # Verify reachability and which search backend is active.
 airbnb-pp-cli doctor
@@ -95,9 +103,9 @@ These capabilities aren't available in any other tool for this API.
   ```bash
   airbnb-pp-cli cheapest 'https://www.airbnb.com/rooms/37124493?check_in=2026-05-16&check_out=2026-05-19' --agent
   ```
-- **`plan`** — Search Airbnb and VRBO in parallel for a city/dates/budget, then run cheapest on the top results, return a ranked-by-savings list.
+- **`plan`** — Search Airbnb for linked, date-priced rooms for a city/dates/budget, then run cheapest on the top available results.
 
-  _The agent-friendly trip planner. One call returns ranked results across both platforms with direct-booking URLs and savings amounts._
+  _The agent-friendly trip planner. One call returns availability-checked rooms with platform_url/recommendation_url, and only claims savings when both totals are verified._
 
   ```bash
   airbnb-pp-cli plan 'Lake Tahoe' --checkin 2026-05-16 --checkout 2026-05-19 --guests 4 --budget 1500 --agent

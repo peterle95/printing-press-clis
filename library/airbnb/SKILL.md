@@ -41,6 +41,14 @@ If `--version` reports "command not found" after install, the install step did n
 
 Reach for this CLI when an agent or user names an Airbnb listing URL, asks about Airbnb fees or direct-booking savings, mentions 'book direct,' or wants to plan a trip across listings. The cheapest command is the headline; plan and compare extend it. The local store accumulates listings, hosts, and price history across sessions, so re-running queries gets faster and richer over time.
 
+<!-- PATCH: Document the availability and link contract agents must preserve. -->
+For room recommendations, prefer `plan` or `airbnb_listing search` with both
+`--checkin` and `--checkout`. Dated Airbnb search results are filtered to
+linked listings with date-specific pricing; cite `booking_url`,
+`platform_url`, or `recommendation_url` in the final answer. Treat direct-site
+web-search candidates as leads unless the output includes a verified dated
+total.
+
 ## When Not to Use This CLI
 
 Do not activate this CLI for requests that require creating, updating, deleting, publishing, commenting, upvoting, inviting, ordering, sending messages, booking, purchasing, or changing remote state. This printed CLI exposes read-only commands for inspection, export, sync, and analysis.
@@ -57,9 +65,9 @@ These capabilities aren't available in any other tool for this API.
   ```bash
   airbnb-pp-cli cheapest 'https://www.airbnb.com/rooms/37124493?check_in=2026-05-16&check_out=2026-05-19' --agent
   ```
-- **`plan`** — Search Airbnb and VRBO in parallel for a city/dates/budget, then run cheapest on the top results, return a ranked-by-savings list.
+- **`plan`** — Search Airbnb for linked, date-priced rooms for a city/dates/budget, then run cheapest on the top available results.
 
-  _The agent-friendly trip planner. One call returns ranked results across both platforms with direct-booking URLs and savings amounts._
+  _The agent-friendly trip planner. One call returns availability-checked rooms with platform_url/recommendation_url, and only claims savings when both totals are verified._
 
   ```bash
   airbnb-pp-cli plan 'Lake Tahoe' --checkin 2026-05-16 --checkout 2026-05-19 --guests 4 --budget 1500 --agent

@@ -1,7 +1,28 @@
 {
   "schema_version": 1,
-  "applied_at": "2026-05-08",
+  "applied_at": "2026-07-08",
   "base_run_id": "2026-05-03T06:03:12.15145Z",
   "base_printing_press_version": "3.6.1",
-  "patches": []
+  "patches": [
+    {
+      "id": "availability-checked-room-links",
+      "summary": "Dated room discovery now returns only linked, date-priced Airbnb listings and carries booking URLs through agent-facing outputs.",
+      "reason": "Agents were recommending unavailable rooms from aggregator/direct-search leads and sometimes omitted the Airbnb URL.",
+      "files": [
+        "README.md",
+        "SKILL.md",
+        "internal/cli/airbnb_listing_search.go",
+        "internal/cli/plan.go",
+        "internal/cli/rental_logic.go",
+        "internal/cli/rental_logic_test.go",
+        "internal/cli/which.go",
+        "internal/mcp/tools.go",
+        "internal/source/airbnb/client.go",
+        "internal/source/airbnb/client_test.go",
+        "internal/source/airbnb/extract.go",
+        "internal/source/airbnb/types.go"
+      ],
+      "validated_outcome": "Formatted with Go 1.26.3; go test ./... passed for library/airbnb. Root audit-public still fails on pre-existing ignored graphify-out artifacts."
+    }
+  ]
 }

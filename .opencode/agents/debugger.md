@@ -1,0 +1,1 @@
+/home/ubuntu/.config/opencode/agents/debugger.md

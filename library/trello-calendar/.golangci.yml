@@ -1,0 +1,27 @@
+version: "2"
+
+linters:
+  default: none
+  enable:
+    - errorlint
+    - govet
+    - ineffassign
+    - staticcheck
+    - unused
+  exclusions:
+    generated: strict
+    paths:
+      # Printing Press 4.6.1 output predates the current linter baseline.
+      # Custom workflow logic is kept in the non-generated packages below.
+      - ^cmd/
+      - ^internal/(cache|cli|client|cliutil|mcp|store|types)/
+
+formatters:
+  enable:
+    - gofmt
+    - goimports
+  exclusions:
+    generated: strict
+    paths:
+      - ^cmd/
+      - ^internal/(cache|cli|client|cliutil|mcp|store|types)/

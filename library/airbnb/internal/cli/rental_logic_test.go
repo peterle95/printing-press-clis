@@ -35,3 +35,33 @@ func TestScanDirectPriceReportsBlockedNon2xx(t *testing.T) {
 		t.Fatalf("scanDirectPrice = (%v, %q), want (0, found_site_blocked)", total, note)
 	}
 }
+
+func TestIsOTADomainBlocksAggregators(t *testing.T) {
+	for _, domain := range []string{
+		"rbo.com",
+		"www.rbo.com",
+		"bedandbreakfast.eu",
+		"www.bedandbreakfast.eu",
+	} {
+		if !isOTADomain(domain) {
+			t.Fatalf("isOTADomain(%q) = false, want true", domain)
+		}
+	}
+}
+
+func TestScanDirectPriceRequiresRequestedDateParams(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		_, _ = w.Write([]byte(`<html><body><strong>$75/night</strong></body></html>`))
+	}))
+	defer srv.Close()
+
+	total, note := scanDirectPrice(context.Background(), srv.URL, "2026-05-16", "2026-05-18")
+	if total != 0 || note != "found_site_price_without_requested_dates" {
+		t.Fatalf("undated scanDirectPrice = (%v, %q), want (0, found_site_price_without_requested_dates)", total, note)
+	}
+
+	total, note = scanDirectPrice(context.Background(), srv.URL+"?checkin=2026-05-16&checkout=2026-05-18", "2026-05-16", "2026-05-18")
+	if total != 150 || note != "" {
+		t.Fatalf("dated scanDirectPrice = (%v, %q), want (150, empty)", total, note)
+	}
+}

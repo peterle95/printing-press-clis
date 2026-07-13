@@ -50,6 +50,29 @@ func Geocode(ctx context.Context, location string) (*Bbox, error) {
 	return defaultClient.Geocode(ctx, location)
 }
 
+// PATCH: Expose date-aware Airbnb room links so every agent recommendation can cite a concrete listing URL.
+func BookingURL(id, checkin, checkout string, adults, children, infants, pets int) string {
+	id = normalizeListingID(id)
+	if id == "" {
+		return ""
+	}
+	u, _ := url.Parse(airbnbBase + "/rooms/" + url.PathEscape(id))
+	q := u.Query()
+	set(q, "check_in", checkin)
+	set(q, "check_out", checkout)
+	setInt(q, "adults", adults)
+	setInt(q, "children", children)
+	setInt(q, "infants", infants)
+	setInt(q, "pets", pets)
+	u.RawQuery = q.Encode()
+	return u.String()
+}
+
+// PATCH: Let callers require date-priced listings instead of guessing from raw search hits.
+func ListingAvailableForRequestedDates(l Listing) bool {
+	return l.Available != nil && *l.Available
+}
+
 func (c *Client) Search(ctx context.Context, params SearchParams) ([]Listing, *Pagination, error) {
 	slug := params.Slug
 	if slug == "" {
@@ -102,7 +125,15 @@ func (c *Client) Search(ctx context.Context, params SearchParams) ([]Listing, *P
 		}
 		l := listingFromSearch(lmap, asMap(obj["pricingQuote"]))
 		if l.ID != "" {
-			l.URL = airbnbBase + "/rooms/" + l.ID
+			l.URL = BookingURL(l.ID, "", "", 0, 0, 0, 0)
+			l.BookingURL = BookingURL(l.ID, params.Checkin, params.Checkout, params.Adults, params.Children, params.Infants, params.Pets)
+		}
+		markAvailabilityFromPricing(&l, params.Checkin, params.Checkout, "search result pricing")
+		if l.URL == "" {
+			continue
+		}
+		if params.Checkin != "" && params.Checkout != "" && !ListingAvailableForRequestedDates(l) {
+			continue
 		}
 		listings = append(listings, l)
 	}
@@ -134,6 +165,8 @@ func (c *Client) Get(ctx context.Context, listingID string, params GetParams) (*
 		return nil, err
 	}
 	l := listingFromPDPSections(root, listingID)
+	l.URL = BookingURL(listingID, "", "", 0, 0, 0, 0)
+	l.BookingURL = BookingURL(listingID, params.Checkin, params.Checkout, params.Adults, 0, 0, 0)
 	if photos := collectURLs(firstByKey(root, "photos")); len(photos) > 0 {
 		l.Photos = photos
 	}
@@ -143,6 +176,7 @@ func (c *Client) Get(ctx context.Context, listingID string, params GetParams) (*
 			applyPriceBreakdown(l, pb)
 		}
 	}
+	markAvailabilityFromPricing(l, params.Checkin, params.Checkout, "listing detail pricing")
 	return l, nil
 }
 

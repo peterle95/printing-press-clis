@@ -26,8 +26,9 @@ func newAirbnbListingSearchCmd(flags *rootFlags) *cobra.Command {
 	var flagAll bool
 
 	cmd := &cobra.Command{
-		Use:         "search <slug>",
-		Short:       "Search Airbnb listings by location, dates, and guest count via the public SSR HTML page (openbnb pattern). Walks...",
+		Use: "search <slug>",
+		// PATCH: Tell agents this command returns only citable, date-priced listings when dates are supplied.
+		Short:       "Search Airbnb for linked listings; with dates, returns only results priced for that stay.",
 		Example:     "  airbnb-pp-cli airbnb-listing search \"Lake Tahoe\"",
 		Annotations: map[string]string{"pp:endpoint": "airbnb_listing.search", "mcp:read-only": "true"},
 		RunE: func(cmd *cobra.Command, args []string) error {

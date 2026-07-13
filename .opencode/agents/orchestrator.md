@@ -1,0 +1,1 @@
+/home/ubuntu/.config/opencode/agents/orchestrator.md

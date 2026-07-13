@@ -11,7 +11,8 @@ import (
 )
 
 var (
-	moneyRe  = regexp.MustCompile(`[$£€]\s*([0-9][0-9,]*(?:\.[0-9]{2})?)`)
+	// PATCH: Parse non-USD Airbnb prices such as DKK/kr so availability filtering works outside dollar locales.
+	moneyRe  = regexp.MustCompile(`(?i)(?:[$£€]\s*|(?:usd|eur|gbp|dkk|nok|sek|kr)\s*)([0-9][0-9.,]*(?:[.,][0-9]{2})?)|([0-9][0-9.,]*(?:[.,][0-9]{2})?)\s*(?:usd|eur|gbp|dkk|nok|sek|kr)\b`)
 	roomIDRe = regexp.MustCompile(`/rooms/([0-9A-Za-z_-]+)`)
 )
 
@@ -147,6 +148,37 @@ func applyPriceBreakdown(l *Listing, pb *PriceBreakdown) {
 	l.PriceBreakdown = pb
 	l.PriceTotal = pb.Total
 	l.PerNightPrice = pb.PerNight
+}
+
+// PATCH: Date-scoped room discovery must distinguish priced/available listings from unpriced or booked results.
+func markAvailabilityFromPricing(l *Listing, checkin, checkout, source string) {
+	if l == nil || checkin == "" || checkout == "" {
+		return
+	}
+	if hasStayPrice(l) {
+		available := true
+		l.Available = &available
+		l.AvailabilityStatus = "available"
+		l.AvailabilityReason = "priced for requested dates via " + source
+		return
+	}
+	available := false
+	l.Available = &available
+	l.AvailabilityStatus = "unavailable"
+	l.AvailabilityReason = "no date-specific price returned for requested dates"
+}
+
+func hasStayPrice(l *Listing) bool {
+	if l == nil {
+		return false
+	}
+	if l.PriceTotal > 0 {
+		return true
+	}
+	if l.PriceBreakdown == nil {
+		return false
+	}
+	return l.PriceBreakdown.Total > 0
 }
 
 func pathValue(v any, keys ...string) any {
@@ -311,8 +343,44 @@ func amountFromText(s string) float64 {
 	if len(match) < 2 {
 		return 0
 	}
-	v, _ := strconv.ParseFloat(strings.ReplaceAll(match[1], ",", ""), 64)
+	raw := ""
+	for _, group := range match[1:] {
+		if group != "" {
+			raw = group
+			break
+		}
+	}
+	if raw == "" {
+		return 0
+	}
+	v, _ := strconv.ParseFloat(normalizeMoneyNumber(raw), 64)
 	return v
+}
+
+func normalizeMoneyNumber(s string) string {
+	s = strings.TrimSpace(s)
+	lastComma := strings.LastIndex(s, ",")
+	lastDot := strings.LastIndex(s, ".")
+	switch {
+	case lastComma >= 0 && lastDot >= 0 && lastComma > lastDot:
+		s = strings.ReplaceAll(s, ".", "")
+		s = strings.ReplaceAll(s, ",", ".")
+	case lastComma >= 0 && lastDot >= 0:
+		s = strings.ReplaceAll(s, ",", "")
+	case lastComma >= 0:
+		parts := strings.Split(s, ",")
+		if len(parts[len(parts)-1]) == 2 {
+			s = strings.ReplaceAll(s, ",", ".")
+		} else {
+			s = strings.ReplaceAll(s, ",", "")
+		}
+	case lastDot >= 0:
+		parts := strings.Split(s, ".")
+		if len(parts[len(parts)-1]) != 2 {
+			s = strings.ReplaceAll(s, ".", "")
+		}
+	}
+	return s
 }
 
 func coordFromMap(m map[string]any) *Coord {

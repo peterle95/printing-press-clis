@@ -106,9 +106,24 @@ func computeCheapest(ctx context.Context, rawURL string, p cheapestParams) (*che
 			return nil, err
 		}
 		host = hostextract.FromAirbnbListing(l)
+		// PATCH: Carry availability and citable booking links through cheapest/plan so agents do not invent missing links.
+		out.Listing["url"] = l.URL
+		out.Listing["booking_url"] = l.BookingURL
 		out.Listing["title"], out.Listing["city"] = l.Title, l.City
+		out.Listing["availability_status"] = l.AvailabilityStatus
+		out.Listing["availability_reason"] = l.AvailabilityReason
+		if l.Available != nil {
+			out.Listing["available"] = *l.Available
+		}
 		total, fees := airbnbTotals(l)
-		platformOption = map[string]any{"source": "airbnb", "url": l.URL, "total": nullableFloat(total), "fees": fees, "currency": "USD"}
+		platformURL := l.BookingURL
+		if platformURL == "" {
+			platformURL = l.URL
+		}
+		platformOption = map[string]any{"source": "airbnb", "url": platformURL, "total": nullableFloat(total), "fees": fees, "currency": "USD", "availability_status": l.AvailabilityStatus}
+		if l.Available != nil {
+			platformOption["available"] = *l.Available
+		}
 		if total == 0 {
 			platformOption["note"] = airbnbPricingUnavailableNote
 		}
@@ -128,10 +143,16 @@ func computeCheapest(ctx context.Context, rawURL string, p cheapestParams) (*che
 		out.Meta = meta
 	}
 	platformTotal := valueAsFloat(platformOption["total"])
+	platformAvailable := p.Checkin == "" || p.Checkout == ""
+	if !platformAvailable {
+		platformAvailable, _ = platformOption["available"].(bool)
+	}
 	var best *directCandidate
-	for i := range candidates {
-		if candidates[i].Total != nil && (best == nil || *candidates[i].Total < *best.Total) {
-			best = &candidates[i]
+	if platformAvailable {
+		for i := range candidates {
+			if candidates[i].Total != nil && (best == nil || *candidates[i].Total < *best.Total) {
+				best = &candidates[i]
+			}
 		}
 	}
 	if best != nil {
@@ -141,7 +162,7 @@ func computeCheapest(ctx context.Context, rawURL string, p cheapestParams) (*che
 		}
 		out.Cheapest = cheapest
 	} else {
-		out.Cheapest = map[string]any{"source": ref.Platform, "total": nullableFloat(platformTotal)}
+		out.Cheapest = map[string]any{"source": ref.Platform, "url": platformOption["url"], "total": nullableFloat(platformTotal)}
 	}
 	return out, nil
 }
@@ -240,7 +261,8 @@ func directCandidates(ctx context.Context, host *hostextract.HostInfo, listingTi
 }
 
 func isOTADomain(domain string) bool {
-	blocked := []string{"airbnb.", "vrbo.", "booking.", "expedia.", "hotels.", "tripadvisor.", "agoda.", "homeaway."}
+	// PATCH: Exclude OTA/aggregator results from direct-booking candidates; agents should not recommend them as available direct rooms.
+	blocked := []string{"airbnb.", "vrbo.", "booking.", "expedia.", "hotels.", "tripadvisor.", "agoda.", "homeaway.", "rbo.", "bedandbreakfast.", "trivago.", "kayak.", "momondo.", "priceline.", "travelocity.", "orbitz."}
 	d := strings.ToLower(domain)
 	for _, b := range blocked {
 		if strings.HasPrefix(d, b) || strings.Contains(d, "."+b) || d == strings.TrimSuffix(b, ".") {
@@ -309,9 +331,15 @@ func scanDirectPrice(ctx context.Context, rawURL, checkin, checkout string) (flo
 		}
 	}
 	if bestTotal > 0 {
+		if !directURLCarriesRequestedDates(rawURL, checkin, checkout) {
+			return 0, "found_site_price_without_requested_dates"
+		}
 		return bestTotal, ""
 	}
 	if bestNightly > 0 {
+		if !directURLCarriesRequestedDates(rawURL, checkin, checkout) {
+			return 0, "found_site_price_without_requested_dates"
+		}
 		if nights := stayNights(checkin, checkout); nights > 0 {
 			return bestNightly * float64(nights), ""
 		}
@@ -321,6 +349,30 @@ func scanDirectPrice(ctx context.Context, rawURL, checkin, checkout string) (flo
 		return 0, "found_site_no_price"
 	}
 	return 0, "found_site_no_price"
+}
+
+func directURLCarriesRequestedDates(rawURL, checkin, checkout string) bool {
+	if checkin == "" || checkout == "" {
+		return true
+	}
+	u, err := url.Parse(rawURL)
+	if err != nil {
+		return false
+	}
+	q := u.Query()
+	return queryHasValue(q, checkin, "checkin", "check_in", "startDate", "start_date", "arrival", "arrivalDate", "d1") &&
+		queryHasValue(q, checkout, "checkout", "check_out", "endDate", "end_date", "departure", "departureDate", "d2")
+}
+
+func queryHasValue(q url.Values, want string, keys ...string) bool {
+	for _, key := range keys {
+		for _, got := range q[key] {
+			if got == want {
+				return true
+			}
+		}
+	}
+	return false
 }
 
 func stayNights(checkin, checkout string) int {

@@ -1,0 +1,90 @@
+{
+  "manifest_version": "0.3",
+  "name": "trello-calendar-pp-mcp",
+  "display_name": "Trello Calendar",
+  "version": "4.6.1",
+  "description": "Trello Calendar API surface as MCP tools.",
+  "author": {
+    "name": "CLI Printing Press"
+  },
+  "license": "Apache-2.0",
+  "server": {
+    "type": "binary",
+    "entry_point": "bin/trello-calendar-pp-mcp",
+    "mcp_config": {
+      "command": "${__dirname}/bin/trello-calendar-pp-mcp",
+      "args": [],
+      "env": {
+        "TRELLO_API_KEY": "${user_config.trello_api_key}",
+        "TRELLO_TOKEN": "${user_config.trello_token}",
+        "TRELLO_BOARD_ID": "${user_config.trello_board_id}",
+        "TRELLO_LIST_ID": "${user_config.trello_list_id}",
+        "GOOGLE_CLIENT_ID": "${user_config.google_client_id}",
+        "GOOGLE_CLIENT_SECRET": "${user_config.google_client_secret}",
+        "GOOGLE_REDIRECT_URI": "${user_config.google_redirect_uri}",
+        "GOOGLE_CALENDAR_ID": "${user_config.google_calendar_id}"
+      }
+    }
+  },
+  "user_config": {
+    "trello_api_key": {
+      "type": "string",
+      "title": "TRELLO_API_KEY",
+      "description": "Trello API key.",
+      "sensitive": true,
+      "required": true
+    },
+    "trello_token": {
+      "type": "string",
+      "title": "TRELLO_TOKEN",
+      "description": "Trello API token.",
+      "sensitive": true,
+      "required": true
+    },
+    "trello_board_id": {
+      "type": "string",
+      "title": "TRELLO_BOARD_ID",
+      "description": "Weekly planner Trello board ID.",
+      "required": true
+    },
+    "trello_list_id": {
+      "type": "string",
+      "title": "TRELLO_LIST_ID",
+      "description": "Doing list ID on the configured board.",
+      "required": true
+    },
+    "google_client_id": {
+      "type": "string",
+      "title": "GOOGLE_CLIENT_ID",
+      "description": "Google OAuth desktop client ID.",
+      "required": true
+    },
+    "google_client_secret": {
+      "type": "string",
+      "title": "GOOGLE_CLIENT_SECRET",
+      "description": "Google OAuth desktop client secret.",
+      "sensitive": true,
+      "required": true
+    },
+    "google_redirect_uri": {
+      "type": "string",
+      "title": "GOOGLE_REDIRECT_URI",
+      "description": "Loopback OAuth callback URI.",
+      "required": true
+    },
+    "google_calendar_id": {
+      "type": "string",
+      "title": "GOOGLE_CALENDAR_ID",
+      "description": "Calendar ID; defaults to primary.",
+      "required": false
+    }
+  },
+  "compatibility": {
+    "claude_desktop": ">=1.0.0",
+    "platforms": [
+      "darwin",
+      "linux",
+      "win32"
+    ]
+  }
+}

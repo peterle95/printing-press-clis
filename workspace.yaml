@@ -21,6 +21,7 @@
     {"name": "spotify", "path": "library/spotify", "runtimes": ["go"]},
     {"name": "stepstone", "path": "library/stepstone", "runtimes": ["go"]},
     {"name": "transit", "path": "library/transit", "runtimes": ["go"]},
+    {"name": "trello-calendar", "path": "library/trello-calendar", "runtimes": ["go"]},
     {"name": "windy-weather-pp-cli", "path": "library/windy-weather-pp-cli", "runtimes": ["go", "node"]},
     {"name": "xing", "path": "library/xing", "runtimes": ["go"]},
     {"name": "youtube", "path": "library/youtube", "runtimes": ["go"]}
