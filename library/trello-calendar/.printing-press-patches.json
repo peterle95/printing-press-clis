@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "applied_at": "2026-07-12",
+  "applied_at": "2026-07-13",
   "base_run_id": "2026-07-12T17:06:17.982437595Z",
   "base_printing_press_version": "4.6.1",
   "patches": [
@@ -33,6 +33,19 @@
         "spec.json"
       ],
       "validated_outcome": "Credentials are absent from TOML and token values are never printed."
+    },
+    {
+      "id": "card-crud-commands",
+      "summary": "Adds hand-written card CRUD commands (get, create, archive, move) with typed trello.Service methods.",
+      "reason": "Generated Trello endpoints expose raw API params; curated commands provide task-oriented UX with confirmation prompts, dry-run support, and consistent JSON output.",
+      "files": [
+        "internal/cli/card.go",
+        "internal/cli/card_test.go",
+        "internal/cli/root.go",
+        "internal/trello/service.go",
+        "internal/trello/service_test.go"
+      ],
+      "validated_outcome": "14 tests pass covering GetCard (found/404), CreateCard, ArchiveCard, MoveCard, ListCards filtering, CLI dry-run, confirmation guards, and API request correctness."
     }
   ]
 }

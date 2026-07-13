@@ -38,7 +38,10 @@ Use `--yes --no-input` only after the target, arguments, and side effects are cl
 `cards` and `preview` perform live Trello and Google Calendar reads. Run
 `schedule --dry-run --agent` before a live schedule, and require explicit
 operator authorization before using `schedule --yes`. Treat
-`--comment-on-card` as a separate Trello mutation. Do not move or archive cards.
+`--comment-on-card` as a separate Trello mutation.
+
+Use `card create`, `card archive`, and `card move` for card mutations.
+All mutations respect `--dry-run` and require `--yes` in non-interactive mode.
 
 Credentials belong only in the documented environment variables and
 `~/.config/trello-calendar-pp-cli/google-token.json`; never place them in the

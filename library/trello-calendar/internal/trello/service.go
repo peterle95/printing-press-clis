@@ -6,6 +6,7 @@ package trello
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/url"
 	"strings"
@@ -31,6 +32,7 @@ type cardResponse struct {
 	ID          string             `json:"id"`
 	Name        string             `json:"name"`
 	URL         string             `json:"url"`
+	Desc        string             `json:"desc"`
 	Due         *string            `json:"due"`
 	DueComplete bool               `json:"dueComplete"`
 	Labels      []scheduling.Label `json:"labels"`
@@ -164,4 +166,116 @@ func (s *Service) AddComment(cardID, text string) error {
 		return fmt.Errorf("add Trello comment: %w", err)
 	}
 	return nil
+}
+
+func (s *Service) GetCard(cardID string) (*scheduling.Card, error) {
+	raw, err := s.client.Get("/cards/"+url.PathEscape(cardID), map[string]string{"fields": "id,name,url,due,dueComplete,labels,pos,closed,desc"})
+	if err != nil {
+		var apiErr *client.APIError
+		if errors.As(err, &apiErr) && apiErr.StatusCode == 404 {
+			return nil, nil
+		}
+		return nil, fmt.Errorf("get Trello card: %w", err)
+	}
+	var card cardResponse
+	if err := json.Unmarshal(raw, &card); err != nil {
+		return nil, fmt.Errorf("decode Trello card response: %w", err)
+	}
+	domain, err := toCard(card)
+	if err != nil {
+		return nil, err
+	}
+	return &domain, nil
+}
+
+func (s *Service) CreateCard(listID, name, desc string) (*scheduling.Card, error) {
+	params := map[string]string{
+		"idList": listID,
+		"name":   name,
+	}
+	if desc != "" {
+		params["desc"] = desc
+	}
+	raw, _, err := s.client.PostWithParams("/cards", params, nil)
+	if err != nil {
+		return nil, fmt.Errorf("create Trello card: %w", err)
+	}
+	var card cardResponse
+	if err := json.Unmarshal(raw, &card); err != nil {
+		return nil, fmt.Errorf("decode Trello card response: %w", err)
+	}
+	if card.ID == "" || strings.TrimSpace(card.Name) == "" {
+		return nil, fmt.Errorf("create Trello card: malformed response (empty id or name)")
+	}
+	domain, err := toCard(card)
+	if err != nil {
+		return nil, err
+	}
+	return &domain, nil
+}
+
+func (s *Service) ArchiveCard(cardID string) error {
+	_, _, err := s.client.PutWithParams("/cards/"+url.PathEscape(cardID), map[string]string{"closed": "true"}, nil)
+	if err != nil {
+		return fmt.Errorf("archive Trello card: %w", err)
+	}
+	return nil
+}
+
+func (s *Service) MoveCard(cardID, targetListID string) error {
+	_, _, err := s.client.PutWithParams("/cards/"+url.PathEscape(cardID), map[string]string{"idList": targetListID}, nil)
+	if err != nil {
+		return fmt.Errorf("move Trello card: %w", err)
+	}
+	return nil
+}
+
+func (s *Service) ListCards(listID string, filter string) ([]scheduling.Card, error) {
+	params := map[string]string{
+		"filter": filter,
+		"fields": "id,name,url,due,dueComplete,labels,pos,closed",
+		"limit":  "1000",
+	}
+	seen := map[string]bool{}
+	var result []scheduling.Card
+	for page := 0; page < 100; page++ {
+		raw, err := s.client.Get("/lists/"+url.PathEscape(listID)+"/cards", params)
+		if err != nil {
+			return nil, fmt.Errorf("list Trello cards: %w", err)
+		}
+		var cards []cardResponse
+		if err := json.Unmarshal(raw, &cards); err != nil {
+			return nil, fmt.Errorf("decode Trello cards response: %w", err)
+		}
+		for _, card := range cards {
+			if card.ID == "" || strings.TrimSpace(card.Name) == "" {
+				return nil, fmt.Errorf("malformed Trello card response")
+			}
+			if seen[card.ID] {
+				continue
+			}
+			seen[card.ID] = true
+			domain, err := toCard(card)
+			if err != nil {
+				return nil, err
+			}
+			switch filter {
+			case "closed":
+				if domain.Closed {
+					result = append(result, domain)
+				}
+			case "open":
+				if !domain.Closed {
+					result = append(result, domain)
+				}
+			default:
+				result = append(result, domain)
+			}
+		}
+		if len(cards) < 1000 {
+			break
+		}
+		params["before"] = cards[len(cards)-1].ID
+	}
+	return result, nil
 }
