@@ -171,7 +171,7 @@ func newWorkflowService(cmd *cobra.Command, flags *rootFlags, persistRefresh boo
 		Options: scheduling.Options{
 			Location: location, DurationMinutes: cfg.DurationMinutes, PreferredTime: cfg.PreferredTime,
 			DayStart: cfg.DayStart, DayEnd: cfg.DayEnd, MaxEventsPerDay: cfg.MaxEventsPerDay,
-			IncludeWeekends: cfg.IncludeWeekends, TitlePrefix: cfg.TitlePrefix,
+			IncludeWeekends: cfg.IncludeWeekends, TitlePrefix: cfg.TitlePrefix, PriorityColors: cfg.PriorityColors(),
 		},
 	}, cfg, nil
 }

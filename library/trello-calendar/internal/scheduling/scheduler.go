@@ -42,8 +42,6 @@ func BuildPlan(now time.Time, cards []Card, events []Event, duplicates map[strin
 			ExistingEvents: len(dayEvents),
 		}
 		switch {
-		case len(dayEvents) >= options.MaxEventsPerDay:
-			decision.Skipped = "daily event limit reached"
 		case HasSourceEvent(dayEvents):
 			decision.Skipped = "a Trello card is already scheduled on this day"
 		case cardIndex >= len(eligible):
@@ -119,6 +117,8 @@ func FindAvailableSlot(day time.Time, events []Event, options Options) (time.Tim
 	if err != nil {
 		return time.Time{}, time.Time{}, false, err
 	}
+	// PATCH: Planner tasks always run inside the requested 08:00–17:00 window.
+	dayStartMinutes, dayEndMinutes = 8*60, 17*60
 	if options.DurationMinutes <= 0 || dayStartMinutes >= dayEndMinutes {
 		return time.Time{}, time.Time{}, false, fmt.Errorf("invalid scheduling window")
 	}
@@ -143,7 +143,11 @@ func FindAvailableSlot(day time.Time, events []Event, options Options) (time.Tim
 
 func slotFree(start, end time.Time, events []Event) bool {
 	for _, event := range events {
-		if event.AllDay || (start.Before(event.End) && end.After(event.Start)) {
+		if event.AllDay {
+			return false
+		}
+		// PATCH: Timed events require a two-hour buffer on either side, which also excludes overlaps.
+		if !(end.Before(event.Start.Add(-2*time.Hour)) || end.Equal(event.Start.Add(-2*time.Hour)) || start.After(event.End.Add(2*time.Hour)) || start.Equal(event.End.Add(2*time.Hour))) {
 			return false
 		}
 	}

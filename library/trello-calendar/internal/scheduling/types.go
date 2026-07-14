@@ -18,6 +18,7 @@ type Card struct {
 	ID               string     `json:"id"`
 	Name             string     `json:"name"`
 	URL              string     `json:"url"`
+	Description      string     `json:"description,omitempty"`
 	ListID           string     `json:"list_id,omitempty"`
 	ListName         string     `json:"list_name,omitempty"`
 	MemberIDs        []string   `json:"member_ids,omitempty"`
@@ -57,6 +58,7 @@ type Options struct {
 	MaxEventsPerDay int
 	IncludeWeekends bool
 	TitlePrefix     string
+	PriorityColors  map[string]string
 }
 
 type Assignment struct {

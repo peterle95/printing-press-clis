@@ -206,7 +206,7 @@ func (s *Service) ListOpenCards(listID string) ([]scheduling.Card, error) {
 func (s *Service) listCards(listID, filter, listName string) ([]scheduling.Card, error) {
 	params := map[string]string{
 		"filter": filter,
-		"fields": "id,name,url,idList,idMembers,due,dueComplete,labels,pos,closed,dateLastActivity",
+		"fields": "id,name,url,desc,idList,idMembers,due,dueComplete,labels,pos,closed,dateLastActivity",
 		"limit":  "1000",
 	}
 	seen := map[string]bool{}
@@ -251,6 +251,7 @@ func toCard(card cardResponse) (scheduling.Card, error) {
 		ID:          card.ID,
 		Name:        card.Name,
 		URL:         card.URL,
+		Description: card.Desc,
 		ListID:      card.ListID,
 		MemberIDs:   card.MemberIDs,
 		DueComplete: card.DueComplete,

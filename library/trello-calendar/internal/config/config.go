@@ -19,8 +19,8 @@ const (
 	DefaultCalendarID  = "primary"
 	DefaultDuration    = 60
 	DefaultPreferred   = "10:00"
-	DefaultDayStart    = "09:00"
-	DefaultDayEnd      = "18:00"
+	DefaultDayStart    = "08:00"
+	DefaultDayEnd      = "17:00"
 	DefaultMaxEvents   = 3
 	DefaultDoingList   = "Doing"
 	DefaultDoneList    = "Done"
@@ -55,6 +55,10 @@ type Config struct {
 	DoingListName    string            `toml:"doing_list_name"`
 	PeterMemberID    string            `toml:"peter_member_id,omitempty"`
 	AllowLiliiaCards bool              `toml:"allow_liliia_cards"`
+	CalendarColorCritical string       `toml:"calendar_color_critical"`
+	CalendarColorHigh     string       `toml:"calendar_color_high"`
+	CalendarColorNormal   string       `toml:"calendar_color_normal"`
+	CalendarColorLow      string       `toml:"calendar_color_low"`
 
 	Path               string `toml:"-"`
 	AuthSource         string `toml:"-"`
@@ -80,7 +84,13 @@ func defaults() *Config {
 		SourceListNames:  append([]string(nil), DefaultSourceListNames...),
 		ExcludeListNames: append([]string(nil), DefaultExcludeListNames...),
 		DoingListName:    DefaultDoingList,
+		CalendarColorCritical: "11", CalendarColorHigh: "6", CalendarColorNormal: "5", CalendarColorLow: "2",
 	}
+}
+
+// PATCH: Priority colors remain configurable and are validated against Calendar at runtime.
+func (c *Config) PriorityColors() map[string]string {
+	return map[string]string{"critical": c.CalendarColorCritical, "high": c.CalendarColorHigh, "normal": c.CalendarColorNormal, "low": c.CalendarColorLow}
 }
 
 func Load(configPath string) (*Config, error) {

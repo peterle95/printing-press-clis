@@ -66,10 +66,11 @@ type fakeCalendar struct {
 func (f *fakeCalendar) ListEvents(context.Context, time.Time, time.Time) ([]scheduling.Event, error) {
 	return append([]scheduling.Event(nil), f.events...), nil
 }
+func (f *fakeCalendar) ListEventColors(context.Context) (map[string]bool, error) { return map[string]bool{}, nil }
 func (f *fakeCalendar) FindCard(_ context.Context, _ string, cardID string) (bool, error) {
 	return f.existing[cardID], nil
 }
-func (f *fakeCalendar) CreateEvent(_ context.Context, _ string, assignment scheduling.Assignment, _, _ string) (string, bool, error) {
+func (f *fakeCalendar) CreateEvent(_ context.Context, _ string, assignment scheduling.Assignment, _, _, _ string) (string, bool, error) {
 	f.creates++
 	if assignment.Card.ID == f.failCard {
 		return "", false, errors.New("injected failure")
@@ -265,9 +266,8 @@ func readyLabels() []scheduling.Label {
 }
 
 func TestEventDescription(t *testing.T) {
-	due := time.Date(2026, 7, 15, 0, 0, 0, 0, time.UTC)
-	text := EventDescription(scheduling.Card{ID: "abc", URL: "https://trello.com/c/abc", Due: &due, Labels: []scheduling.Label{{Name: "backend"}, {Name: "priority"}}})
-	want := "Scheduled from Trello.\n\nCard: https://trello.com/c/abc\nTrello card ID: abc\nLabels: backend, priority\nDue date: 2026-07-15"
+	text := EventDescription(scheduling.Card{ID: "abc", URL: "https://trello.com/c/abc", Description: "Line one\nLine two", Priority: "High", EstimatedMinutes: 60})
+	want := "Line one\nLine two\n\nCard: https://trello.com/c/abc\nTrello card ID: abc\nPriority: High\nDuration: 60 minutes"
 	if text != want {
 		t.Fatalf("description:\n%s\nwant:\n%s", text, want)
 	}

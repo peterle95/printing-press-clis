@@ -24,8 +24,9 @@ type TrelloService interface {
 
 type CalendarService interface {
 	ListEvents(ctx context.Context, start, end time.Time) ([]scheduling.Event, error)
+	ListEventColors(ctx context.Context) (map[string]bool, error)
 	FindCard(ctx context.Context, boardID, cardID string) (bool, error)
-	CreateEvent(ctx context.Context, boardID string, assignment scheduling.Assignment, titlePrefix, description string) (eventID string, created bool, err error)
+	CreateEvent(ctx context.Context, boardID string, assignment scheduling.Assignment, titlePrefix, description, colorID string) (eventID string, created bool, err error)
 	CheckAccess(ctx context.Context) error
 }
 
@@ -179,6 +180,12 @@ func (s *Service) Plan(ctx context.Context) (PlanResult, error) {
 	if err != nil {
 		return PlanResult{}, fmt.Errorf("list Google Calendar events: %w", err)
 	}
+	colors, err := s.Calendar.ListEventColors(ctx)
+	if err != nil {
+		base.Warnings = append(base.Warnings, "Calendar color discovery unavailable; creating events without priority colors: "+err.Error())
+	} else {
+		s.Options.PriorityColors = availablePriorityColors(s.Options.PriorityColors, colors)
+	}
 	plan, err := scheduling.BuildPlan(s.Now(), planningCards, events, duplicates, s.Options, s.OrdererOrDefault())
 	if err != nil {
 		return PlanResult{}, err
@@ -222,8 +229,6 @@ func (s *Service) Execute(ctx context.Context, plan scheduling.Plan, dryRun, com
 		}
 		active := scheduling.EventsForDay(events, dayStart)
 		switch {
-		case len(active) >= s.Options.MaxEventsPerDay:
-			err = fmt.Errorf("daily event limit reached during recheck")
 		case scheduling.HasSourceEvent(active):
 			err = fmt.Errorf("another Trello card is already scheduled on this day")
 		case !scheduling.SlotAvailable(assignment.Start, assignment.End, active):
@@ -234,7 +239,8 @@ func (s *Service) Execute(ctx context.Context, plan scheduling.Plan, dryRun, com
 			continue
 		}
 		description := EventDescription(assignment.Card)
-		eventID, created, err := s.Calendar.CreateEvent(ctx, s.BoardID, assignment, s.Options.TitlePrefix, description)
+		colorID := priorityColor(assignment.Card.Priority, s.Options.PriorityColors)
+		eventID, created, err := s.Calendar.CreateEvent(ctx, s.BoardID, assignment, s.Options.TitlePrefix, description, colorID)
 		if err != nil {
 			s.fail(&result, &item, fmt.Errorf("create event: %w", err))
 			continue
@@ -292,20 +298,29 @@ func (s *Service) OrdererOrDefault() scheduling.CardOrderer {
 
 func EventDescription(card scheduling.Card) string {
 	var lines []string
-	lines = append(lines, "Scheduled from Trello.", "", "Card: "+card.URL, "Trello card ID: "+card.ID)
-	if len(card.Labels) > 0 {
-		labels := make([]string, 0, len(card.Labels))
-		for _, label := range card.Labels {
-			if strings.TrimSpace(label.Name) != "" {
-				labels = append(labels, label.Name)
-			}
-		}
-		if len(labels) > 0 {
-			lines = append(lines, "Labels: "+strings.Join(labels, ", "))
-		}
-	}
-	if card.Due != nil {
-		lines = append(lines, "Due date: "+card.Due.Format("2006-01-02"))
-	}
+	// PATCH: Preserve non-empty Trello descriptions and include only meaningful scheduling metadata.
+	if strings.TrimSpace(card.Description) != "" { lines = append(lines, card.Description, "") }
+	if card.URL != "" { lines = append(lines, "Card: "+card.URL) }
+	if card.ID != "" { lines = append(lines, "Trello card ID: "+card.ID) }
+	if card.Priority != "" { lines = append(lines, "Priority: "+card.Priority) }
+	if card.EstimatedMinutes > 0 { lines = append(lines, fmt.Sprintf("Duration: %d minutes", card.EstimatedMinutes)) }
 	return strings.Join(lines, "\n")
+}
+
+func availablePriorityColors(configured map[string]string, available map[string]bool) map[string]string {
+	result := map[string]string{}
+	for priority, colorID := range configured { if available[colorID] { result[priority] = colorID } }
+	return result
+}
+
+func priorityColor(priority string, colors map[string]string) string { return colors[schedulingPriority(priority)] }
+
+func schedulingPriority(priority string) string {
+	switch strings.ToUpper(strings.TrimSpace(priority)) {
+	case "CRITICAL", "P0", "P1": return "critical"
+	case "HIGH", "P2": return "high"
+	case "NORMAL", "P3": return "normal"
+	case "LOW", "P4", "P5": return "low"
+	default: return ""
+	}
 }
