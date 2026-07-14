@@ -79,8 +79,10 @@ type cardResponse struct {
 	Labels      []scheduling.Label `json:"labels"`
 	Position    float64            `json:"pos"`
 	Closed      bool               `json:"closed"`
-	CreatedAt   *string            `json:"dateLastActivity"`
-	ActivityAt  *string            `json:"dateLastActivity"`
+	// PATCH: Trello exposes one dateLastActivity field; creation ordering is
+	// derived from the card ID, so avoid a duplicate JSON tag during vet.
+	CreatedAt  *string `json:"-"`
+	ActivityAt *string `json:"dateLastActivity"`
 }
 
 type customFieldItemResponse struct {

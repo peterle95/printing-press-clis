@@ -6,6 +6,7 @@ google_calendar_id = "primary"
 source_list_names = ["Peter", "Peter & Liliia"]
 exclude_list_names = ["Doing", "Done"]
 doing_list_name = "Doing"
+done_list_name = "Done"
 peter_member_id = ""
 allow_liliia_cards = false
 duration_minutes = 60

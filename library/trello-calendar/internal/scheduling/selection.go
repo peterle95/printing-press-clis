@@ -8,6 +8,7 @@ type SelectionPolicy struct {
 	SourceListNames  []string
 	ExcludeListNames []string
 	DoingListName    string
+	DoneListName     string
 	PeterMemberID    string
 	AllowLiliiaCards bool
 }

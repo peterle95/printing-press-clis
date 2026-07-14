@@ -11,6 +11,8 @@ import (
 	"time"
 )
 
+const DefaultBufferMinutes = 120
+
 func BuildPlan(now time.Time, cards []Card, events []Event, duplicates map[string]bool, options Options, orderer CardOrderer) (Plan, error) {
 	if options.Location == nil {
 		return Plan{}, fmt.Errorf("location is required")
@@ -44,6 +46,8 @@ func BuildPlan(now time.Time, cards []Card, events []Event, duplicates map[strin
 		switch {
 		case HasSourceEvent(dayEvents):
 			decision.Skipped = "a Trello card is already scheduled on this day"
+		case options.MaxEventsPerDay > 0 && len(dayEvents) >= options.MaxEventsPerDay:
+			decision.Skipped = "daily event limit reached"
 		case cardIndex >= len(eligible):
 			decision.Skipped = "no unscheduled cards"
 		default:
@@ -118,7 +122,6 @@ func FindAvailableSlot(day time.Time, events []Event, options Options) (time.Tim
 		return time.Time{}, time.Time{}, false, err
 	}
 	// PATCH: Planner tasks always run inside the requested 08:00–17:00 window.
-	dayStartMinutes, dayEndMinutes = 8*60, 17*60
 	if options.DurationMinutes <= 0 || dayStartMinutes >= dayEndMinutes {
 		return time.Time{}, time.Time{}, false, fmt.Errorf("invalid scheduling window")
 	}
@@ -134,20 +137,21 @@ func FindAvailableSlot(day time.Time, events []Event, options Options) (time.Tim
 		}
 		start := time.Date(day.Year(), day.Month(), day.Day(), candidate/60, candidate%60, 0, 0, options.Location)
 		end := start.Add(time.Duration(options.DurationMinutes) * time.Minute)
-		if slotFree(start, end, events) {
+		if slotFree(start, end, events, options.BufferMinutes) {
 			return start, end, true, nil
 		}
 	}
 	return time.Time{}, time.Time{}, false, nil
 }
 
-func slotFree(start, end time.Time, events []Event) bool {
+func slotFree(start, end time.Time, events []Event, bufferMinutes int) bool {
 	for _, event := range events {
 		if event.AllDay {
 			return false
 		}
 		// PATCH: Timed events require a two-hour buffer on either side, which also excludes overlaps.
-		if !(end.Before(event.Start.Add(-2*time.Hour)) || end.Equal(event.Start.Add(-2*time.Hour)) || start.After(event.End.Add(2*time.Hour)) || start.Equal(event.End.Add(2*time.Hour))) {
+		buffer := time.Duration(bufferMinutes) * time.Minute
+		if start.Before(event.End.Add(buffer)) && end.After(event.Start.Add(-buffer)) {
 			return false
 		}
 	}
@@ -155,7 +159,7 @@ func slotFree(start, end time.Time, events []Event) bool {
 }
 
 func SlotAvailable(start, end time.Time, events []Event) bool {
-	return slotFree(start, end, events)
+	return slotFree(start, end, events, DefaultBufferMinutes)
 }
 
 func clockMinutes(value string) (int, error) {
