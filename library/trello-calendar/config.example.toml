@@ -1,7 +1,13 @@
 timezone = "Europe/Berlin"
 trello_board_id = "BOARD_ID"
-trello_list_id = "LIST_ID"
+# Optional legacy single-list mode. Leave empty to discover board lists by name.
+trello_list_id = ""
 google_calendar_id = "primary"
+source_list_names = ["Peter", "Peter & Liliia"]
+exclude_list_names = ["Doing", "Done"]
+doing_list_name = "Doing"
+peter_member_id = ""
+allow_liliia_cards = false
 duration_minutes = 60
 preferred_time = "10:00"
 day_start = "09:00"

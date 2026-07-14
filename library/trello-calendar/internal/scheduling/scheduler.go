@@ -49,7 +49,13 @@ func BuildPlan(now time.Time, cards []Card, events []Event, duplicates map[strin
 		case cardIndex >= len(eligible):
 			decision.Skipped = "no unscheduled cards"
 		default:
-			slotStart, slotEnd, ok, err := FindAvailableSlot(day, dayEvents, options)
+			card := eligible[cardIndex]
+			cardOptions := options
+			// PATCH: Board-aware cards can carry discovered Time estimates that override default duration.
+			if card.EstimatedMinutes > 0 {
+				cardOptions.DurationMinutes = card.EstimatedMinutes
+			}
+			slotStart, slotEnd, ok, err := FindAvailableSlot(day, dayEvents, cardOptions)
 			if err != nil {
 				return Plan{}, err
 			}
@@ -57,7 +63,7 @@ func BuildPlan(now time.Time, cards []Card, events []Event, duplicates map[strin
 				decision.Skipped = "no suitable free slot"
 			} else {
 				assignment := Assignment{
-					Card:           eligible[cardIndex],
+					Card:           card,
 					Date:           day.Format("2006-01-02"),
 					Start:          slotStart,
 					End:            slotEnd,

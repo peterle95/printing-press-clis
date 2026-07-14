@@ -160,9 +160,14 @@ func newWorkflowService(cmd *cobra.Command, flags *rootFlags, persistRefresh boo
 	if flags.verbose {
 		fmt.Fprintf(cmd.ErrOrStderr(), "planner timezone=%s calendar=%s list=%s\n", cfg.Timezone, cfg.GoogleCalendarID, cfg.TrelloListID)
 	}
+	// PATCH: Wire board-aware defaults while preserving trello_list_id legacy mode.
 	return &workflow.Service{
 		Trello: trello.New(trelloClient), Calendar: calendar, Now: time.Now,
 		BoardID: cfg.TrelloBoardID, ListID: cfg.TrelloListID,
+		Policy: scheduling.SelectionPolicy{
+			SourceListNames: cfg.SourceListNames, ExcludeListNames: cfg.ExcludeListNames, DoingListName: cfg.DoingListName,
+			PeterMemberID: cfg.PeterMemberID, AllowLiliiaCards: cfg.AllowLiliiaCards,
+		},
 		Options: scheduling.Options{
 			Location: location, DurationMinutes: cfg.DurationMinutes, PreferredTime: cfg.PreferredTime,
 			DayStart: cfg.DayStart, DayEnd: cfg.DayEnd, MaxEventsPerDay: cfg.MaxEventsPerDay,

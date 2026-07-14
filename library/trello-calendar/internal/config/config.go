@@ -22,8 +22,16 @@ const (
 	DefaultDayStart    = "09:00"
 	DefaultDayEnd      = "18:00"
 	DefaultMaxEvents   = 3
+	DefaultDoingList   = "Doing"
+	DefaultDoneList    = "Done"
 	defaultTrelloURL   = "https://api.trello.com/1"
 	defaultCalendarURL = "https://www.googleapis.com/calendar/v3"
+)
+
+// PATCH: Centralize board-aware planner names so list policy is configurable, not scattered.
+var (
+	DefaultSourceListNames  = []string{"Peter", "Peter & Liliia"}
+	DefaultExcludeListNames = []string{"Doing", "Done"}
 )
 
 // Config combines generated Trello transport settings with planner settings.
@@ -42,6 +50,11 @@ type Config struct {
 	MaxEventsPerDay  int               `toml:"max_events_per_day"`
 	IncludeWeekends  bool              `toml:"include_weekends"`
 	TitlePrefix      string            `toml:"title_prefix"`
+	SourceListNames  []string          `toml:"source_list_names,omitempty"`
+	ExcludeListNames []string          `toml:"exclude_list_names,omitempty"`
+	DoingListName    string            `toml:"doing_list_name"`
+	PeterMemberID    string            `toml:"peter_member_id,omitempty"`
+	AllowLiliiaCards bool              `toml:"allow_liliia_cards"`
 
 	Path               string `toml:"-"`
 	AuthSource         string `toml:"-"`
@@ -64,6 +77,9 @@ func defaults() *Config {
 		DayStart:         DefaultDayStart,
 		DayEnd:           DefaultDayEnd,
 		MaxEventsPerDay:  DefaultMaxEvents,
+		SourceListNames:  append([]string(nil), DefaultSourceListNames...),
+		ExcludeListNames: append([]string(nil), DefaultExcludeListNames...),
+		DoingListName:    DefaultDoingList,
 	}
 }
 
@@ -107,6 +123,7 @@ func applyEnv(cfg *Config) {
 	setString(&cfg.TrelloBoardID, "TRELLO_BOARD_ID")
 	setString(&cfg.TrelloListID, "TRELLO_LIST_ID")
 	setString(&cfg.GoogleCalendarID, "GOOGLE_CALENDAR_ID")
+	setString(&cfg.PeterMemberID, "TRELLO_PETER_MEMBER_ID")
 	cfg.TrelloAPIKey = strings.TrimSpace(os.Getenv("TRELLO_API_KEY"))
 	cfg.TrelloToken = strings.TrimSpace(os.Getenv("TRELLO_TOKEN"))
 	cfg.GoogleClientID = strings.TrimSpace(os.Getenv("GOOGLE_CLIENT_ID"))
@@ -157,6 +174,12 @@ func (c *Config) Validate() error {
 	if strings.TrimSpace(c.GoogleCalendarID) == "" {
 		return fmt.Errorf("google_calendar_id must not be empty")
 	}
+	if len(c.SourceListNames) == 0 && strings.TrimSpace(c.TrelloListID) == "" {
+		return fmt.Errorf("source_list_names must not be empty unless trello_list_id is set")
+	}
+	if strings.TrimSpace(c.DoingListName) == "" {
+		return fmt.Errorf("doing_list_name must not be empty")
+	}
 	return nil
 }
 
@@ -164,9 +187,6 @@ func (c *Config) ValidatePlanner() error {
 	var missing []string
 	if strings.TrimSpace(c.TrelloBoardID) == "" {
 		missing = append(missing, "TRELLO_BOARD_ID or trello_board_id")
-	}
-	if strings.TrimSpace(c.TrelloListID) == "" {
-		missing = append(missing, "TRELLO_LIST_ID or trello_list_id")
 	}
 	if len(missing) > 0 {
 		return fmt.Errorf("missing planner configuration: %s", strings.Join(missing, ", "))

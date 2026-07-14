@@ -27,6 +27,46 @@ func TestLoadPrecedenceAndCredentialsStayOutOfTOML(t *testing.T) {
 	}
 }
 
+func TestBoardAwareDefaultsAndLegacyListCompatibility(t *testing.T) {
+	path := filepath.Join(t.TempDir(), "config.toml")
+	data := []byte("timezone = \"Europe/Berlin\"\ntrello_board_id = \"board\"\ngoogle_calendar_id = \"primary\"\n")
+	if err := os.WriteFile(path, data, 0o600); err != nil {
+		t.Fatal(err)
+	}
+	cfg, err := Load(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := cfg.ValidatePlanner(); err != nil {
+		t.Fatalf("board-aware planner must not require trello_list_id: %v", err)
+	}
+	if cfg.TrelloListID != "" {
+		t.Fatalf("unexpected legacy list id: %q", cfg.TrelloListID)
+	}
+	if cfg.DoingListName != "Doing" {
+		t.Fatalf("unexpected names: %#v", cfg)
+	}
+	if len(cfg.SourceListNames) != 2 || cfg.SourceListNames[0] != "Peter" || cfg.SourceListNames[1] != "Peter & Liliia" {
+		t.Fatalf("unexpected source lists: %#v", cfg.SourceListNames)
+	}
+	if len(cfg.ExcludeListNames) != 2 || cfg.ExcludeListNames[0] != "Doing" || cfg.ExcludeListNames[1] != "Done" {
+		t.Fatalf("unexpected exclude lists: %#v", cfg.ExcludeListNames)
+	}
+
+	legacyPath := filepath.Join(t.TempDir(), "legacy.toml")
+	legacyData := []byte("timezone = \"Europe/Berlin\"\ntrello_board_id = \"board\"\ntrello_list_id = \"list\"\ngoogle_calendar_id = \"primary\"\nsource_list_names = []\n")
+	if err := os.WriteFile(legacyPath, legacyData, 0o600); err != nil {
+		t.Fatal(err)
+	}
+	legacy, err := Load(legacyPath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if legacy.TrelloListID != "list" || len(legacy.SourceListNames) != 0 {
+		t.Fatalf("legacy compatibility broken: %#v", legacy)
+	}
+}
+
 func TestLoadRejectsUnknownAndInvalidSettings(t *testing.T) {
 	for name, contents := range map[string]string{
 		"unknown": "unknown_key = true\n",

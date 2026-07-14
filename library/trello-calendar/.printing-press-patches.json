@@ -46,6 +46,24 @@
         "internal/trello/service_test.go"
       ],
       "validated_outcome": "14 tests pass covering GetCard (found/404), CreateCard, ArchiveCard, MoveCard, ListCards filtering, CLI dry-run, confirmation guards, and API request correctness."
+    },
+    {
+      "id": "board-aware-weekly-planner",
+      "summary": "Adds board-aware list/label discovery, label-name eligibility decisions, per-card duration, and move-to-Doing after Calendar success.",
+      "reason": "The operator's Trello board uses named lists and planner labels; safe weekly planning must discover IDs at runtime, match labels by name, and remain idempotent across Calendar and Trello moves.",
+      "files": [
+        "README.md",
+        "config.example.toml",
+        "internal/cli/planner.go",
+        "internal/cli/planner_test.go",
+        "internal/config/config.go",
+        "internal/config/config_test.go",
+        "internal/scheduling",
+        "internal/trello/service.go",
+        "internal/trello/service_test.go",
+        "internal/workflow"
+      ],
+      "validated_outcome": "Unit tests cover config defaults/legacy list mode, board and label discovery JSON output, name-based label validation, fail-closed selection policy, dry-run write isolation, live moves, full-rerun move retry idempotency, and partial move failure."
     }
   ]
 }

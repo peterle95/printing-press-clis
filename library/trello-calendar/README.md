@@ -1,6 +1,6 @@
 # Trello Calendar Printing Press CLI
 
-`trello-calendar-pp-cli` reads open cards from a configured Trello weekly-planner list and schedules as many as possible into the next calendar week without overloading or overlapping Google Calendar days. It also retains the complete generated Trello REST command surface and ships a companion MCP server.
+`trello-calendar-pp-cli` reads open cards from named Trello weekly-planner lists and schedules as many as possible into the next calendar week without overloading or overlapping Google Calendar days. It also retains the complete generated Trello REST command surface and ships a companion MCP server.
 
 ## Features
 
@@ -10,7 +10,9 @@
 - Monday-to-Sunday planning in `Europe/Berlin`, weekdays by default.
 - Counts timed and all-day events, ignores cancelled events, and never overlaps an active event.
 - At most one Trello card per day and no day that already has the configured event maximum.
-- Due-date-first card ordering followed by Trello list position.
+- Board-aware defaults: source lists `Peter` and `Peter & Liliia`, excluded lists `Doing` and `Done`, and post-schedule moves to `Doing`.
+- Runtime discovery of Trello list IDs, custom fields, and dropdown options by name; no custom-field IDs are hardcoded.
+- Due-date-first card ordering followed by Trello list position; discovered `Time` values can override default event duration.
 - Deterministic Google event IDs and private extended properties for cross-run idempotency.
 - Complete planning before mutation, confirmation before writes, and write-free previews/dry-runs.
 - Optional Trello comment after successful scheduling.
@@ -35,14 +37,17 @@ make build-all
 
 1. Create or select a Trello Power-Up at <https://trello.com/power-ups/admin>.
 2. Generate an API key and a user token with permission to read the planner and add comments if `--comment-on-card` will be used.
-3. Find the board ID and the ID of its `Doing` list.
+3. Find the board ID. The planner discovers list IDs by name at runtime. If you need the old single-list mode, also find that list ID.
 4. Export the credentials and IDs:
 
 ```bash
 export TRELLO_API_KEY='...'
 export TRELLO_TOKEN='...'
 export TRELLO_BOARD_ID='...'
-export TRELLO_LIST_ID='...'
+# Optional legacy mode:
+# export TRELLO_LIST_ID='...'
+# Optional shared-list ownership guard:
+# export TRELLO_PETER_MEMBER_ID='...'
 ```
 
 The key and token are sent in Trello's OAuth `Authorization` header. They are never stored in `config.toml` or printed.
@@ -86,8 +91,13 @@ The default file is `~/.config/trello-calendar-pp-cli/config.toml`. Copy [`confi
 ```toml
 timezone = "Europe/Berlin"
 trello_board_id = "BOARD_ID"
-trello_list_id = "LIST_ID"
+trello_list_id = "" # optional legacy single-list mode
 google_calendar_id = "primary"
+source_list_names = ["Peter", "Peter & Liliia"]
+exclude_list_names = ["Doing", "Done"]
+doing_list_name = "Doing"
+peter_member_id = ""
+allow_liliia_cards = false
 duration_minutes = 60
 preferred_time = "10:00"
 day_start = "09:00"
@@ -97,7 +107,7 @@ include_weekends = false
 title_prefix = ""
 ```
 
-Precedence is command flags, then environment IDs, then TOML, then defaults. Unknown TOML keys and invalid scheduling windows are rejected. Credentials remain in environment variables and the Google token file.
+Precedence is command flags, then environment IDs, then TOML, then defaults. Unknown TOML keys and invalid scheduling windows are rejected. Credentials remain in environment variables and the Google token file. Shared-list filtering uses `peter_member_id`; Trello card member names are not fetched.
 
 ## Commands
 
@@ -154,17 +164,19 @@ The next week is the next Monday after today through the following Sunday. A run
 
 The planner:
 
-1. Validates the configured board/list and fetches open list cards.
-2. Marks cards already represented in the target Calendar.
-3. Sorts due cards by due instant, then undated cards by Trello position.
-4. Expands and groups all non-cancelled Calendar events by local day.
-5. Tries the preferred time, then 30-minute increments between the day boundaries.
-6. Assigns at most one card to each eligible day and validates the complete plan.
-7. On a confirmed live run, rechecks the duplicate, capacity, source event, and exact slot immediately before each insert.
+1. Discovers board list IDs plus `Priority`, `Time`, `Automation`, and `Status` custom-field/option mappings by name.
+2. Fetches open cards from configured source lists, defaulting to `Peter` and `Peter & Liliia`.
+3. Excludes `Doing`/`Done`, shared-list cards not assigned to Peter unless explicitly allowed, non-auto-pick cards, and non-ready cards.
+4. Marks cards already represented in the target Calendar.
+5. Sorts due cards by due instant, then undated cards by Trello position.
+6. Expands and groups all non-cancelled Calendar events by local day.
+7. Tries the preferred time, then 30-minute increments between the day boundaries, using discovered `Time` as duration when parseable.
+8. Assigns at most one card to each eligible day and validates the complete plan.
+9. On a confirmed live run, rechecks the duplicate, capacity, source event, and exact slot immediately before each insert/reconcile, then moves the card to `Doing` only after Calendar success.
 
 All-day events block each covered date. Timed events block regardless of Calendar transparency. Boundary-touching events do not overlap.
 
-`preview` and `schedule --dry-run` perform the same live GET requests and return the same plan. They never insert Calendar events, add Trello comments, or save refreshed OAuth tokens.
+`preview` and `schedule --dry-run` perform the same live GET requests and return the same plan. They never insert Calendar events, move Trello cards, add Trello comments, or save refreshed OAuth tokens. JSON/agent reports include discovery source, field mappings, per-card decisions, Calendar actions, Trello move actions, and totals.
 
 ## Duplicate prevention
 
@@ -207,7 +219,7 @@ Doctor independently checks configuration, IDs, timezone data, Trello environmen
 
 - **No Google refresh token:** run `auth google`; if Google omits it, revoke the app's existing consent and authenticate again.
 - **OAuth callback timeout:** confirm `GOOGLE_REDIRECT_URI` is loopback HTTP, its port is free, and the browser uses the printed URL.
-- **List not named Doing:** the configured list ID remains authoritative; doctor emits a warning.
+- **List not named Doing:** in legacy `trello_list_id` mode the configured list ID remains authoritative; doctor emits a warning.
 - **Rate limits or temporary failures:** requests retry three times with exponential backoff and `Retry-After` support.
 - **Partial schedule:** successful events remain; failures are summarized and the process exits nonzero. Re-run safely—duplicate checks prevent repeated events.
 - **No slot:** inspect all-day events and the configured day window/duration.
@@ -255,8 +267,8 @@ spec.json              normalized archived official Trello OpenAPI
 
 ## Assumptions and future work
 
-- The list ID is authoritative; a non-`Doing` name warns but does not block.
+- In legacy `trello_list_id` mode, the list ID is authoritative; a non-`Doing` name warns but does not block.
 - `dueComplete` does not exclude an otherwise open card.
 - Cancelled events do not consume capacity, but a cancelled matching event permanently prevents rescheduling that card.
-- Cards are not moved or archived. The workflow interface leaves room for a future post-scheduling action.
+- Live board-aware scheduling moves cards to `Doing` after Calendar event creation or reconciliation. If the move fails, the event remains and a rerun retries the move without duplicating the event.
 - A future week policy may support different week starts or rolling windows without changing API adapters.
