@@ -14,9 +14,9 @@ import (
 	"hevy-pp-cli/internal/plans"
 )
 
-const loginURL = "https://www.hevyapp.com/login"
+const loginURL = "https://hevy.com/login"
 
-var allowedHosts = map[string]bool{"www.hevyapp.com": true, "hevyapp.com": true}
+var allowedHosts = map[string]bool{"www.hevyapp.com": true, "hevyapp.com": true, "hevy.com": true, "www.hevy.com": true}
 
 type Status struct {
 	Status    string `json:"status"`
@@ -72,7 +72,8 @@ func Login(ctx context.Context, o Options) error {
 			return ctx.Err()
 		default:
 		}
-		if !strings.Contains(p.URL(), "/login") {
+		cur := p.URL()
+		if !strings.Contains(cur, "/login") && !strings.Contains(cur, "/wp-login.php") {
 			return nil
 		}
 		time.Sleep(500 * time.Millisecond)
@@ -104,12 +105,13 @@ func AuthStatus(ctx context.Context, o Options) Status {
 	}
 	defer b.Close()
 	p := b.Pages()[0]
-	if _, err = p.Goto("https://www.hevyapp.com/"); err != nil {
+	if _, err = p.Goto("https://hevy.com/"); err != nil {
 		st.Status = "unknown"
 		st.Detail = "could not reach Hevy"
 		return st
 	}
-	if strings.Contains(p.URL(), "/login") {
+	cur := p.URL()
+	if strings.Contains(cur, "/login") || strings.Contains(cur, "/wp-login.php") {
 		st.Status = "expired"
 	} else {
 		st.Status = "authenticated"
