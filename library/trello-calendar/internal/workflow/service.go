@@ -30,6 +30,17 @@ type CalendarService interface {
 	CheckAccess(ctx context.Context) error
 }
 
+// PATCH: Optional Calendar capabilities support reviewing existing Doing cards
+// without forcing existing test doubles or alternate Calendar adapters to grow
+// the core scheduling interface.
+type CalendarEventFinder interface {
+	FindCardEvent(ctx context.Context, boardID, cardID string) (scheduling.Event, bool, error)
+}
+
+type CalendarEventRescheduler interface {
+	RescheduleEvent(ctx context.Context, eventID string, start, end time.Time) error
+}
+
 type Clock func() time.Time
 
 type Service struct {
@@ -42,6 +53,25 @@ type Service struct {
 	Orderer  scheduling.CardOrderer
 	Policy   scheduling.SelectionPolicy
 	DoingID  string
+	DoneID   string
+}
+
+const DoingCapacity = 4
+
+type DoingReviewItem struct {
+	Card       scheduling.Card        `json:"card"`
+	Completed  bool                   `json:"completed"`
+	Action     string                 `json:"action"`
+	EventID    string                 `json:"event_id,omitempty"`
+	Assignment *scheduling.Assignment `json:"assignment,omitempty"`
+	Error      string                 `json:"error,omitempty"`
+}
+
+type DoingReviewResult struct {
+	DoingCount     int               `json:"doing_count"`
+	RemainingCount int               `json:"remaining_doing_count"`
+	Items          []DoingReviewItem `json:"items"`
+	Plan           scheduling.Plan   `json:"plan"`
 }
 
 type PlanResult struct {
@@ -121,6 +151,8 @@ func (s *Service) BoardCards(ctx context.Context) (PlanResult, error) {
 		warnings = append(warnings, fmt.Sprintf("target list %q not discovered", s.Policy.DoingListName))
 	}
 	s.DoingID = doing.ID
+	done := listsByName[strings.ToLower(strings.TrimSpace(s.Policy.DoneListName))]
+	s.DoneID = done.ID
 	var cards []scheduling.Card
 	for _, name := range s.Policy.SourceListNames {
 		list := listsByName[strings.ToLower(strings.TrimSpace(name))]
@@ -142,6 +174,189 @@ func (s *Service) BoardCards(ctx context.Context) (PlanResult, error) {
 		cards[index].Scheduled = exists
 	}
 	return PlanResult{ListName: strings.Join(s.Policy.SourceListNames, ", "), Warnings: warnings, Discovery: discovery, Cards: s.OrdererOrDefault().Order(cards)}, nil
+}
+
+// PATCH: Prepare and optionally execute the human-confirmed Doing-card review.
+// A completed card moves to Done; an incomplete card retains its list position
+// and gets an existing Calendar event moved, or a missing event created, in the
+// next scheduling week.
+func (s *Service) ReviewDoing(ctx context.Context, completed map[string]bool, dryRun bool) (DoingReviewResult, error) {
+	if strings.TrimSpace(s.ListID) != "" {
+		return DoingReviewResult{}, fmt.Errorf("Doing review requires board-aware list discovery; unset trello_list_id")
+	}
+	discovery, err := s.Trello.DiscoverBoard(s.BoardID)
+	if err != nil {
+		return DoingReviewResult{}, err
+	}
+	lists := map[string]trelloadapter.DiscoveredList{}
+	for _, list := range discovery.Lists {
+		lists[strings.ToLower(strings.TrimSpace(list.Name))] = list
+	}
+	doing := lists[strings.ToLower(strings.TrimSpace(s.Policy.DoingListName))]
+	done := lists[strings.ToLower(strings.TrimSpace(s.Policy.DoneListName))]
+	if doing.ID == "" {
+		return DoingReviewResult{}, fmt.Errorf("target list %q not discovered", s.Policy.DoingListName)
+	}
+	s.DoingID, s.DoneID = doing.ID, done.ID
+	cards, err := s.Trello.ListOpenCardsInList(doing.ID, doing.Name, discovery.Fields)
+	if err != nil {
+		return DoingReviewResult{}, err
+	}
+	result := DoingReviewResult{DoingCount: len(cards)}
+	var remaining []scheduling.Card
+	for _, card := range cards {
+		if !completed[card.ID] {
+			remaining = append(remaining, card)
+		}
+	}
+	result.RemainingCount = len(remaining)
+
+	start, end := scheduling.NextWeek(s.Now(), s.Options.Location)
+	events, err := s.Calendar.ListEvents(ctx, start, end)
+	if err != nil {
+		return DoingReviewResult{}, fmt.Errorf("list Google Calendar events for Doing review: %w", err)
+	}
+	cardEvents := map[string]scheduling.Event{}
+	if finder, ok := s.Calendar.(CalendarEventFinder); ok {
+		for _, card := range remaining {
+			event, found, findErr := finder.FindCardEvent(ctx, s.BoardID, card.ID)
+			if findErr != nil {
+				return DoingReviewResult{}, fmt.Errorf("find Calendar event for card %s: %w", card.ID, findErr)
+			}
+			if found {
+				cardEvents[card.ID] = event
+			}
+		}
+	}
+	// Existing events for the cards being rescheduled must not block their new
+	// slots. Other Calendar events continue to reserve their dates and times.
+	filteredEvents := make([]scheduling.Event, 0, len(events))
+	for _, event := range events {
+		remove := false
+		for _, own := range cardEvents {
+			if own.ID != "" && own.ID == event.ID {
+				remove = true
+				break
+			}
+		}
+		if !remove {
+			filteredEvents = append(filteredEvents, event)
+		}
+	}
+	duplicates := map[string]bool{}
+	plan, err := scheduling.BuildPlan(s.Now(), remaining, filteredEvents, duplicates, s.Options, s.OrdererOrDefault())
+	if err != nil {
+		return DoingReviewResult{}, err
+	}
+	result.Plan = plan
+	assignments := map[string]scheduling.Assignment{}
+	for _, assignment := range plan.Assignments {
+		assignments[assignment.Card.ID] = assignment
+	}
+	for _, card := range cards {
+		item := DoingReviewItem{Card: card, Completed: completed[card.ID]}
+		if item.Completed {
+			item.Action = "move-to-done"
+			if done.ID == "" {
+				item.Action = "failed"
+				item.Error = fmt.Sprintf("target list %q not discovered", s.Policy.DoneListName)
+			} else if dryRun {
+				item.Action = "would-move-to-done"
+			} else if err := s.Trello.MoveCard(card.ID, done.ID); err != nil {
+				item.Action = "failed"
+				item.Error = err.Error()
+			}
+			result.Items = append(result.Items, item)
+			continue
+		}
+		assignment, hasAssignment := assignments[card.ID]
+		if hasAssignment {
+			item.Assignment = &assignment
+		}
+		if event, found := cardEvents[card.ID]; found {
+			item.EventID = event.ID
+		}
+		switch {
+		case !hasAssignment:
+			item.Action = "unscheduled"
+			item.Error = "no suitable free slot in next week"
+		case dryRun:
+			if item.EventID != "" {
+				item.Action = "would-reschedule"
+			} else {
+				item.Action = "would-create-event"
+			}
+		default:
+			if item.EventID != "" {
+				rescheduler, ok := s.Calendar.(CalendarEventRescheduler)
+				if !ok {
+					item.Action = "failed"
+					item.Error = "Calendar adapter does not support rescheduling"
+				} else if err := rescheduler.RescheduleEvent(ctx, item.EventID, assignment.Start, assignment.End); err != nil {
+					item.Action = "failed"
+					item.Error = err.Error()
+				} else {
+					item.Action = "rescheduled"
+				}
+			} else {
+				eventID, created, createErr := s.Calendar.CreateEvent(ctx, s.BoardID, assignment, s.Options.TitlePrefix, EventDescription(card), priorityColor(card.Priority, s.Options.PriorityColors))
+				if createErr != nil {
+					item.Action = "failed"
+					item.Error = createErr.Error()
+				} else {
+					// PATCH: Preserve CreateEvent's verified created-versus-reconciled outcome.
+					if created {
+						item.Action = "created-event"
+					} else {
+						item.Action = "reconciled-event"
+					}
+					item.EventID = eventID
+				}
+			}
+		}
+		result.Items = append(result.Items, item)
+	}
+	return result, nil
+}
+
+// PATCH: Build a capped refill plan so Doing never exceeds four open cards.
+func (s *Service) PlanTopUp(ctx context.Context, capacity int, reserved []scheduling.Assignment) (PlanResult, error) {
+	if capacity <= 0 {
+		return PlanResult{ListName: strings.Join(s.Policy.SourceListNames, ", "), Plan: scheduling.Plan{Timezone: s.Options.Location.String()}}, nil
+	}
+	base, err := s.BoardCards(ctx)
+	if err != nil {
+		return PlanResult{}, err
+	}
+	duplicates := make(map[string]bool, len(base.Cards))
+	for _, card := range base.Cards {
+		duplicates[card.ID] = card.Scheduled
+	}
+	planningCards, decisions := scheduling.SelectEligible(base.Cards, s.Policy, duplicates)
+	// PATCH: A source-list card with an existing deterministic event still
+	// needs the move retry so it can occupy one of the four Doing slots.
+	for _, card := range planningCards {
+		if card.Scheduled && card.ListID != "" && s.DoingID != "" && card.ListID != s.DoingID {
+			duplicates[card.ID] = false
+		}
+	}
+	if len(planningCards) > capacity {
+		planningCards = planningCards[:capacity]
+	}
+	start, end := scheduling.NextWeek(s.Now(), s.Options.Location)
+	events, err := s.Calendar.ListEvents(ctx, start, end)
+	if err != nil {
+		return PlanResult{}, fmt.Errorf("list Google Calendar events: %w", err)
+	}
+	for _, assignment := range reserved {
+		events = append(events, scheduling.Event{ID: "planned-" + assignment.Card.ID, Summary: assignment.Card.Name, Start: assignment.Start, End: assignment.End, Properties: map[string]string{"source": scheduling.Source}})
+	}
+	plan, err := scheduling.BuildPlan(s.Now(), planningCards, events, duplicates, s.Options, s.OrdererOrDefault())
+	if err != nil {
+		return PlanResult{}, err
+	}
+	base.Decisions, base.Plan = decisions, plan
+	return base, nil
 }
 
 func (s *Service) Plan(ctx context.Context) (PlanResult, error) {
@@ -299,28 +514,49 @@ func (s *Service) OrdererOrDefault() scheduling.CardOrderer {
 func EventDescription(card scheduling.Card) string {
 	var lines []string
 	// PATCH: Preserve non-empty Trello descriptions and include only meaningful scheduling metadata.
-	if strings.TrimSpace(card.Description) != "" { lines = append(lines, card.Description, "") }
-	if card.URL != "" { lines = append(lines, "Card: "+card.URL) }
-	if card.ID != "" { lines = append(lines, "Trello card ID: "+card.ID) }
-	if card.Priority != "" { lines = append(lines, "Priority: "+card.Priority) }
-	if card.EstimatedMinutes > 0 { lines = append(lines, fmt.Sprintf("Duration: %d minutes", card.EstimatedMinutes)) }
+	if strings.TrimSpace(card.Description) != "" {
+		lines = append(lines, card.Description, "")
+	}
+	if card.URL != "" {
+		lines = append(lines, "Card: "+card.URL)
+	}
+	if card.ID != "" {
+		lines = append(lines, "Trello card ID: "+card.ID)
+	}
+	if card.Priority != "" {
+		lines = append(lines, "Priority: "+card.Priority)
+	}
+	if card.EstimatedMinutes > 0 {
+		lines = append(lines, fmt.Sprintf("Duration: %d minutes", card.EstimatedMinutes))
+	}
 	return strings.Join(lines, "\n")
 }
 
 func availablePriorityColors(configured map[string]string, available map[string]bool) map[string]string {
 	result := map[string]string{}
-	for priority, colorID := range configured { if available[colorID] { result[priority] = colorID } }
+	for priority, colorID := range configured {
+		if available[colorID] {
+			result[priority] = colorID
+		}
+	}
 	return result
 }
 
-func priorityColor(priority string, colors map[string]string) string { return colors[schedulingPriority(priority)] }
+func priorityColor(priority string, colors map[string]string) string {
+	return colors[schedulingPriority(priority)]
+}
 
 func schedulingPriority(priority string) string {
 	switch strings.ToUpper(strings.TrimSpace(priority)) {
-	case "CRITICAL", "P0", "P1": return "critical"
-	case "HIGH", "P2": return "high"
-	case "NORMAL", "P3": return "normal"
-	case "LOW", "P4", "P5": return "low"
-	default: return ""
+	case "CRITICAL", "P0", "P1":
+		return "critical"
+	case "HIGH", "P2":
+		return "high"
+	case "NORMAL", "P3":
+		return "normal"
+	case "LOW", "P4", "P5":
+		return "low"
+	default:
+		return ""
 	}
 }

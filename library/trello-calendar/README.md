@@ -96,6 +96,7 @@ google_calendar_id = "primary"
 source_list_names = ["Peter", "Peter & Liliia"]
 exclude_list_names = ["Doing", "Done"]
 doing_list_name = "Doing"
+done_list_name = "Done"
 peter_member_id = ""
 allow_liliia_cards = false
 duration_minutes = 60
@@ -118,6 +119,7 @@ trello-calendar-pp-cli preview
 trello-calendar-pp-cli schedule
 trello-calendar-pp-cli schedule --yes
 trello-calendar-pp-cli schedule --dry-run
+trello-calendar-pp-cli review
 trello-calendar-pp-cli doctor
 ```
 
@@ -144,6 +146,8 @@ trello-calendar-pp-cli which "get a Trello card" --json
 ```
 
 `schedule` additionally accepts `--comment-on-card`. Global Printing Press flags include `--json`, `--agent`, `--yes`, `--no-input`, `--verbose`, `--timeout`, and `--rate-limit`.
+
+`review` (and board-aware `schedule`, unless `--skip-doing-review` is used) first reviews every open card in `Doing`. Interactive runs ask whether each card is complete; completed cards move to `Done`, while incomplete cards stay in `Doing` and have their linked Calendar event rescheduled into the next week. If fewer than four cards remain, eligible cards from the source lists are selected using the normal priority, duration, automation, and status rules, moved into `Doing` after successful event creation, and scheduled. Use `--dry-run` to inspect the complete review and refill plan without writes; use `--yes` for non-interactive execution.
 
 Examples:
 

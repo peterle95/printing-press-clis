@@ -52,6 +52,7 @@ type Event struct {
 type Options struct {
 	Location        *time.Location
 	DurationMinutes int
+	BufferMinutes   int
 	PreferredTime   string
 	DayStart        string
 	DayEnd          string

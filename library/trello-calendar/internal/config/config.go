@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"time"
 
@@ -18,6 +19,7 @@ const (
 	DefaultTimezone    = "Europe/Berlin"
 	DefaultCalendarID  = "primary"
 	DefaultDuration    = 60
+	DefaultBuffer      = 120
 	DefaultPreferred   = "10:00"
 	DefaultDayStart    = "08:00"
 	DefaultDayEnd      = "17:00"
@@ -37,28 +39,30 @@ var (
 // Config combines generated Trello transport settings with planner settings.
 // PATCH: Keep credentials out of TOML and add the Trello-to-Calendar workflow configuration.
 type Config struct {
-	BaseURL          string            `toml:"base_url"`
-	Headers          map[string]string `toml:"headers,omitempty"`
-	Timezone         string            `toml:"timezone"`
-	TrelloBoardID    string            `toml:"trello_board_id"`
-	TrelloListID     string            `toml:"trello_list_id"`
-	GoogleCalendarID string            `toml:"google_calendar_id"`
-	DurationMinutes  int               `toml:"duration_minutes"`
-	PreferredTime    string            `toml:"preferred_time"`
-	DayStart         string            `toml:"day_start"`
-	DayEnd           string            `toml:"day_end"`
-	MaxEventsPerDay  int               `toml:"max_events_per_day"`
-	IncludeWeekends  bool              `toml:"include_weekends"`
-	TitlePrefix      string            `toml:"title_prefix"`
-	SourceListNames  []string          `toml:"source_list_names,omitempty"`
-	ExcludeListNames []string          `toml:"exclude_list_names,omitempty"`
-	DoingListName    string            `toml:"doing_list_name"`
-	PeterMemberID    string            `toml:"peter_member_id,omitempty"`
-	AllowLiliiaCards bool              `toml:"allow_liliia_cards"`
-	CalendarColorCritical string       `toml:"calendar_color_critical"`
-	CalendarColorHigh     string       `toml:"calendar_color_high"`
-	CalendarColorNormal   string       `toml:"calendar_color_normal"`
-	CalendarColorLow      string       `toml:"calendar_color_low"`
+	BaseURL               string            `toml:"base_url"`
+	Headers               map[string]string `toml:"headers,omitempty"`
+	Timezone              string            `toml:"timezone"`
+	TrelloBoardID         string            `toml:"trello_board_id"`
+	TrelloListID          string            `toml:"trello_list_id"`
+	GoogleCalendarID      string            `toml:"google_calendar_id"`
+	DurationMinutes       int               `toml:"duration_minutes"`
+	BufferMinutes         int               `toml:"buffer_minutes"`
+	PreferredTime         string            `toml:"preferred_time"`
+	DayStart              string            `toml:"day_start"`
+	DayEnd                string            `toml:"day_end"`
+	MaxEventsPerDay       int               `toml:"max_events_per_day"`
+	IncludeWeekends       bool              `toml:"include_weekends"`
+	TitlePrefix           string            `toml:"title_prefix"`
+	SourceListNames       []string          `toml:"source_list_names,omitempty"`
+	ExcludeListNames      []string          `toml:"exclude_list_names,omitempty"`
+	DoingListName         string            `toml:"doing_list_name"`
+	DoneListName          string            `toml:"done_list_name"`
+	PeterMemberID         string            `toml:"peter_member_id,omitempty"`
+	AllowLiliiaCards      bool              `toml:"allow_liliia_cards"`
+	CalendarColorCritical string            `toml:"calendar_color_critical"`
+	CalendarColorHigh     string            `toml:"calendar_color_high"`
+	CalendarColorNormal   string            `toml:"calendar_color_normal"`
+	CalendarColorLow      string            `toml:"calendar_color_low"`
 
 	Path               string `toml:"-"`
 	AuthSource         string `toml:"-"`
@@ -68,22 +72,25 @@ type Config struct {
 	GoogleClientID     string `toml:"-"`
 	GoogleClientSecret string `toml:"-"`
 	GoogleRedirectURI  string `toml:"-"`
+	EnvPath            string `toml:"-"`
 }
 
 func defaults() *Config {
 	return &Config{
-		BaseURL:          defaultTrelloURL,
-		GoogleBaseURL:    defaultCalendarURL,
-		Timezone:         DefaultTimezone,
-		GoogleCalendarID: DefaultCalendarID,
-		DurationMinutes:  DefaultDuration,
-		PreferredTime:    DefaultPreferred,
-		DayStart:         DefaultDayStart,
-		DayEnd:           DefaultDayEnd,
-		MaxEventsPerDay:  DefaultMaxEvents,
-		SourceListNames:  append([]string(nil), DefaultSourceListNames...),
-		ExcludeListNames: append([]string(nil), DefaultExcludeListNames...),
-		DoingListName:    DefaultDoingList,
+		BaseURL:               defaultTrelloURL,
+		GoogleBaseURL:         defaultCalendarURL,
+		Timezone:              DefaultTimezone,
+		GoogleCalendarID:      DefaultCalendarID,
+		DurationMinutes:       DefaultDuration,
+		BufferMinutes:         DefaultBuffer,
+		PreferredTime:         DefaultPreferred,
+		DayStart:              DefaultDayStart,
+		DayEnd:                DefaultDayEnd,
+		MaxEventsPerDay:       DefaultMaxEvents,
+		SourceListNames:       append([]string(nil), DefaultSourceListNames...),
+		ExcludeListNames:      append([]string(nil), DefaultExcludeListNames...),
+		DoingListName:         DefaultDoingList,
+		DoneListName:          DefaultDoneList,
 		CalendarColorCritical: "11", CalendarColorHigh: "6", CalendarColorNormal: "5", CalendarColorLow: "2",
 	}
 }
@@ -95,6 +102,11 @@ func (c *Config) PriorityColors() map[string]string {
 
 func Load(configPath string) (*Config, error) {
 	cfg := defaults()
+	// PATCH: Load project-local dotenv credentials without overwriting exports.
+	envPath, err := loadDotEnv(configPath)
+	if err != nil {
+		return nil, err
+	}
 	path := configPath
 	if path == "" {
 		path = os.Getenv("TRELLO_CALENDAR_CONFIG")
@@ -106,7 +118,7 @@ func Load(configPath string) (*Config, error) {
 		}
 		path = filepath.Join(home, ".config", "trello-calendar-pp-cli", "config.toml")
 	}
-	cfg.Path = path
+	cfg.Path, cfg.EnvPath = path, envPath
 
 	data, err := os.ReadFile(path)
 	switch {
@@ -144,6 +156,57 @@ func applyEnv(cfg *Config) {
 	}
 }
 
+var dotenvNames = map[string]bool{"TRELLO_API_KEY": true, "TRELLO_TOKEN": true, "TRELLO_BOARD_ID": true, "TRELLO_LIST_ID": true, "TRELLO_PETER_MEMBER_ID": true, "GOOGLE_CLIENT_ID": true, "GOOGLE_CLIENT_SECRET": true, "GOOGLE_REDIRECT_URI": true, "GOOGLE_CALENDAR_ID": true}
+
+func loadDotEnv(configPath string) (string, error) {
+	if explicit := strings.TrimSpace(os.Getenv("TRELLO_CALENDAR_ENV_FILE")); explicit != "" {
+		return explicit, applyDotEnv(explicit)
+	}
+	cwd, err := os.Getwd()
+	if err != nil {
+		return "", nil
+	}
+	for _, path := range []string{filepath.Join(cwd, ".env"), filepath.Join(cwd, "library", "trello-calendar", ".env"), filepath.Join(filepath.Dir(configPath), ".env")} {
+		if _, err := os.Stat(path); os.IsNotExist(err) {
+			continue
+		} else if err != nil {
+			return "", err
+		}
+		return path, applyDotEnv(path)
+	}
+	return "", nil
+}
+func applyDotEnv(path string) error {
+	data, err := os.ReadFile(path)
+	if err != nil {
+		return err
+	}
+	for _, line := range strings.Split(string(data), "\n") {
+		line = strings.TrimSpace(strings.TrimPrefix(strings.TrimSpace(line), "export "))
+		if line == "" || strings.HasPrefix(line, "#") {
+			continue
+		}
+		name, value, ok := strings.Cut(line, "=")
+		name = strings.TrimSpace(name)
+		if !ok || !dotenvNames[name] || strings.TrimSpace(os.Getenv(name)) != "" {
+			continue
+		}
+		value = strings.TrimSpace(value)
+		if strings.HasPrefix(value, `"`) {
+			unquoted, err := strconv.Unquote(value)
+			if err != nil {
+				return err
+			}
+			value = unquoted
+		} else if strings.HasPrefix(value, "'") && strings.HasSuffix(value, "'") {
+			value = value[1 : len(value)-1]
+		}
+		if err := os.Setenv(name, value); err != nil {
+			return err
+		}
+	}
+	return nil
+}
 func setString(dst *string, name string) {
 	if value := strings.TrimSpace(os.Getenv(name)); value != "" {
 		*dst = value
@@ -175,6 +238,9 @@ func (c *Config) Validate() error {
 	if c.DurationMinutes <= 0 {
 		return fmt.Errorf("duration_minutes must be greater than zero")
 	}
+	if c.BufferMinutes < 0 {
+		return fmt.Errorf("buffer_minutes must not be negative")
+	}
 	if start+c.DurationMinutes > end {
 		return fmt.Errorf("duration_minutes does not fit inside the scheduling window")
 	}
@@ -189,6 +255,9 @@ func (c *Config) Validate() error {
 	}
 	if strings.TrimSpace(c.DoingListName) == "" {
 		return fmt.Errorf("doing_list_name must not be empty")
+	}
+	if strings.TrimSpace(c.DoneListName) == "" {
+		return fmt.Errorf("done_list_name must not be empty")
 	}
 	return nil
 }

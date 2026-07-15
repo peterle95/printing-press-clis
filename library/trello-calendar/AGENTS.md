@@ -4,6 +4,12 @@ This directory is a generated `trello-calendar-pp-cli` printed CLI. It was produ
 
 ## Local Operating Contract
 
+Before any CLI invocation, load credentials from `.env`:
+
+```bash
+source .env
+```
+
 Start by asking the generated CLI for current runtime truth:
 
 ```bash
@@ -39,6 +45,10 @@ Use `--yes --no-input` only after the target, arguments, and side effects are cl
 `schedule --dry-run --agent` before a live schedule, and require explicit
 operator authorization before using `schedule --yes`. Treat
 `--comment-on-card` as a separate Trello mutation.
+
+Before scheduling, check `schedule --dry-run --agent` output for cards in the
+"Doing" list that would be re-scheduled. Ask the operator whether each is
+completed. If yes, move it to "Done" or archive before running live schedule.
 
 Use `card create`, `card archive`, and `card move` for card mutations.
 All mutations respect `--dry-run` and require `--yes` in non-interactive mode.

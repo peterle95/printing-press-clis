@@ -45,6 +45,10 @@ Use `preview` or `schedule --dry-run` before live scheduling. A live agent or
 JSON invocation must include `--yes`; never infer permission to add Trello
 comments unless `--comment-on-card` was explicitly requested.
 
+Before live scheduling, inspect `schedule --dry-run` output for cards in the
+"Doing" list flagged for re-schedule. Ask operator if each is completed — if
+yes, move card to "Done" list or archive before running live schedule.
+
 ```bash
 trello-calendar-pp-cli preview --agent
 trello-calendar-pp-cli schedule --dry-run --agent

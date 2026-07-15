@@ -26,6 +26,8 @@ type plannerCLIOptions struct {
 	maxEvents       int
 	titlePrefix     string
 	commentOnCard   bool
+	reviewDoing     bool
+	skipReviewDoing bool
 }
 
 func defaultPlannerCLIOptions() plannerCLIOptions {
@@ -68,6 +70,9 @@ func newScheduleCmd(flags *rootFlags) *cobra.Command {
 			service, _, err := newWorkflowService(cmd, flags, !flags.dryRun, &opts)
 			if err != nil {
 				return err
+			}
+			if opts.reviewDoing && !opts.skipReviewDoing && strings.TrimSpace(service.ListID) == "" {
+				return runDoingReviewWorkflow(cmd, flags, service)
 			}
 			planned, err := service.Plan(cmd.Context())
 			if err != nil {
@@ -112,7 +117,137 @@ func newScheduleCmd(flags *rootFlags) *cobra.Command {
 	}
 	addPlannerFlags(cmd, &opts)
 	cmd.Flags().BoolVar(&opts.commentOnCard, "comment-on-card", false, "Add a scheduling comment to each Trello card")
+	cmd.Flags().BoolVar(&opts.reviewDoing, "review-doing", true, "Review Doing cards and refill the list to four cards")
+	cmd.Flags().BoolVar(&opts.skipReviewDoing, "skip-doing-review", false, "Skip the Doing review phase")
 	return cmd
+}
+
+// PATCH: Expose the Doing review as a dedicated command and as the default
+// board-aware schedule phase. Legacy trello_list_id mode remains unchanged.
+func newReviewCmd(flags *rootFlags) *cobra.Command {
+	opts := defaultPlannerCLIOptions()
+	cmd := &cobra.Command{
+		Use:   "review",
+		Short: "Review Doing cards, reschedule them, and refill Doing to four cards",
+		Args:  cobra.NoArgs,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			service, _, err := newWorkflowService(cmd, flags, !flags.dryRun, &opts)
+			if err != nil {
+				return err
+			}
+			return runDoingReviewWorkflow(cmd, flags, service)
+		},
+	}
+	addPlannerFlags(cmd, &opts)
+	return cmd
+}
+
+func runDoingReviewWorkflow(cmd *cobra.Command, flags *rootFlags, service *workflow.Service) error {
+	ctx := cmd.Context()
+	initial, err := service.ReviewDoing(ctx, map[string]bool{}, true)
+	if err != nil {
+		return apiErr(err)
+	}
+	completed := map[string]bool{}
+	for _, item := range initial.Items {
+		// PATCH: Only ask about Doing cards that already have a Calendar event;
+		// unscheduled Doing cards are proposed directly in the weekly preview.
+		if item.EventID == "" || flags.noInput || flags.yes {
+			continue
+		}
+		fmt.Fprintf(cmd.OutOrStdout(), "Was already-scheduled Doing card %q completed? [y/N] (No = retry/reschedule) ", item.Card.Name)
+		answer, readErr := confirm(cmd.InOrStdin(), cmd.ErrOrStderr())
+		if readErr != nil {
+			return readErr
+		}
+		if answer {
+			completed[item.Card.ID] = true
+		}
+	}
+	preview, err := service.ReviewDoing(ctx, completed, true)
+	if err != nil {
+		return apiErr(err)
+	}
+	capacity := workflow.DoingCapacity - preview.RemainingCount
+	refillPreview, err := service.PlanTopUp(ctx, capacity, preview.Plan.Assignments)
+	if err != nil {
+		return apiErr(err)
+	}
+	if !flags.asJSON {
+		fmt.Fprintln(cmd.OutOrStdout(), "\nProposed Doing review:")
+		for _, item := range preview.Items {
+			if item.Error != "" {
+				fmt.Fprintf(cmd.OutOrStdout(), "- %s: %s (%s)\n", item.Card.Name, item.Action, item.Error)
+			} else {
+				fmt.Fprintf(cmd.OutOrStdout(), "- %s: %s\n", item.Card.Name, item.Action)
+			}
+		}
+		fmt.Fprintln(cmd.OutOrStdout(), "\nProposed week for Doing cards:")
+		if err := printPlan(cmd, flags, workflow.PlanResult{ListName: "Doing", Plan: preview.Plan}); err != nil {
+			return err
+		}
+		fmt.Fprintln(cmd.OutOrStdout(), "Proposed refill from source lists:")
+		if err := printPlan(cmd, flags, refillPreview); err != nil {
+			return err
+		}
+	}
+	if !flags.dryRun && !flags.yes {
+		if flags.noInput || flags.asJSON {
+			return usageErr(fmt.Errorf("live Doing review in non-interactive or JSON mode requires --yes"))
+		}
+		confirmed, confirmErr := confirm(cmd.InOrStdin(), cmd.ErrOrStderr())
+		if confirmErr != nil {
+			return confirmErr
+		}
+		if !confirmed {
+			fmt.Fprintln(cmd.ErrOrStderr(), "Doing review cancelled.")
+			return nil
+		}
+	}
+
+	review := preview
+	refill := refillPreview
+	execution := workflow.ExecutionResult{DryRun: flags.dryRun, Planned: len(refill.Plan.Assignments), Results: []workflow.AssignmentResult{}}
+	if !flags.dryRun {
+		review, err = service.ReviewDoing(ctx, completed, false)
+		if err != nil {
+			return apiErr(err)
+		}
+		refill, err = service.PlanTopUp(ctx, workflow.DoingCapacity-review.RemainingCount, nil)
+		if err != nil {
+			return apiErr(err)
+		}
+		execution = service.Execute(ctx, refill.Plan, false, false)
+	} else {
+		execution = service.Execute(ctx, refill.Plan, true, false)
+	}
+
+	if flags.asJSON {
+		return flags.printJSON(cmd, map[string]any{"command": "review", "review": review, "refill": refill, "execution": execution})
+	}
+	for _, item := range review.Items {
+		if item.Error != "" {
+			fmt.Fprintf(cmd.ErrOrStderr(), "%s: %s (%s)\n", item.Card.Name, item.Action, item.Error)
+		} else {
+			fmt.Fprintf(cmd.OutOrStdout(), "%s: %s\n", item.Card.Name, item.Action)
+		}
+	}
+	fmt.Fprintf(cmd.OutOrStdout(), "Doing remaining: %d/%d; refill assignments: %d\n", review.RemainingCount, workflow.DoingCapacity, len(refill.Plan.Assignments))
+	if execution.Failed > 0 {
+		return fmt.Errorf("Doing review completed with %d failed assignment(s)", execution.Failed)
+	}
+	if !flags.dryRun {
+		failed := 0
+		for _, item := range review.Items {
+			if item.Action == "failed" || item.Action == "unscheduled" {
+				failed++
+			}
+		}
+		if failed > 0 {
+			return fmt.Errorf("Doing review completed with %d failed card action(s)", failed)
+		}
+	}
+	return nil
 }
 
 func addPlannerFlags(cmd *cobra.Command, opts *plannerCLIOptions) {
@@ -166,6 +301,7 @@ func newWorkflowService(cmd *cobra.Command, flags *rootFlags, persistRefresh boo
 		BoardID: cfg.TrelloBoardID, ListID: cfg.TrelloListID,
 		Policy: scheduling.SelectionPolicy{
 			SourceListNames: cfg.SourceListNames, ExcludeListNames: cfg.ExcludeListNames, DoingListName: cfg.DoingListName,
+			DoneListName:  cfg.DoneListName,
 			PeterMemberID: cfg.PeterMemberID, AllowLiliiaCards: cfg.AllowLiliiaCards,
 		},
 		Options: scheduling.Options{

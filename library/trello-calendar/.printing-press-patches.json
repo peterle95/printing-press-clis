@@ -5,6 +5,33 @@
   "base_printing_press_version": "4.6.1",
   "patches": [
     {
+      "id": "calendar-create-readback",
+      "summary": "Verifies Calendar event creation and reconciliation through strict deterministic-ID read-back.",
+      "reason": "Ambiguous POST outcomes must never trigger duplicate writes or downstream Trello changes without confirmed event identity and metadata.",
+      "files": ["internal/googlecalendar/client.go", "internal/googlecalendar/client_test.go", "internal/workflow/service.go", "internal/workflow/service_test.go"],
+      "validated_outcome": "Focused tests cover one-shot POST, bounded transient confirmation, strict metadata, reconciliation, and workflow side-effect isolation."
+    },
+    {
+      "id": "doing-review-and-refill",
+      "summary": "Reviews Doing cards, moves completed cards to Done, reschedules incomplete cards, and refills Doing to four cards.",
+      "reason": "The planner needs a recurring cross-API work-state loop in addition to its original source-list scheduling pass.",
+      "files": [
+        "config.example.toml",
+        "README.md",
+        "internal/cli/planner.go",
+        "internal/cli/root.go",
+        "internal/config/config.go",
+        "internal/googlecalendar/client.go",
+        "internal/googlecalendar/client_test.go",
+        "internal/scheduling/scheduler.go",
+        "internal/scheduling/selection.go",
+        "internal/trello/service.go",
+        "internal/workflow/service.go",
+        "internal/workflow/service_test.go"
+      ],
+      "validated_outcome": "Unit coverage verifies completed-card moves, incomplete-card rescheduling, and capped refill planning."
+    },
+    {
       "id": "planner-age-slots-colors-description",
       "summary": "Ranks ready cards by age, applies buffered business-hour slots, validates priority colors, and carries Trello descriptions into Calendar events.",
       "reason": "Weekly scheduling needs fair treatment of waiting cards while honoring strict calendar availability and preserving the card context in each event.",
@@ -70,6 +97,13 @@
         "internal/workflow"
       ],
       "validated_outcome": "Unit tests cover config defaults/legacy list mode, board and label discovery JSON output, name-based label validation, fail-closed selection policy, dry-run write isolation, live moves, full-rerun move retry idempotency, and partial move failure."
+    },
+    {
+      "id": "resurrect-soft-deleted-events",
+      "summary": "Resurrects deterministic Calendar events that exist as soft-deleted (cancelled) Google Calendar resources.",
+      "reason": "Google Calendar retains soft-deleted events and returns 409 Conflict on POST with the same ID; the code now handles this by PUTting the event with status 'confirmed' to revive it.",
+      "files": ["internal/googlecalendar/client.go"],
+      "validated_outcome": "schedule --dry-run and live schedule now succeed for Doing cards whose deterministic event IDs were previously soft-deleted."
     }
   ]
 }

@@ -218,6 +218,7 @@ Run 'trello-calendar-pp-cli doctor' to verify auth and connectivity.`,
 	// PATCH: Add cross-API scheduling workflows while preserving the generated Trello surface.
 	rootCmd.AddCommand(newPreviewCmd(flags))
 	rootCmd.AddCommand(newScheduleCmd(flags))
+	rootCmd.AddCommand(newReviewCmd(flags))
 	rootCmd.AddCommand(newCardCmd(flags))
 	rootCmd.AddCommand(newChecklistsCmd(flags))
 	rootCmd.AddCommand(newCustomFieldsCmd(flags))
