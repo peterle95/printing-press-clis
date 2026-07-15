@@ -1,0 +1,8 @@
+# Never commit private Hevy exports or browser/session diagnostics.
+*.csv
+*.db
+*.db-shm
+*.db-wal
+browser-profile/
+debug/
+logs/
