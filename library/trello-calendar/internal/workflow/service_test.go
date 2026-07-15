@@ -6,19 +6,53 @@ import (
 	"testing"
 	"time"
 	"trello-calendar-pp-cli/internal/scheduling"
+	trelloadapter "trello-calendar-pp-cli/internal/trello"
 )
 
 type fakeTrello struct {
 	cards        []scheduling.Card
 	comments     int
+	moves        int
+	moveError    error
+	moveErrors   []error
 	commentError error
 }
 
 func (f *fakeTrello) ValidateList(string, string) (string, error)     { return "Doing", nil }
 func (f *fakeTrello) ListOpenCards(string) ([]scheduling.Card, error) { return f.cards, nil }
+func (f *fakeTrello) DiscoverBoard(string) (trelloadapter.BoardDiscovery, error) {
+	return trelloadapter.BoardDiscovery{Source: "fake", Lists: []trelloadapter.DiscoveredList{{ID: "peter", Name: "Peter"}, {ID: "shared", Name: "Peter & Liliia"}, {ID: "doing", Name: "Doing"}}}, nil
+}
+func (f *fakeTrello) ListOpenCardsInList(listID, listName string, _ trelloadapter.FieldMapping) ([]scheduling.Card, error) {
+	var result []scheduling.Card
+	for _, card := range f.cards {
+		if card.ListID == listID || card.ListName == listName {
+			result = append(result, card)
+		}
+	}
+	return result, nil
+}
 func (f *fakeTrello) AddComment(string, string) error {
 	f.comments++
 	return f.commentError
+}
+func (f *fakeTrello) MoveCard(cardID, targetListID string) error {
+	f.moves++
+	err := f.moveError
+	if len(f.moveErrors) > 0 {
+		err = f.moveErrors[0]
+		f.moveErrors = f.moveErrors[1:]
+	}
+	if err != nil {
+		return err
+	}
+	for index := range f.cards {
+		if f.cards[index].ID == cardID {
+			f.cards[index].ListID = targetListID
+			f.cards[index].ListName = "Doing"
+		}
+	}
+	return nil
 }
 
 type fakeCalendar struct {
@@ -32,10 +66,11 @@ type fakeCalendar struct {
 func (f *fakeCalendar) ListEvents(context.Context, time.Time, time.Time) ([]scheduling.Event, error) {
 	return append([]scheduling.Event(nil), f.events...), nil
 }
+func (f *fakeCalendar) ListEventColors(context.Context) (map[string]bool, error) { return map[string]bool{}, nil }
 func (f *fakeCalendar) FindCard(_ context.Context, _ string, cardID string) (bool, error) {
 	return f.existing[cardID], nil
 }
-func (f *fakeCalendar) CreateEvent(_ context.Context, _ string, assignment scheduling.Assignment, _, _ string) (string, bool, error) {
+func (f *fakeCalendar) CreateEvent(_ context.Context, _ string, assignment scheduling.Assignment, _, _, _ string) (string, bool, error) {
 	f.creates++
 	if assignment.Card.ID == f.failCard {
 		return "", false, errors.New("injected failure")
@@ -56,6 +91,7 @@ func testService(t *testing.T, trello *fakeTrello, calendar *fakeCalendar) *Serv
 		Now:     func() time.Time { return time.Date(2026, 7, 12, 12, 0, 0, 0, loc) },
 		BoardID: "board", ListID: "list",
 		Options: scheduling.Options{Location: loc, DurationMinutes: 60, PreferredTime: "10:00", DayStart: "09:00", DayEnd: "18:00", MaxEventsPerDay: 3},
+		Policy:  scheduling.SelectionPolicy{SourceListNames: []string{"Peter", "Peter & Liliia"}, ExcludeListNames: []string{"Doing", "Done"}, DoingListName: "Doing", PeterMemberID: "peter-member"},
 	}
 }
 
@@ -119,10 +155,119 @@ func TestCommentFailureIsPartial(t *testing.T) {
 	}
 }
 
+func TestBoardAwarePlanSelectsAndDryRunDoesNotMove(t *testing.T) {
+	trello := &fakeTrello{cards: []scheduling.Card{
+		{ID: "peter", Name: "Peter", ListID: "peter", ListName: "Peter", Labels: readyLabels()},
+		{ID: "liliia", Name: "Liliia", ListID: "shared", ListName: "Peter & Liliia", Labels: readyLabels()},
+		{ID: "manual", Name: "Manual", ListID: "peter", ListName: "Peter", Labels: []scheduling.Label{{Name: "P1"}, {Name: "T60"}}},
+	}}
+	calendar := &fakeCalendar{existing: map[string]bool{}}
+	service := testService(t, trello, calendar)
+	service.ListID = ""
+	planned, err := service.Plan(context.Background())
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(planned.Plan.Assignments) != 1 || planned.Plan.Assignments[0].Card.ID != "peter" {
+		t.Fatalf("unexpected plan: %#v", planned.Plan.Assignments)
+	}
+	if len(planned.Decisions) != 3 {
+		t.Fatalf("missing decisions: %#v", planned.Decisions)
+	}
+	result := service.Execute(context.Background(), planned.Plan, true, false)
+	if result.Results[0].MoveStatus != "would-move-to-Doing" || trello.moves != 0 || calendar.creates != 0 {
+		t.Fatalf("dry-run wrote or missed intended move: result=%#v moves=%d creates=%d", result, trello.moves, calendar.creates)
+	}
+}
+
+func TestLiveScheduleMovesOnlyAfterCalendarEventAndRetriesMoveOnExisting(t *testing.T) {
+	trello := &fakeTrello{cards: []scheduling.Card{{ID: "a", Name: "A", ListID: "peter", ListName: "Peter", Labels: readyLabels()}}}
+	calendar := &fakeCalendar{existing: map[string]bool{}}
+	service := testService(t, trello, calendar)
+	service.ListID = ""
+	planned, err := service.Plan(context.Background())
+	if err != nil {
+		t.Fatal(err)
+	}
+	first := service.Execute(context.Background(), planned.Plan, false, false)
+	second := service.Execute(context.Background(), planned.Plan, false, false)
+	if first.Created != 1 || first.Moved != 1 || first.Results[0].MoveStatus != "moved" {
+		t.Fatalf("first run=%#v", first)
+	}
+	if second.Existing != 1 || second.Moved != 1 || calendar.creates != 1 || trello.moves != 2 {
+		t.Fatalf("move retry/idempotency failed: first=%#v second=%#v creates=%d moves=%d", first, second, calendar.creates, trello.moves)
+	}
+}
+
+func TestFullRerunRetriesMoveAfterCalendarSuccessWithoutDuplicateEvent(t *testing.T) {
+	trello := &fakeTrello{
+		cards:      []scheduling.Card{{ID: "a", Name: "A", ListID: "peter", ListName: "Peter", Labels: readyLabels()}},
+		moveErrors: []error{errors.New("move failed")},
+	}
+	calendar := &fakeCalendar{existing: map[string]bool{}}
+	service := testService(t, trello, calendar)
+	service.ListID = ""
+	firstPlan, err := service.Plan(context.Background())
+	if err != nil {
+		t.Fatal(err)
+	}
+	first := service.Execute(context.Background(), firstPlan.Plan, false, false)
+	secondPlan, err := service.Plan(context.Background())
+	if err != nil {
+		t.Fatal(err)
+	}
+	second := service.Execute(context.Background(), secondPlan.Plan, false, false)
+	if first.Created != 1 || first.Failed != 1 || first.Results[0].MoveStatus != "failed" {
+		t.Fatalf("first run=%#v", first)
+	}
+	if len(secondPlan.Plan.Assignments) != 1 || secondPlan.Plan.Assignments[0].Card.ID != "a" {
+		t.Fatalf("second plan did not retry source-list card: %#v", secondPlan.Plan.Assignments)
+	}
+	if second.Existing != 1 || second.Moved != 1 || calendar.creates != 1 || trello.moves != 2 {
+		t.Fatalf("rerun failed: first=%#v second=%#v creates=%d moves=%d", first, second, calendar.creates, trello.moves)
+	}
+}
+
+func TestBoardAwareAlreadyScheduledDoingCardIsSkipped(t *testing.T) {
+	trello := &fakeTrello{cards: []scheduling.Card{{ID: "a", Name: "A", ListID: "doing", ListName: "Doing", Labels: readyLabels()}}}
+	calendar := &fakeCalendar{existing: map[string]bool{"a": true}}
+	service := testService(t, trello, calendar)
+	service.ListID = ""
+	service.Policy.SourceListNames = []string{"Doing"}
+	planned, err := service.Plan(context.Background())
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(planned.Plan.Assignments) != 0 || len(planned.Decisions) != 1 || planned.Decisions[0].Reason != "excluded list" {
+		t.Fatalf("unexpected scheduled Doing handling: plan=%#v decisions=%#v", planned.Plan.Assignments, planned.Decisions)
+	}
+}
+
+func TestCalendarFailureDoesNotMoveAndMoveFailureIsPartial(t *testing.T) {
+	trello := &fakeTrello{cards: []scheduling.Card{{ID: "a", Name: "A", ListID: "peter", ListName: "Peter", Labels: readyLabels()}, {ID: "b", Name: "B", ListID: "peter", ListName: "Peter", Labels: readyLabels(), Position: 1}}, moveError: errors.New("move failed")}
+	calendar := &fakeCalendar{existing: map[string]bool{}, failCard: "a"}
+	service := testService(t, trello, calendar)
+	service.ListID = ""
+	planned, err := service.Plan(context.Background())
+	if err != nil {
+		t.Fatal(err)
+	}
+	result := service.Execute(context.Background(), planned.Plan, false, false)
+	if trello.moves != 1 {
+		t.Fatalf("calendar failure must not move failed event card; moves=%d result=%#v", trello.moves, result)
+	}
+	if result.Created != 1 || result.Failed != 2 || result.Results[1].Status != "event-created-move-failed" {
+		t.Fatalf("unexpected partial move failure: %#v", result)
+	}
+}
+
+func readyLabels() []scheduling.Label {
+	return []scheduling.Label{{Name: "P1 High"}, {Name: "T60 1h"}, {Name: "AUTO"}}
+}
+
 func TestEventDescription(t *testing.T) {
-	due := time.Date(2026, 7, 15, 0, 0, 0, 0, time.UTC)
-	text := EventDescription(scheduling.Card{ID: "abc", URL: "https://trello.com/c/abc", Due: &due, Labels: []scheduling.Label{{Name: "backend"}, {Name: "priority"}}})
-	want := "Scheduled from Trello.\n\nCard: https://trello.com/c/abc\nTrello card ID: abc\nLabels: backend, priority\nDue date: 2026-07-15"
+	text := EventDescription(scheduling.Card{ID: "abc", URL: "https://trello.com/c/abc", Description: "Line one\nLine two", Priority: "High", EstimatedMinutes: 60})
+	want := "Line one\nLine two\n\nCard: https://trello.com/c/abc\nTrello card ID: abc\nPriority: High\nDuration: 60 minutes"
 	if text != want {
 		t.Fatalf("description:\n%s\nwant:\n%s", text, want)
 	}

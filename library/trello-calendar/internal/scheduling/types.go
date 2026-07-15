@@ -9,20 +9,34 @@ import "time"
 const Source = "trello-calendar-cli"
 
 type Label struct {
+	ID    string `json:"id,omitempty"`
 	Name  string `json:"name"`
 	Color string `json:"color,omitempty"`
 }
 
 type Card struct {
-	ID          string     `json:"id"`
-	Name        string     `json:"name"`
-	URL         string     `json:"url"`
-	Due         *time.Time `json:"due,omitempty"`
-	DueComplete bool       `json:"due_complete"`
-	Labels      []Label    `json:"labels,omitempty"`
-	Position    float64    `json:"position"`
-	Closed      bool       `json:"closed"`
-	Scheduled   bool       `json:"scheduled,omitempty"`
+	ID               string     `json:"id"`
+	Name             string     `json:"name"`
+	URL              string     `json:"url"`
+	Description      string     `json:"description,omitempty"`
+	ListID           string     `json:"list_id,omitempty"`
+	ListName         string     `json:"list_name,omitempty"`
+	MemberIDs        []string   `json:"member_ids,omitempty"`
+	Due              *time.Time `json:"due,omitempty"`
+	DueDate          *time.Time `json:"due_date,omitempty"`
+	DueComplete      bool       `json:"due_complete"`
+	Completed        bool       `json:"completed"`
+	Priority         string     `json:"priority,omitempty"`
+	EstimatedMinutes int        `json:"estimated_minutes,omitempty"`
+	Automation       string     `json:"automation,omitempty"`
+	Status           string     `json:"status,omitempty"`
+	CreatedAt        *time.Time `json:"created_at,omitempty"`
+	LastActivityAt   *time.Time `json:"last_activity_at,omitempty"`
+	FieldWarnings    []string   `json:"field_warnings,omitempty"`
+	Labels           []Label    `json:"labels,omitempty"`
+	Position         float64    `json:"position"`
+	Closed           bool       `json:"closed"`
+	Scheduled        bool       `json:"scheduled,omitempty"`
 }
 
 type Event struct {
@@ -44,6 +58,7 @@ type Options struct {
 	MaxEventsPerDay int
 	IncludeWeekends bool
 	TitlePrefix     string
+	PriorityColors  map[string]string
 }
 
 type Assignment struct {
@@ -52,6 +67,14 @@ type Assignment struct {
 	Start          time.Time `json:"start"`
 	End            time.Time `json:"end"`
 	ExistingEvents int       `json:"existing_events"`
+}
+
+type CardDecision struct {
+	CardID string `json:"card_id"`
+	Name   string `json:"name"`
+	List   string `json:"list,omitempty"`
+	Action string `json:"action"`
+	Reason string `json:"reason,omitempty"`
 }
 
 type DayDecision struct {

@@ -10,6 +10,7 @@ import (
 	"time"
 	"trello-calendar-pp-cli/internal/client"
 	"trello-calendar-pp-cli/internal/config"
+	"trello-calendar-pp-cli/internal/scheduling"
 )
 
 func TestListOpenCardsPaginatesAndUsesAuthorizationHeader(t *testing.T) {
@@ -276,4 +277,85 @@ func TestCreateCardRejectsEmptyResponse(t *testing.T) {
 	if !strings.Contains(err.Error(), "malformed") {
 		t.Fatalf("expected malformed response error, got: %v", err)
 	}
+}
+
+func TestCustomFieldAndPluginDataExtraction(t *testing.T) {
+	card := schedulingCard("card")
+	applyCustomFields(&card, FieldMapping{
+		Priority:   "priority-field",
+		Time:       "time-field",
+		Automation: "automation-field",
+		Status:     "status-field",
+		Options:    map[string]string{"opt-high": "High", "opt-auto": "auto-pick", "opt-ready": "ready"},
+	}, []customFieldItemResponse{
+		fieldItem("priority-field", "opt-high", "", ""),
+		fieldItem("time-field", "", "90", ""),
+		fieldItem("automation-field", "opt-auto", "", ""),
+		fieldItem("status-field", "opt-ready", "", ""),
+	})
+	if card.Priority != "High" || card.EstimatedMinutes != 90 || card.Automation != "auto-pick" || card.Status != "ready" {
+		t.Fatalf("native extraction failed: %#v", card)
+	}
+
+	pluginOnly := schedulingCard("plugin")
+	applyPluginData(&pluginOnly, []pluginDataResponse{{Value: `{"fields":{"Priority":"Low","Time":"2h","Automation":"auto-pick","Status":"ready"}}`}})
+	if pluginOnly.Priority != "Low" || pluginOnly.EstimatedMinutes != 120 || pluginOnly.Automation != "auto-pick" || pluginOnly.Status != "ready" {
+		t.Fatalf("plugin extraction failed: %#v", pluginOnly)
+	}
+
+	applyPluginData(&card, []pluginDataResponse{{Value: `{"fields":{"Priority":"Low","Time":"30","Automation":"manual","Status":"blocked"}}`}})
+	if card.Priority != "High" || card.EstimatedMinutes != 90 || card.Automation != "auto-pick" || card.Status != "ready" {
+		t.Fatalf("plugin data overwrote native values: %#v", card)
+	}
+}
+
+func TestDiscoverBoardMapsListsFieldsAndOptions(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		switch r.URL.Path {
+		case "/boards/board/lists":
+			json.NewEncoder(w).Encode([]map[string]any{{"id": "peter", "name": "Peter"}, {"id": "doing", "name": "Doing"}})
+		case "/boards/board/labels":
+			json.NewEncoder(w).Encode([]map[string]any{{"id": "label-auto", "name": "AUTO", "color": "green"}, {"id": "label-p1", "name": "P1 High", "color": "red"}})
+		case "/boards/board/customFields":
+			json.NewEncoder(w).Encode([]map[string]any{
+				{"id": "f-priority", "name": "Priority", "options": []map[string]any{{"id": "o-high", "value": map[string]string{"text": "High"}}}},
+				{"id": "f-time", "name": "Time"},
+				{"id": "f-auto", "name": "Automation"},
+				{"id": "f-status", "name": "Status"},
+			})
+		default:
+			http.Error(w, "not found", http.StatusNotFound)
+		}
+	}))
+	defer server.Close()
+	c := client.New(&config.Config{BaseURL: server.URL, TrelloAPIKey: "key", TrelloToken: "token"}, 5*time.Second, 0)
+	c.NoCache = true
+	discovery, err := New(c).DiscoverBoard("board")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(discovery.Lists) != 2 || discovery.Lists[0].Name != "Peter" {
+		t.Fatalf("lists=%#v", discovery.Lists)
+	}
+	if discovery.Fields.Priority != "f-priority" || discovery.Fields.Time != "f-time" || discovery.Fields.Automation != "f-auto" || discovery.Fields.Status != "f-status" {
+		t.Fatalf("fields=%#v", discovery.Fields)
+	}
+	if discovery.Fields.Options["o-high"] != "High" {
+		t.Fatalf("options=%#v", discovery.Fields.Options)
+	}
+	if discovery.Labels["AUTO"] != "label-auto" || discovery.Labels["P1 High"] != "label-p1" {
+		t.Fatalf("labels=%#v", discovery.Labels)
+	}
+}
+
+func schedulingCard(id string) scheduling.Card { return scheduling.Card{ID: id, Name: id} }
+
+func fieldItem(fieldID, optionID, text, number string) customFieldItemResponse {
+	var item customFieldItemResponse
+	item.IDCustomField = fieldID
+	item.IDValue = optionID
+	item.Value.Text = text
+	item.Value.Number = number
+	return item
 }

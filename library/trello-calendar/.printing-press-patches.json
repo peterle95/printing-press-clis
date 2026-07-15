@@ -1,9 +1,15 @@
 {
   "schema_version": 1,
-  "applied_at": "2026-07-13",
+  "applied_at": "2026-07-14",
   "base_run_id": "2026-07-12T17:06:17.982437595Z",
   "base_printing_press_version": "4.6.1",
   "patches": [
+    {
+      "id": "planner-age-slots-colors-description",
+      "summary": "Ranks ready cards by age, applies buffered business-hour slots, validates priority colors, and carries Trello descriptions into Calendar events.",
+      "reason": "Weekly scheduling needs fair treatment of waiting cards while honoring strict calendar availability and preserving the card context in each event.",
+      "files": ["config.example.toml", "internal/cli/planner.go", "internal/config/config.go", "internal/googlecalendar/client.go", "internal/scheduling", "internal/trello/service.go", "internal/workflow/service.go"]
+    },
     {
       "id": "trello-google-calendar-workflow",
       "summary": "Adds typed planner commands, Google OAuth/Calendar access, pure scheduling, and safe execution.",
@@ -46,6 +52,24 @@
         "internal/trello/service_test.go"
       ],
       "validated_outcome": "14 tests pass covering GetCard (found/404), CreateCard, ArchiveCard, MoveCard, ListCards filtering, CLI dry-run, confirmation guards, and API request correctness."
+    },
+    {
+      "id": "board-aware-weekly-planner",
+      "summary": "Adds board-aware list/label discovery, label-name eligibility decisions, per-card duration, and move-to-Doing after Calendar success.",
+      "reason": "The operator's Trello board uses named lists and planner labels; safe weekly planning must discover IDs at runtime, match labels by name, and remain idempotent across Calendar and Trello moves.",
+      "files": [
+        "README.md",
+        "config.example.toml",
+        "internal/cli/planner.go",
+        "internal/cli/planner_test.go",
+        "internal/config/config.go",
+        "internal/config/config_test.go",
+        "internal/scheduling",
+        "internal/trello/service.go",
+        "internal/trello/service_test.go",
+        "internal/workflow"
+      ],
+      "validated_outcome": "Unit tests cover config defaults/legacy list mode, board and label discovery JSON output, name-based label validation, fail-closed selection policy, dry-run write isolation, live moves, full-rerun move retry idempotency, and partial move failure."
     }
   ]
 }

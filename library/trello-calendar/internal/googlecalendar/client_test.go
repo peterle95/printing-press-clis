@@ -96,7 +96,7 @@ func TestCreateEventExtendedProperties(t *testing.T) {
 	c := NewClient(server.URL, "primary", loc, server.Client())
 	start := time.Date(2026, 7, 13, 10, 0, 0, 0, loc)
 	assignment := scheduling.Assignment{Card: scheduling.Card{ID: "card", Name: "Finish auth"}, Date: "2026-07-13", Start: start, End: start.Add(time.Hour)}
-	id, created, err := c.CreateEvent(context.Background(), "board", assignment, "[Trello] ", "description")
+	id, created, err := c.CreateEvent(context.Background(), "board", assignment, "[Trello] ", "description", "11")
 	if err != nil || !created || id != "created" {
 		t.Fatalf("create result id=%q created=%v err=%v", id, created, err)
 	}
@@ -107,4 +107,5 @@ func TestCreateEventExtendedProperties(t *testing.T) {
 	if received.Summary != "[Trello] Finish auth" {
 		t.Fatalf("summary=%q", received.Summary)
 	}
+	if received.ColorID != "11" { t.Fatalf("color=%q", received.ColorID) }
 }

@@ -39,12 +39,15 @@ type apiEvent struct {
 	Summary            string       `json:"summary,omitempty"`
 	Description        string       `json:"description,omitempty"`
 	Status             string       `json:"status,omitempty"`
+	ColorID            string       `json:"colorId,omitempty"`
 	Start              apiEventTime `json:"start"`
 	End                apiEventTime `json:"end"`
 	ExtendedProperties struct {
 		Private map[string]string `json:"private,omitempty"`
 	} `json:"extendedProperties,omitempty"`
 }
+
+type colorsResponse struct { Event map[string]json.RawMessage `json:"event"` }
 
 type eventsResponse struct {
 	Items         []apiEvent `json:"items"`
@@ -94,6 +97,15 @@ func (c *Client) ListEvents(ctx context.Context, start, end time.Time) ([]schedu
 	return result, nil
 }
 
+// PATCH: Fetch Calendar-provided event color IDs before assigning configured priority colors.
+func (c *Client) ListEventColors(ctx context.Context) (map[string]bool, error) {
+	var response colorsResponse
+	if err := c.doJSON(ctx, http.MethodGet, c.BaseURL+"/colors", nil, &response); err != nil { return nil, err }
+	colors := make(map[string]bool, len(response.Event))
+	for id := range response.Event { colors[id] = true }
+	return colors, nil
+}
+
 func (c *Client) list(ctx context.Context, values url.Values) ([]apiEvent, string, error) {
 	var result []apiEvent
 	accessRole := ""
@@ -138,11 +150,12 @@ func (c *Client) FindCard(ctx context.Context, boardID, cardID string) (bool, er
 	return len(items) > 0, err
 }
 
-func (c *Client) CreateEvent(ctx context.Context, boardID string, assignment scheduling.Assignment, titlePrefix, description string) (string, bool, error) {
+func (c *Client) CreateEvent(ctx context.Context, boardID string, assignment scheduling.Assignment, titlePrefix, description, colorID string) (string, bool, error) {
 	event := apiEvent{
 		ID:          scheduling.DeterministicEventID(c.CalendarID, boardID, assignment.Card.ID),
 		Summary:     titlePrefix + assignment.Card.Name,
 		Description: description,
+		ColorID:     colorID,
 		Start:       apiEventTime{DateTime: assignment.Start.Format(time.RFC3339), TimeZone: c.Timezone.String()},
 		End:         apiEventTime{DateTime: assignment.End.Format(time.RFC3339), TimeZone: c.Timezone.String()},
 	}

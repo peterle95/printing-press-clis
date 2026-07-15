@@ -136,6 +136,77 @@ func TestScheduleDryRunMatchesPreviewAndPerformsNoWrites(t *testing.T) {
 	}
 }
 
+func TestPreviewBoardAwareJSONIncludesDiscoveryAndDecisions(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		switch {
+		case r.URL.Path == "/boards/board/lists":
+			w.Write([]byte(`[{"id":"peter","name":"Peter","closed":false},{"id":"shared","name":"Peter & Liliia","closed":false},{"id":"doing","name":"Doing","closed":false},{"id":"done","name":"Done","closed":false}]`))
+		case r.URL.Path == "/boards/board/labels":
+			w.Write([]byte(`[{"id":"label-p1","name":"P1 High","color":"red"},{"id":"label-t45","name":"T45 45m","color":"blue"},{"id":"label-auto","name":"AUTO","color":"green"}]`))
+		case r.URL.Path == "/boards/board/customFields":
+			w.Write([]byte(`[{"id":"f-auto","name":"Automation","options":[{"id":"o-auto","value":{"text":"auto-pick"}}]},{"id":"f-status","name":"Status","options":[{"id":"o-ready","value":{"text":"ready"}}]},{"id":"f-time","name":"Time"}]`))
+		case r.URL.Path == "/lists/peter/cards":
+			w.Write([]byte(`[{"id":"card-peter","name":"Peter card","url":"https://trello.com/c/card-peter","idList":"peter","idMembers":[],"pos":1,"closed":false,"labels":[{"id":"label-p1","name":"P1 High","color":"red"},{"id":"label-t45","name":"T45 45m","color":"blue"},{"id":"label-auto","name":"AUTO","color":"green"}]}]`))
+		case r.URL.Path == "/lists/shared/cards":
+			w.Write([]byte(`[{"id":"card-shared","name":"Shared card","url":"https://trello.com/c/card-shared","idList":"shared","idMembers":[],"pos":2,"closed":false,"labels":[{"id":"label-p1","name":"P1 High"},{"id":"label-t45","name":"T45 45m"},{"id":"label-auto","name":"AUTO"}]}]`))
+		case strings.HasSuffix(r.URL.Path, "/customFieldItems"):
+			w.Write([]byte(`[{"idCustomField":"f-auto","idValue":"o-auto"},{"idCustomField":"f-status","idValue":"o-ready"},{"idCustomField":"f-time","value":{"number":"45"}}]`))
+		case strings.HasSuffix(r.URL.Path, "/pluginData"):
+			w.Write([]byte(`[]`))
+		case strings.Contains(r.URL.Path, "/events/tcc"):
+			w.WriteHeader(http.StatusNotFound)
+		case strings.HasSuffix(r.URL.Path, "/events"):
+			w.Write([]byte(`{"items":[]}`))
+		default:
+			http.Error(w, "not found", http.StatusNotFound)
+		}
+	}))
+	defer server.Close()
+
+	dir := t.TempDir()
+	configPath := filepath.Join(dir, "config.toml")
+	configData := "timezone = \"Europe/Berlin\"\ntrello_board_id = \"board\"\ngoogle_calendar_id = \"primary\"\n"
+	if err := os.WriteFile(configPath, []byte(configData), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	writeTestToken(t, configPath)
+	t.Setenv("TRELLO_API_KEY", "key")
+	t.Setenv("TRELLO_TOKEN", "token")
+	t.Setenv("GOOGLE_CLIENT_ID", "client")
+	t.Setenv("GOOGLE_CLIENT_SECRET", "secret")
+	t.Setenv("GOOGLE_REDIRECT_URI", "http://127.0.0.1:8765/oauth2/callback")
+	t.Setenv("TRELLO_CALENDAR_BASE_URL", server.URL)
+	t.Setenv("TRELLO_CALENDAR_GOOGLE_BASE_URL", server.URL)
+
+	preview := executePlannerCommand(t, "--config", configPath, "--json", "preview")
+	result := preview["result"].(map[string]any)
+	if result["discovery"] == nil || result["decisions"] == nil {
+		t.Fatalf("missing discovery/decisions: %#v", result)
+	}
+	plan := result["plan"].(map[string]any)
+	assignments := plan["assignments"].([]any)
+	if len(assignments) != 1 {
+		t.Fatalf("assignments=%#v", assignments)
+	}
+	card := assignments[0].(map[string]any)["card"].(map[string]any)
+	if card["id"] != "card-peter" || card["estimated_minutes"].(float64) != 45 {
+		t.Fatalf("unexpected assignment card: %#v", card)
+	}
+}
+
+func writeTestToken(t *testing.T, configPath string) {
+	t.Helper()
+	cfg, err := config.Load(configPath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	store := googlecalendar.TokenStore{Path: cfg.TokenPath()}
+	if err := store.Save(&oauth2.Token{AccessToken: "access", RefreshToken: "refresh", TokenType: "Bearer", Expiry: time.Now().Add(time.Hour)}); err != nil {
+		t.Fatal(err)
+	}
+}
+
 func executePlannerCommand(t *testing.T, args ...string) map[string]any {
 	t.Helper()
 	root := RootCmd()
