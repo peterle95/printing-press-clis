@@ -1,0 +1,12 @@
+{
+  "manifest_version": "0.3",
+  "name": "hevy-pp-cli",
+  "display_name": "Hevy Workout CLI",
+  "version": "0.1.0",
+  "description": "Local-first Hevy CSV importer and workout-plan CLI.",
+  "author": {"name": "CLI Printing Press"},
+  "license": "Apache-2.0",
+  "server": {"type": "binary", "entry_point": "bin/hevy"},
+  "compatibility": {"platforms": ["darwin", "linux", "win32"]}
+}
+
