@@ -10,6 +10,7 @@
     {"name": "flight", "path": "library/flight", "runtimes": ["go"]},
     {"name": "germantechjobs", "path": "library/germantechjobs", "runtimes": ["go"]},
     {"name": "getinit", "path": "library/getinit", "runtimes": ["go"]},
+    {"name": "hevy", "path": "library/hevy", "runtimes": ["go"]},
     {"name": "google-calendar", "path": "library/google-calendar", "runtimes": ["go"]},
     {"name": "indeed", "path": "library/indeed", "runtimes": ["go"]},
     {"name": "job-research-cli", "path": "library/job-research-cli", "runtimes": ["python"]},
