@@ -38,6 +38,7 @@ Every agent MUST use the appropriate CLI from `library/` based on the user's req
 | Google Calendar | `library/google-calendar` | `google-calendar-pp-cli` |
 | Trello planning / calendar scheduling | `library/trello-calendar` | `trello-calendar-pp-cli` |
 | Email | `library/mail` | `mail-pp-cli` |
+| Investing / Trade Republic | `library/trade-republic-pp` | `tr` |
 | Classifieds / Kleinanzeigen | `library/kleinanzeigen-pp-cli` | `kleinanzeigen-pp-cli` |
 | Events / Meetup | `library/meetup` | `meetup-pp-cli` |
 | Healthcare / Doctolib | `library/doctolib` | `doctolib-pp-cli` |
@@ -73,5 +74,5 @@ Run the complete test matrix, including Android:
 ./scripts/verify.sh --all --android
 ```
 
-`workspace.yaml` is JSON-compatible YAML and is the source of truth for the 24
+`workspace.yaml` is JSON-compatible YAML and is the source of truth for the 26
 project paths and runtimes.
