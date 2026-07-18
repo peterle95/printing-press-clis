@@ -2,6 +2,10 @@
 
 This directory is a generated `youtube-pp-cli` printed CLI. It was produced by [CLI Printing Press](https://github.com/mvanhorn/cli-printing-press), so treat systemic fixes as upstream Printing Press fixes first. Keep local edits narrow and document why a generated-tree patch belongs here.
 
+## Operating Rules
+
+- Store operator-specific instructions in `AGENTS.override.md`; this file is intentionally ignored by Git.
+
 ## Local Operating Contract
 
 Start by asking the generated CLI for current runtime truth:
