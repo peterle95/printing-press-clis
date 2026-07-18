@@ -12,6 +12,7 @@ SQLite-format cache through `sql.js`.
 - Prefer URL/cache/local commands. `search` and `watch run` must not open a
   browser unless the user explicitly asks for browser use and the command uses
   both `--open-browser` and `--browser-ok USER_REQUESTED_BROWSER`.
+- Store operator-specific instructions in `AGENTS.override.md`; this file is intentionally ignored by Git.
 - Do not scrape aggressively. Browser-backed searches are visible-browser,
   user-initiated, sequential, and capped.
 - Do not add bulk messaging features. There must never be a "message all"
