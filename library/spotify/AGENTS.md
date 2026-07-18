@@ -13,6 +13,7 @@ Press library.
 - Never remove tracks from Liked Songs unless a move command was explicitly
   confirmed and playlist membership was verified after the add.
 - Prefer dry-run before every Spotify mutation.
+- Store operator-specific instructions in `AGENTS.override.md`; this file is intentionally ignored by Git.
 
 ## Build And Test
 
