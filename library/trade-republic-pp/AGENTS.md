@@ -15,6 +15,7 @@ Republic portfolio data, timeline exports, and statement PDFs into SQLite.
   displace the user's mobile app session.
 - Keep databases, downloaded PDFs, raw exports, credentials, and audit data in
   the operator's external data directory. Never add them to the repository.
+- Store operator-specific instructions in `AGENTS.override.md`; this file is intentionally ignored by Git.
 - Synchronization is read-only at the broker. Remote order placement is not
   implemented. Do not add a live execution path without a separate review of
   the deterministic risk engine, typed approval challenge, idempotency,
