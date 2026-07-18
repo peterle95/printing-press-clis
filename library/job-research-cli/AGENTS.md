@@ -14,6 +14,7 @@ research from Berlin/Germany.
   Kununu, or similar pages unless a future adapter documents explicit permission.
 - Restricted job boards must stay in `manual_search_link` mode and only produce
   direct URLs for manual opening.
+- Store operator-specific instructions in `AGENTS.override.md`; this file is intentionally ignored by Git.
 - Keep API keys, OAuth tokens, cookies, HAR auth headers, and generated files
   containing secrets outside this repository.
 - Use dry-run before adding or changing live source behavior.
