@@ -12,6 +12,7 @@ local workout plans, and using the public Hevy website through Playwright.
   databases, screenshots, or debug HTML in Git.
 - Run routine changes with `--dry-run` first. Live routine mutations require
   explicit confirmation and must stop on an unexpected UI state.
+- Store operator-specific instructions in `AGENTS.override.md`; this file is intentionally ignored by Git.
 - Keep real-site tests opt-in with `HEVY_E2E_REAL=1`.
 
 ## Build and test
