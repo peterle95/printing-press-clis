@@ -18,6 +18,7 @@ Press library.
   to the tickets (Google Flights, Skyscanner, Kiwi, airline site, or deep
   link). Never show a result without its link.
 - Prefer `--no-cache` only when the user needs a fresh provider request.
+- Store operator-specific instructions in `AGENTS.override.md`; this file is intentionally ignored by Git.
 
 ## Build And Test
 
