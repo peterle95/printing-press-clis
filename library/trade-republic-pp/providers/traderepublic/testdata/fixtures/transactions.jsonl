@@ -1,0 +1,3 @@
+{"Date":"2026-07-14T09:30:00","Type":"DEPOSIT","Value":50,"Note":"Synthetic old deposit","ISIN":null,"Shares":null,"Fees":null,"Taxes":null,"ISIN2":null,"Shares2":null}
+{"Date":"2026-07-15T10:30:00","Type":"BUY","Value":-123.45678901,"Note":"Synthetic purchase","ISIN":"IE00B4L5Y983","Shares":1.23456789,"Fees":-1.25,"Taxes":null,"ISIN2":null,"Shares2":null}
+{"Date":"2026-07-16T11:00:00","Type":"DIVIDEND","Value":1.2e1,"Note":"Synthetic distribution","ISIN":"IE00B4L5Y983","Shares":null,"Fees":null,"Taxes":-2.34567891,"ISIN2":null,"Shares2":null}

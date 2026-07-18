@@ -1,0 +1,68 @@
+{
+  "schema": "trpp.finance/v1",
+  "generated_at": "2026-07-16T10:00:00Z",
+  "as_of": "2026-07-16T10:00:00Z",
+  "provider": "fixture",
+  "instruments": [
+    {
+      "isin": "IE00B4L5Y983",
+      "name": "Synthetic World ETF",
+      "kind": "etf",
+      "country": "Global",
+      "sector": "Diversified",
+      "base_currency": "USD",
+      "trading_currency": "EUR",
+      "updated_at": "2026-07-16T10:00:00Z"
+    }
+  ],
+  "positions": [
+    {
+      "isin": "IE00B4L5Y983",
+      "name": "Synthetic World ETF",
+      "quantity": "2",
+      "average_cost": "90",
+      "price": "100",
+      "market_value": "200",
+      "currency": "EUR",
+      "as_of": "2026-07-16T10:00:00Z",
+      "source": "fixture"
+    }
+  ],
+  "cash_balances": [
+    {
+      "currency": "EUR",
+      "amount": "500",
+      "as_of": "2026-07-16T10:00:00Z",
+      "source": "fixture"
+    }
+  ],
+  "transactions": [
+    {
+      "occurred_at": "2026-07-01T10:00:00Z",
+      "kind": "buy",
+      "isin": "IE00B4L5Y983",
+      "quantity": "2",
+      "amount": "-180",
+      "fees": "1",
+      "taxes": "0",
+      "currency": "EUR",
+      "note": "Synthetic fixture purchase",
+      "source": "fixture"
+    },
+    {
+      "occurred_at": "2026-07-10T10:00:00Z",
+      "kind": "dividend",
+      "isin": "IE00B4L5Y983",
+      "quantity": "0",
+      "amount": "5",
+      "fees": "0",
+      "taxes": "1",
+      "currency": "EUR",
+      "note": "Synthetic fixture distribution",
+      "source": "fixture"
+    }
+  ],
+  "documents": [],
+  "research_reports": []
+}
+

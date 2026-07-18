@@ -1,0 +1,1 @@
+ALTER TABLE sync_runs ADD COLUMN request_hash TEXT NOT NULL DEFAULT '';

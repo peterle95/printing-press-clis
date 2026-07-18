@@ -1,0 +1,12 @@
+{
+  "manifest_version": "0.3",
+  "name": "trade-republic-pp-cli",
+  "display_name": "Trade Republic Printing Press CLI",
+  "version": "0.1.0",
+  "description": "Local-first Trade Republic portfolio, statement, research, and reporting CLI.",
+  "author": {"name": "CLI Printing Press"},
+  "license": "Apache-2.0",
+  "server": {"type": "binary", "entry_point": "bin/tr"},
+  "compatibility": {"platforms": ["darwin", "linux", "win32"]}
+}
+

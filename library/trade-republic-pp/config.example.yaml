@@ -1,0 +1,18 @@
+database_path: /path/outside/the/repository/trade-republic.db
+documents_directory: /path/outside/the/repository/documents
+staging_directory: /path/outside/the/repository/staging
+account_timezone: Europe/Berlin
+base_currency: EUR
+pytr_command: [pytr]
+pdftotext_command: [pdftotext, -layout]
+pytr_timeout: 5m
+risk:
+  kill_switch: true
+  paper_trading: true
+  max_order_value: "1000"
+  max_daily_value: "2500"
+  permitted_isins: []
+  price_max_age: 2m
+  balance_max_age: 2m
+  preview_validity: 5m
+
