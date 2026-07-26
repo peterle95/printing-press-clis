@@ -158,7 +158,7 @@ func newDraftCmd(flags *rootFlags) *cobra.Command {
 }
 
 func newSendCmd(flags *rootFlags) *cobra.Command {
-	var accountRef, subject, body, bodyFile, replyTo string
+	var accountRef, subject, body, bodyFile, replyTo, draftID string
 	var confirmSend bool
 	var allowCompactBody bool
 	var to, cc, bcc []string
@@ -174,6 +174,44 @@ func newSendCmd(flags *rootFlags) *cobra.Command {
 			account, provider, err := app.resolveProvider(accountRef)
 			if err != nil {
 				return err
+			}
+			if strings.TrimSpace(draftID) != "" {
+				if len(to) > 0 || len(cc) > 0 || len(bcc) > 0 || subject != "" || body != "" || bodyFile != "" || replyTo != "" {
+					return fmt.Errorf("--draft-id cannot be combined with message or reply flags")
+				}
+				draftSender, ok := provider.(ppmail.DraftSender)
+				if !ok {
+					return fmt.Errorf("provider %s does not support sending drafts", provider.ProviderName())
+				}
+				if !confirmSend {
+					preview := map[string]any{
+						"sent":                  false,
+						"requires_confirmation": true,
+						"draft_id":              draftID,
+						"account":               account.Name,
+						"provider":              provider.ProviderName(),
+						"instruction":           "No email was sent. Inspect this draft, then rerun with --confirm-send only after explicit approval.",
+					}
+					outErr := outputValue(flags, preview, func() error {
+						fmt.Fprintf(cmd.OutOrStdout(), "Draft ready to send: %s\n", draftID)
+						fmt.Fprintln(cmd.OutOrStdout(), "No email sent. Inspect the draft, ask for explicit approval, then rerun with --confirm-send.")
+						return nil
+					})
+					if outErr != nil {
+						return outErr
+					}
+					return fmt.Errorf("send requires --confirm-send after user approval; no email sent")
+				}
+				ctx, cancel := commandContext(flags)
+				defer cancel()
+				result, err := draftSender.SendDraft(ctx, draftID)
+				if err != nil {
+					return err
+				}
+				return outputValue(flags, result, func() error {
+					fmt.Fprintf(cmd.OutOrStdout(), "Sent draft %s: %s (draft deleted)\n", draftID, result.ID)
+					return nil
+				})
 			}
 			outbound, err := outboundFromFlags(account.Address, to, cc, bcc, subject, body, bodyFile)
 			if err != nil {
@@ -220,6 +258,7 @@ func newSendCmd(flags *rootFlags) *cobra.Command {
 	}
 	addOutboundFlags(cmd, &accountRef, &to, &cc, &bcc, &subject, &body, &bodyFile)
 	cmd.Flags().StringVar(&replyTo, "reply-to", "", "Message ID to reply to; keeps supported providers in the same thread")
+	cmd.Flags().StringVar(&draftID, "draft-id", "", "Send an existing provider draft; Gmail removes it after successful send")
 	cmd.Flags().BoolVar(&confirmSend, "confirm-send", false, "Actually send after the user has approved the preview")
 	cmd.Flags().BoolVar(&allowCompactBody, "allow-compact-body", false, "Allow a long single-line body")
 	return cmd

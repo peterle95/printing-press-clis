@@ -50,10 +50,11 @@ type DraftResult struct {
 }
 
 type SendResult struct {
-	ID       string `json:"id"`
-	Account  string `json:"account"`
-	Provider string `json:"provider"`
-	ThreadID string `json:"thread_id,omitempty"`
+	ID           string `json:"id"`
+	Account      string `json:"account"`
+	Provider     string `json:"provider"`
+	ThreadID     string `json:"thread_id,omitempty"`
+	DraftDeleted bool   `json:"draft_deleted,omitempty"`
 }
 
 type LabelResult struct {

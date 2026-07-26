@@ -180,6 +180,49 @@ func routinesCmd(f *flags) *cobra.Command {
 		return emit(f, map[string]any{"version": 1, "routines": rs}, fmt.Sprintf("%d routines", len(rs)))
 	}
 	c.AddCommand(&cobra.Command{Use: "list", RunE: inspect}, &cobra.Command{Use: "inspect", RunE: inspect})
+	var createExercises []string
+	create := &cobra.Command{Use: "create <name>", Args: cobra.ExactArgs(1), RunE: func(_ *cobra.Command, args []string) error {
+		a, close, err := open(f)
+		if err != nil {
+			return err
+		}
+		defer close()
+		if !f.Yes {
+			return fmt.Errorf("creating a live routine requires --yes")
+		}
+		remote, err := browser.Inspect(context.Background(), browserOptions(a))
+		if err != nil {
+			return err
+		}
+		for _, routine := range remote {
+			if strings.EqualFold(routine.Name, args[0]) {
+				return fmt.Errorf("routine already exists: %q", args[0])
+			}
+		}
+		exercises := make([]plans.Exercise, 0, len(createExercises))
+		for _, name := range createExercises {
+			sets := 3
+			reps := 10
+			if strings.EqualFold(name, "running") || strings.EqualFold(name, "treadmill") {
+				sets = 1
+				reps = 0
+			}
+			routineExercise := plans.Exercise{Name: name, Sets: make([]plans.Set, sets)}
+			for i := range routineExercise.Sets {
+				routineExercise.Sets[i].Type = "normal"
+				if reps > 0 {
+					routineExercise.Sets[i].TargetReps = &plans.Reps{Min: reps, Max: reps}
+				}
+			}
+			exercises = append(exercises, routineExercise)
+		}
+		if err := browser.CreateRoutine(context.Background(), browserOptions(a), args[0], exercises); err != nil {
+			return err
+		}
+		return emit(f, map[string]any{"version": 1, "created": args[0]}, "created "+args[0])
+	}}
+	create.Flags().StringArrayVar(&createExercises, "exercise", nil, "exercise to add; repeat flag; defaults to 3 sets of 10 reps")
+	c.AddCommand(create)
 	c.AddCommand(&cobra.Command{Use: "diff <plan>", Args: cobra.ExactArgs(1), RunE: func(_ *cobra.Command, args []string) error {
 		a, close, err := open(f)
 		if err != nil {

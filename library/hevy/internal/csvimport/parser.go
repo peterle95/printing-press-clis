@@ -146,7 +146,7 @@ func parseDecimal(s string) (*float64, error) {
 }
 func ParseTime(s string) (time.Time, error) {
 	s = strings.TrimSpace(s)
-	layouts := []string{time.RFC3339, time.RFC3339Nano, "2006-01-02 15:04:05 -0700 MST", "2006-01-02 15:04:05 -0700", "2006-01-02 15:04:05", "02/01/2006 15:04:05", "01/02/2006 15:04:05"}
+	layouts := []string{time.RFC3339, time.RFC3339Nano, "2006-01-02 15:04:05 -0700 MST", "2006-01-02 15:04:05 -0700", "2006-01-02 15:04:05", "Jan 2, 2006, 3:04 PM", "Jan 2, 2006, 3:04:05 PM", "02/01/2006 15:04:05", "01/02/2006 15:04:05"}
 	for _, l := range layouts {
 		if t, e := time.Parse(l, s); e == nil {
 			return t, nil

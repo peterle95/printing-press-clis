@@ -56,6 +56,17 @@ To send after approval:
 ./bin/mail-pp-cli send --account gmail-main --reply-to '<message-id>' --body-file reply.txt --confirm-send
 ```
 
+To send an inspected Gmail draft and remove it after successful delivery, use
+the draft ID returned by `write-reply --create-draft`:
+
+```bash
+./bin/mail-pp-cli send --account gmail-main --draft-id '<draft-id>'
+./bin/mail-pp-cli send --account gmail-main --draft-id '<draft-id>' --confirm-send
+```
+
+Gmail sends that exact draft through `drafts.send`, which removes the draft on
+successful delivery. Body-based `send` does not modify existing drafts.
+
 The first command only previews and returns `requires_confirmation`. The second
 command is allowed only after the user approves the preview.
 

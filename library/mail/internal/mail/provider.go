@@ -18,6 +18,10 @@ type MailProvider interface {
 	Send(ctx context.Context, msg OutboundMessage) (*SendResult, error)
 }
 
+type DraftSender interface {
+	SendDraft(ctx context.Context, id string) (*SendResult, error)
+}
+
 type ArchiveProvider interface {
 	Archive(ctx context.Context, id string) error
 }

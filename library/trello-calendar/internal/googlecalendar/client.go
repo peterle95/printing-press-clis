@@ -43,9 +43,20 @@ type apiEvent struct {
 	ColorID            string       `json:"colorId,omitempty"`
 	Start              apiEventTime `json:"start"`
 	End                apiEventTime `json:"end"`
+	Reminders          *eventReminders `json:"reminders,omitempty"`
 	ExtendedProperties struct {
 		Private map[string]string `json:"private,omitempty"`
 	} `json:"extendedProperties,omitempty"`
+}
+
+type eventReminders struct {
+	UseDefault bool            `json:"useDefault"`
+	Overrides  []eventReminder `json:"overrides,omitempty"`
+}
+
+type eventReminder struct {
+	Method  string `json:"method"`
+	Minutes int    `json:"minutes"`
 }
 
 type colorsResponse struct {

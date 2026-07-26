@@ -182,6 +182,20 @@ preserve the original thread using Gmail `threadId` and the original RFC
   --create-draft
 ```
 
+After inspecting that Gmail draft, send the exact draft ID returned by the
+command. Gmail removes it after successful delivery:
+
+```bash
+./bin/mail-pp-cli send \
+  --account gmail-main \
+  --draft-id <draft-id>
+
+./bin/mail-pp-cli send \
+  --account gmail-main \
+  --draft-id <draft-id> \
+  --confirm-send
+```
+
 `send` is a two-step safety flow. First run it without `--confirm-send`; it
 prints the exact preview and exits without sending. Only after the user approves
 that preview should the same command be rerun with `--confirm-send`.

@@ -39,7 +39,7 @@ func ExitCode(err error) int {
 }
 
 func RootCmd() *cobra.Command {
-	f := &flags{Timeout: 30 * time.Second}
+	f := &flags{Timeout: 5 * time.Minute}
 	root := &cobra.Command{Use: "hevy", Short: "Import Hevy CSV exports and safely manage local workout plans", SilenceErrors: true, SilenceUsage: true, Version: version}
 	p := root.PersistentFlags()
 	p.BoolVar(&f.JSON, "json", false, "write JSON to stdout")
@@ -50,7 +50,7 @@ func RootCmd() *cobra.Command {
 	p.BoolVar(&f.Headed, "headed", false, "show browser UI")
 	p.StringVar(&f.Config, "config", "", "configuration file")
 	p.StringVar(&f.DB, "db", "", "SQLite database path")
-	p.DurationVar(&f.Timeout, "timeout", 30*time.Second, "browser timeout")
+	p.DurationVar(&f.Timeout, "timeout", 5*time.Minute, "browser timeout")
 	root.AddCommand(syncCmd(f), workoutsCmd(f), exercisesCmd(f), exerciseCmd(f), prsCmd(f), volumeCmd(f), plansCmd(f), loginCmd(f), logoutCmd(f), authCmd(f), routinesCmd(f))
 	return root
 }

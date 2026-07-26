@@ -1,7 +1,10 @@
 package gmail
 
 import (
+	"context"
 	"encoding/base64"
+	"io"
+	"net/http"
 	"strings"
 	"testing"
 
@@ -40,4 +43,48 @@ func TestRawMessageUsesRFCMessageIDForReplyHeaders(t *testing.T) {
 	if !strings.Contains(message, "References: <older@example.com> <original@example.com>") {
 		t.Fatalf("raw message missing reference chain:\n%s", message)
 	}
+}
+
+func TestSendDraftUsesDraftSendEndpointAndMarksDraftDeleted(t *testing.T) {
+	provider := NewProvider(accounts.Account{Name: "gmail-main", Address: "user@example.com"}, "", 0)
+	provider = provider.withScopes(ScopeSend)
+	provider.httpClient = &http.Client{Transport: roundTripFunc(func(req *http.Request) (*http.Response, error) {
+		if req.Method != http.MethodPost || req.URL.Path != "/gmail/v1/users/me/drafts/draft-123/send" {
+			t.Fatalf("request = %s %s, want POST /gmail/v1/users/me/drafts/draft-123/send", req.Method, req.URL.Path)
+		}
+		if req.Body != nil {
+			body, err := io.ReadAll(req.Body)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if len(body) != 0 {
+				t.Fatalf("request body = %q, want empty", body)
+			}
+		}
+		return &http.Response{
+			StatusCode: http.StatusOK,
+			Body:       io.NopCloser(strings.NewReader(`{"id":"sent-123","threadId":"thread-123"}`)),
+			Header:     make(http.Header),
+		}, nil
+	})}
+
+	result, err := provider.sendDraft(context.Background(), "draft-123")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if result.ID != "gmail:gmail-main:sent-123" {
+		t.Fatalf("id = %q, want gmail:gmail-main:sent-123", result.ID)
+	}
+	if result.ThreadID != "thread-123" {
+		t.Fatalf("thread id = %q, want thread-123", result.ThreadID)
+	}
+	if !result.DraftDeleted {
+		t.Fatal("draft_deleted = false, want true")
+	}
+}
+
+type roundTripFunc func(*http.Request) (*http.Response, error)
+
+func (f roundTripFunc) RoundTrip(req *http.Request) (*http.Response, error) {
+	return f(req)
 }

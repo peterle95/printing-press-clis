@@ -22,6 +22,9 @@ func TestParseTimeAndFingerprint(t *testing.T) {
 	if _, err := ParseTime("2026-01-02 10:00:00"); err != nil {
 		t.Fatal(err)
 	}
+	if _, err := ParseTime("Jul 18, 2026, 3:53 PM"); err != nil {
+		t.Fatal(err)
+	}
 	if Fingerprint("Bench Press") != Fingerprint(" bench press ") {
 		t.Fatal("fingerprints should normalize")
 	}
