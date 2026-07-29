@@ -1,0 +1,1901 @@
+{
+  "parameters": {
+    "titles": [],
+    "locations": [],
+    "remote": false,
+    "days": 0,
+    "limit": 5000,
+    "sources": [
+      "stored"
+    ]
+  },
+  "structured_results": [
+    {
+      "job_id": "14277-k24833.2878-S",
+      "title": "Senior Software Engineer (m/w/d) 40% Remote",
+      "company": "EICS PD GmbH",
+      "location": "Berlin, BERLIN, DEUTSCHLAND",
+      "date_of_posting": "2026-07-21",
+      "source_website": "bundesagentur",
+      "source_type": "api",
+      "url": "https://www.arbeitsagentur.de/jobsuche/jobdetail/14277-k24833.2878-S",
+      "search_term": "Software Engineer",
+      "remote_mode": "remote",
+      "raw_payload": {
+        "stellenangebotsart": "ARBEIT",
+        "stellenangebotsTitel": "Senior Software Engineer (m/w/d) 40% Remote",
+        "quereinstiegGeeignet": false,
+        "arbeitszeitVollzeit": true,
+        "eintrittszeitraum": {
+          "von": "2026-07-22"
+        },
+        "verguetungsangabe": "JAHRESGEHALT",
+        "artDerVerguetung": "GEHALTSSPANNE",
+        "gehaltsspanneVon": 63000.0,
+        "gehaltsspanneBis": 80000.0,
+        "vertragsdauer": "UNBEFRISTET",
+        "istGeringfuegigeBeschaeftigung": false,
+        "stellenlokationen": [
+          {
+            "adresse": {
+              "plz": "10115",
+              "ort": "Berlin",
+              "region": "BERLIN",
+              "land": "DEUTSCHLAND"
+            },
+            "breite": 52.531976082,
+            "laenge": 13.38673791
+          }
+        ],
+        "veroeffentlichungszeitraum": {
+          "von": "2026-07-21"
+        },
+        "datumErsteVeroeffentlichung": "2026-07-21",
+        "aenderungsdatum": "2026-07-21T17:36:30.382",
+        "hauptberuf": "UX-Designer/in",
+        "alternativBeruf1": "Softwareentwickler/in",
+        "alternativBeruf2": "Ingenieur/in - Systems Engineering",
+        "firma": "EICS PD GmbH",
+        "arbeitgeberKundennummerHash": "rl6FMSVJNBJqcgTpT5c7DedARawf45j8ZyVLmjbCmo8=",
+        "referenznummer": "14277-k24833.2878-S",
+        "entfernung": 3,
+        "alleBerufe": [
+          "Softwareentwickler/in",
+          "Ingenieur/in - Systems Engineering",
+          "UX-Designer/in"
+        ]
+      },
+      "normalized_title": "senior software engineer 40 remote",
+      "canonical_url": "https://www.arbeitsagentur.de/jobsuche/jobdetail/14277-k24833.2878-S"
+    },
+    {
+      "job_id": "12336-a26f1192j0438731-S",
+      "title": "(Senior) Full Stack Developer (m/d/w)",
+      "company": "EXXETA AG",
+      "location": "Berlin, BERLIN, DEUTSCHLAND",
+      "date_of_posting": "2026-07-21",
+      "source_website": "bundesagentur",
+      "source_type": "api",
+      "url": "https://www.arbeitsagentur.de/jobsuche/jobdetail/12336-a26f1192j0438731-S",
+      "search_term": "Full Stack Developer",
+      "remote_mode": null,
+      "raw_payload": {
+        "stellenangebotsart": "ARBEIT",
+        "stellenangebotsTitel": "(Senior) Full Stack Developer (m/d/w)",
+        "quereinstiegGeeignet": false,
+        "arbeitszeitSchichtNachtWochenende": false,
+        "arbeitszeitTeilzeitAbend": false,
+        "arbeitszeitTeilzeitNachmittag": false,
+        "arbeitszeitTeilzeitVormittag": false,
+        "arbeitszeitTeilzeitFlexibel": false,
+        "arbeitszeitVollzeit": true,
+        "eintrittszeitraum": {
+          "von": "2026-07-21"
+        },
+        "verguetungsangabe": "KEINE_ANGABEN",
+        "vertragsdauer": "KEINE_ANGABE",
+        "istGeringfuegigeBeschaeftigung": false,
+        "stellenlokationen": [
+          {
+            "adresse": {
+              "plz": "10178",
+              "ort": "Berlin",
+              "region": "BERLIN",
+              "land": "DEUTSCHLAND"
+            },
+            "breite": 52.5210906,
+            "laenge": 13.4099785
+          }
+        ],
+        "homeofficemoeglich": false,
+        "veroeffentlichungszeitraum": {
+          "von": "2026-07-21"
+        },
+        "datumErsteVeroeffentlichung": "2026-07-21",
+        "aenderungsdatum": "2026-07-21T07:01:19.888",
+        "externeURL": "https://gute-jobs.de/viewjob-kaqqb?utm_source=jsba-premium&utm_medium=n-a&utm_campaign=jsba-premium&utm_term=senior-full-stack-developer-m-d-w",
+        "hauptberuf": "Fullstack-Entwickler/in",
+        "firma": "EXXETA AG",
+        "referenznummer": "12336-a26f1192j0438731-S",
+        "entfernung": 2,
+        "alleBerufe": [
+          "Fullstack-Entwickler/in"
+        ]
+      },
+      "normalized_title": "senior full stack developer m d w",
+      "canonical_url": "https://www.arbeitsagentur.de/jobsuche/jobdetail/12336-a26f1192j0438731-S"
+    },
+    {
+      "job_id": "11070-1590766-1-S",
+      "title": "Senior Full-Stack Developer (f/m/d) SAP CFS (Commercial Foundation Services)",
+      "company": "SAP",
+      "location": "Berlin, BERLIN, DEUTSCHLAND",
+      "date_of_posting": "2026-06-24",
+      "source_website": "bundesagentur",
+      "source_type": "api",
+      "url": "https://www.arbeitsagentur.de/jobsuche/jobdetail/11070-1590766-1-S",
+      "search_term": "Full Stack Developer",
+      "remote_mode": null,
+      "raw_payload": {
+        "stellenangebotsart": "ARBEIT",
+        "stellenangebotsTitel": "Senior Full-Stack Developer (f/m/d) SAP CFS (Commercial Foundation Services)",
+        "quereinstiegGeeignet": false,
+        "arbeitszeitSchichtNachtWochenende": false,
+        "arbeitszeitTeilzeitAbend": false,
+        "arbeitszeitTeilzeitNachmittag": false,
+        "arbeitszeitTeilzeitVormittag": false,
+        "arbeitszeitTeilzeitFlexibel": false,
+        "arbeitszeitVollzeit": true,
+        "eintrittszeitraum": {
+          "von": "2026-07-21"
+        },
+        "verguetungsangabe": "KEINE_ANGABEN",
+        "vertragsdauer": "KEINE_ANGABE",
+        "istGeringfuegigeBeschaeftigung": false,
+        "stellenlokationen": [
+          {
+            "adresse": {
+              "plz": "10178",
+              "ort": "Berlin",
+              "region": "BERLIN",
+              "land": "DEUTSCHLAND"
+            },
+            "breite": 52.5210906,
+            "laenge": 13.4099785
+          }
+        ],
+        "homeofficemoeglich": false,
+        "chiffrenummer": "451995",
+        "veroeffentlichungszeitraum": {
+          "von": "2026-07-20"
+        },
+        "datumErsteVeroeffentlichung": "2026-06-24",
+        "aenderungsdatum": "2026-07-20T13:18:29.103",
+        "externeURL": "https://www.jobstairs.de/de/stellenangebot-senior-full-stack-developer-fmd-sap-cfs-commercial-foundation-services-sap-10178-berlin--2379919.html",
+        "hauptberuf": "Informatiker/in",
+        "firma": "SAP",
+        "referenznummer": "11070-1590766-1-S",
+        "entfernung": 2,
+        "alleBerufe": [
+          "Informatiker/in"
+        ]
+      },
+      "normalized_title": "senior full stack developer sap cfs commercial foundation services",
+      "canonical_url": "https://www.arbeitsagentur.de/jobsuche/jobdetail/11070-1590766-1-S"
+    },
+    {
+      "job_id": "15548-1594230-1-S",
+      "title": "Senior Full Stack Developer (Python, Azure & AI) (w/m/d)",
+      "company": "EY GmbH & Co. KG WPG",
+      "location": "Berlin, BERLIN, DEUTSCHLAND",
+      "date_of_posting": "2026-07-02",
+      "source_website": "bundesagentur",
+      "source_type": "api",
+      "url": "https://www.arbeitsagentur.de/jobsuche/jobdetail/15548-1594230-1-S",
+      "search_term": "Full Stack Developer",
+      "remote_mode": null,
+      "raw_payload": {
+        "stellenangebotsart": "ARBEIT",
+        "stellenangebotsTitel": "Senior Full Stack Developer (Python, Azure & AI) (w/m/d)",
+        "quereinstiegGeeignet": false,
+        "arbeitszeitSchichtNachtWochenende": false,
+        "arbeitszeitTeilzeitAbend": false,
+        "arbeitszeitTeilzeitNachmittag": false,
+        "arbeitszeitTeilzeitVormittag": false,
+        "arbeitszeitTeilzeitFlexibel": false,
+        "arbeitszeitVollzeit": true,
+        "eintrittszeitraum": {
+          "von": "2026-07-22"
+        },
+        "verguetungsangabe": "KEINE_ANGABEN",
+        "vertragsdauer": "UNBEFRISTET",
+        "istGeringfuegigeBeschaeftigung": false,
+        "stellenlokationen": [
+          {
+            "adresse": {
+              "plz": "10117",
+              "ort": "Berlin",
+              "region": "BERLIN",
+              "land": "DEUTSCHLAND"
+            },
+            "breite": 52.5172722,
+            "laenge": 13.3882904
+          }
+        ],
+        "homeofficemoeglich": false,
+        "chiffrenummer": "1722102",
+        "veroeffentlichungszeitraum": {
+          "von": "2026-07-02"
+        },
+        "datumErsteVeroeffentlichung": "2026-07-02",
+        "aenderungsdatum": "2026-07-22T14:56:22.497",
+        "hauptberuf": "Fullstack-Entwickler/in",
+        "firma": "EY GmbH & Co. KG WPG",
+        "arbeitgeberKundennummerHash": "Kr_OZgwzKlXDbpYf2krXmy59XHkBLhWx8us26kNLaOc=",
+        "referenznummer": "15548-1594230-1-S",
+        "entfernung": 3,
+        "alleBerufe": [
+          "Fullstack-Entwickler/in"
+        ]
+      },
+      "normalized_title": "senior full stack developer python azure and ai",
+      "canonical_url": "https://www.arbeitsagentur.de/jobsuche/jobdetail/15548-1594230-1-S"
+    },
+    {
+      "job_id": "13635-e64f82df_JB5191923-S",
+      "title": "Full Stack Software Developer E-Health (x/d/w/m)",
+      "company": "Doc Cirrus GmbH",
+      "location": "Berlin, BERLIN, DEUTSCHLAND",
+      "date_of_posting": "2026-07-07",
+      "source_website": "bundesagentur",
+      "source_type": "api",
+      "url": "https://www.arbeitsagentur.de/jobsuche/jobdetail/13635-e64f82df_JB5191923-S",
+      "search_term": "Full Stack Developer",
+      "remote_mode": null,
+      "raw_payload": {
+        "stellenangebotsart": "ARBEIT",
+        "stellenangebotsTitel": "Full Stack Software Developer E-Health (x/d/w/m)",
+        "quereinstiegGeeignet": false,
+        "arbeitszeitSchichtNachtWochenende": false,
+        "arbeitszeitTeilzeitAbend": false,
+        "arbeitszeitTeilzeitNachmittag": true,
+        "arbeitszeitTeilzeitVormittag": true,
+        "arbeitszeitTeilzeitFlexibel": false,
+        "arbeitszeitVollzeit": true,
+        "eintrittszeitraum": {
+          "von": "2026-07-07"
+        },
+        "verguetungsangabe": "KEINE_ANGABEN",
+        "vertragsdauer": "UNBEFRISTET",
+        "istGeringfuegigeBeschaeftigung": false,
+        "stellenlokationen": [
+          {
+            "adresse": {
+              "plz": "10785",
+              "ort": "Berlin",
+              "region": "BERLIN",
+              "land": "DEUTSCHLAND"
+            },
+            "breite": 52.506327,
+            "laenge": 13.3650884
+          }
+        ],
+        "homeofficemoeglich": false,
+        "chiffrenummer": "138468",
+        "veroeffentlichungszeitraum": {
+          "von": "2026-07-07"
+        },
+        "datumErsteVeroeffentlichung": "2026-07-07",
+        "aenderungsdatum": "2026-07-07T14:14:00.632",
+        "externeURL": "https://www.jobexport.de/job/5191923.html?exp=81&cid=e64f82df-376f-492d-9347-d8b8ae11e1ab",
+        "hauptberuf": "Softwareentwickler/in",
+        "firma": "Doc Cirrus GmbH",
+        "referenznummer": "13635-e64f82df_JB5191923-S",
+        "entfernung": 4,
+        "alleBerufe": [
+          "Softwareentwickler/in"
+        ]
+      },
+      "normalized_title": "full stack software developer e health x d w m",
+      "canonical_url": "https://www.arbeitsagentur.de/jobsuche/jobdetail/13635-e64f82df_JB5191923-S"
+    },
+    {
+      "job_id": "12908-063098559-S",
+      "title": "Full Stack Web Developer mit Architekturverantwortung (m/w/d)",
+      "company": "BITKOM e.V.",
+      "location": "Berlin, BERLIN, DEUTSCHLAND",
+      "date_of_posting": "2026-07-07",
+      "source_website": "bundesagentur",
+      "source_type": "api",
+      "url": "https://www.arbeitsagentur.de/jobsuche/jobdetail/12908-063098559-S",
+      "search_term": "Full Stack Developer",
+      "remote_mode": null,
+      "raw_payload": {
+        "stellenangebotsart": "ARBEIT",
+        "stellenangebotsTitel": "Full Stack Web Developer mit Architekturverantwortung (m/w/d)",
+        "quereinstiegGeeignet": false,
+        "arbeitszeitSchichtNachtWochenende": false,
+        "arbeitszeitTeilzeitAbend": false,
+        "arbeitszeitTeilzeitNachmittag": false,
+        "arbeitszeitTeilzeitVormittag": false,
+        "arbeitszeitTeilzeitFlexibel": false,
+        "arbeitszeitVollzeit": false,
+        "eintrittszeitraum": {
+          "von": "2026-07-07"
+        },
+        "verguetungsangabe": "KEINE_ANGABEN",
+        "vertragsdauer": "KEINE_ANGABE",
+        "istGeringfuegigeBeschaeftigung": false,
+        "stellenlokationen": [
+          {
+            "adresse": {
+              "plz": "10117",
+              "ort": "Berlin",
+              "region": "BERLIN",
+              "land": "DEUTSCHLAND"
+            },
+            "breite": 52.5172722,
+            "laenge": 13.3882904
+          }
+        ],
+        "homeofficemoeglich": false,
+        "veroeffentlichungszeitraum": {
+          "von": "2026-07-07"
+        },
+        "datumErsteVeroeffentlichung": "2026-07-07",
+        "aenderungsdatum": "2026-07-07T08:38:08.526",
+        "externeURL": "https://www.jobware.de/job/063098559?jw_chl_seg=ARBEITSAGENTUR",
+        "hauptberuf": "IT-Entwickler/in (Weiterbildung/Ausbildung)",
+        "firma": "BITKOM e.V.",
+        "referenznummer": "12908-063098559-S",
+        "entfernung": 3,
+        "alleBerufe": [
+          "IT-Entwickler/in (Weiterbildung/Ausbildung)"
+        ]
+      },
+      "normalized_title": "full stack web developer mit architekturverantwortung",
+      "canonical_url": "https://www.arbeitsagentur.de/jobsuche/jobdetail/12908-063098559-S"
+    },
+    {
+      "job_id": "13644-307155-S",
+      "title": "Full Stack Developer - AI Team (f/m/d)",
+      "company": "think-cell",
+      "location": "Berlin, BERLIN, DEUTSCHLAND",
+      "date_of_posting": "2026-07-03",
+      "source_website": "bundesagentur",
+      "source_type": "api",
+      "url": "https://www.arbeitsagentur.de/jobsuche/jobdetail/13644-307155-S",
+      "search_term": "Full Stack Developer",
+      "remote_mode": null,
+      "raw_payload": {
+        "stellenangebotsart": "ARBEIT",
+        "stellenangebotsTitel": "Full Stack Developer - AI Team (f/m/d)",
+        "quereinstiegGeeignet": false,
+        "arbeitszeitSchichtNachtWochenende": false,
+        "arbeitszeitTeilzeitAbend": false,
+        "arbeitszeitTeilzeitNachmittag": false,
+        "arbeitszeitTeilzeitVormittag": false,
+        "arbeitszeitTeilzeitFlexibel": false,
+        "arbeitszeitVollzeit": false,
+        "eintrittszeitraum": {
+          "von": "2026-07-03"
+        },
+        "verguetungsangabe": "KEINE_ANGABEN",
+        "vertragsdauer": "KEINE_ANGABE",
+        "istGeringfuegigeBeschaeftigung": false,
+        "stellenlokationen": [
+          {
+            "adresse": {
+              "plz": "10178",
+              "ort": "Berlin",
+              "region": "BERLIN",
+              "land": "DEUTSCHLAND"
+            },
+            "breite": 52.5210906,
+            "laenge": 13.4099785
+          }
+        ],
+        "homeofficemoeglich": false,
+        "chiffrenummer": "307155",
+        "veroeffentlichungszeitraum": {
+          "von": "2026-07-03"
+        },
+        "datumErsteVeroeffentlichung": "2026-07-03",
+        "aenderungsdatum": "2026-07-03T07:01:50.732",
+        "externeURL": "https://www.get-in-it.de/jobsuche/p307155?utm_source=arbeitsagentur&utm_medium=organic&utm_campaign=launch-basic",
+        "hauptberuf": "Anwendungsprogrammierer/in",
+        "firma": "think-cell",
+        "referenznummer": "13644-307155-S",
+        "entfernung": 2,
+        "alleBerufe": [
+          "Anwendungsprogrammierer/in"
+        ]
+      },
+      "normalized_title": "full stack developer ai team",
+      "canonical_url": "https://www.arbeitsagentur.de/jobsuche/jobdetail/13644-307155-S"
+    },
+    {
+      "job_id": "13644-296843-S",
+      "title": "Quereinsteiger Physiker / Mathematiker als Software Engineer Data Analytics (mwd)",
+      "company": "HMS Analytical Software",
+      "location": "Berlin, BERLIN, DEUTSCHLAND",
+      "date_of_posting": "2026-07-03",
+      "source_website": "bundesagentur",
+      "source_type": "api",
+      "url": "https://www.arbeitsagentur.de/jobsuche/jobdetail/13644-296843-S",
+      "search_term": "Software Engineer",
+      "remote_mode": null,
+      "raw_payload": {
+        "stellenangebotsart": "ARBEIT",
+        "stellenangebotsTitel": "Quereinsteiger Physiker / Mathematiker als Software Engineer Data Analytics (mwd)",
+        "quereinstiegGeeignet": false,
+        "arbeitszeitSchichtNachtWochenende": false,
+        "arbeitszeitTeilzeitAbend": false,
+        "arbeitszeitTeilzeitNachmittag": false,
+        "arbeitszeitTeilzeitVormittag": false,
+        "arbeitszeitTeilzeitFlexibel": false,
+        "arbeitszeitVollzeit": false,
+        "eintrittszeitraum": {
+          "von": "2026-07-03"
+        },
+        "verguetungsangabe": "KEINE_ANGABEN",
+        "vertragsdauer": "KEINE_ANGABE",
+        "istGeringfuegigeBeschaeftigung": false,
+        "stellenlokationen": [
+          {
+            "adresse": {
+              "plz": "10178",
+              "ort": "Berlin",
+              "region": "BERLIN",
+              "land": "DEUTSCHLAND"
+            },
+            "breite": 52.5210906,
+            "laenge": 13.4099785
+          }
+        ],
+        "homeofficemoeglich": true,
+        "homeofficetyp": "NACH_VEREINBARUNG",
+        "chiffrenummer": "296843",
+        "veroeffentlichungszeitraum": {
+          "von": "2026-07-03"
+        },
+        "datumErsteVeroeffentlichung": "2026-07-03",
+        "aenderungsdatum": "2026-07-03T07:03:53.573",
+        "externeURL": "https://www.get-in-it.de/jobsuche/p296843?utm_source=arbeitsagentur&utm_medium=organic&utm_campaign=launch-basic",
+        "hauptberuf": "Anwendungsprogrammierer/in",
+        "firma": "HMS Analytical Software",
+        "referenznummer": "13644-296843-S",
+        "entfernung": 2,
+        "alleBerufe": [
+          "Anwendungsprogrammierer/in"
+        ]
+      },
+      "normalized_title": "quereinsteiger physiker mathematiker als software engineer data analytics mwd",
+      "canonical_url": "https://www.arbeitsagentur.de/jobsuche/jobdetail/13644-296843-S"
+    },
+    {
+      "job_id": "18251-31201-S",
+      "title": "Senior Software Engineer (all genders)",
+      "company": "Zalando SE",
+      "location": "Berlin, BERLIN, DEUTSCHLAND",
+      "date_of_posting": "2026-07-14",
+      "source_website": "bundesagentur",
+      "source_type": "api",
+      "url": "https://www.arbeitsagentur.de/jobsuche/jobdetail/18251-31201-S",
+      "search_term": "Software Engineer",
+      "remote_mode": null,
+      "raw_payload": {
+        "stellenangebotsart": "ARBEIT",
+        "stellenangebotsTitel": "Senior Software Engineer (all genders)",
+        "quereinstiegGeeignet": false,
+        "arbeitszeitVollzeit": true,
+        "eintrittszeitraum": {
+          "von": "2026-07-14"
+        },
+        "verguetungsangabe": "KEINE_ANGABEN",
+        "vertragsdauer": "KEINE_ANGABE",
+        "istGeringfuegigeBeschaeftigung": false,
+        "stellenlokationen": [
+          {
+            "adresse": {
+              "strasse": "Valeska-Gert-Straße 5",
+              "plz": "10243",
+              "ort": "Berlin",
+              "region": "BERLIN",
+              "land": "DEUTSCHLAND"
+            },
+            "breite": 52.506468,
+            "laenge": 13.441248
+          }
+        ],
+        "veroeffentlichungszeitraum": {
+          "von": "2026-07-14"
+        },
+        "datumErsteVeroeffentlichung": "2026-07-14",
+        "aenderungsdatum": "2026-07-14T07:19:37.623",
+        "hauptberuf": "IT-Fachwirt/in",
+        "firma": "Zalando SE",
+        "arbeitgeberKundennummerHash": "6j1LD7GT5Ptmu4Kjh_aAXrzBy8l2iE9iGSfd_WjRWHc=",
+        "referenznummer": "18251-31201-S",
+        "entfernung": 1,
+        "alleBerufe": [
+          "IT-Fachwirt/in"
+        ]
+      },
+      "normalized_title": "senior software engineer",
+      "canonical_url": "https://www.arbeitsagentur.de/jobsuche/jobdetail/18251-31201-S"
+    },
+    {
+      "job_id": "10001-1003350545-S",
+      "title": "Senior Software Engineer (AppGlass) (m/f/d)",
+      "company": "JetBrains GmbH",
+      "location": "Berlin, BERLIN, DEUTSCHLAND",
+      "date_of_posting": "2026-07-08",
+      "source_website": "bundesagentur",
+      "source_type": "api",
+      "url": "https://www.arbeitsagentur.de/jobsuche/jobdetail/10001-1003350545-S",
+      "search_term": "Software Engineer",
+      "remote_mode": null,
+      "raw_payload": {
+        "stellenangebotsart": "ARBEIT",
+        "stellenangebotsTitel": "Senior Software Engineer (AppGlass) (m/f/d)",
+        "arbeitszeitSchichtNachtWochenende": false,
+        "arbeitszeitTeilzeitAbend": false,
+        "arbeitszeitTeilzeitNachmittag": false,
+        "arbeitszeitTeilzeitVormittag": false,
+        "arbeitszeitTeilzeitFlexibel": false,
+        "arbeitszeitVollzeit": true,
+        "eintrittszeitraum": {
+          "von": "2026-07-22"
+        },
+        "verguetungsangabe": "KEINE_ANGABEN",
+        "vertragsdauer": "KEINE_ANGABE",
+        "stellenlokationen": [
+          {
+            "adresse": {
+              "strasse": "Cuvrystraße",
+              "hausnummer": "53",
+              "plz": "10997",
+              "ort": "Berlin",
+              "region": "BERLIN",
+              "land": "DEUTSCHLAND"
+            },
+            "breite": 52.499898,
+            "laenge": 13.4472735
+          }
+        ],
+        "homeofficemoeglich": true,
+        "homeofficetyp": "NACH_VEREINBARUNG",
+        "veroeffentlichungszeitraum": {
+          "von": "2026-07-08"
+        },
+        "datumErsteVeroeffentlichung": "2026-07-08",
+        "aenderungsdatum": "2026-07-22T12:03:06.012",
+        "hauptberuf": "Softwareentwickler/in",
+        "alternativBeruf1": "Berufsspezialist/in - Softwareentwicklung",
+        "alternativBeruf2": "Software-Architect",
+        "firma": "JetBrains GmbH",
+        "arbeitgeberKundennummerHash": "WBy2dq1793NfyIndKqUbywqejG4d7VZeQPXXQqqRZiU=",
+        "referenznummer": "10001-1003350545-S",
+        "entfernung": 2,
+        "alleBerufe": [
+          "Softwareentwickler/in",
+          "Software-Architect",
+          "Berufsspezialist/in - Softwareentwicklung"
+        ]
+      },
+      "normalized_title": "senior software engineer appglass",
+      "canonical_url": "https://www.arbeitsagentur.de/jobsuche/jobdetail/10001-1003350545-S"
+    },
+    {
+      "job_id": "13932-k18687.3323-S",
+      "title": "Software Test Engineer (m/w/d)",
+      "company": "PAR GmbH",
+      "location": "Berlin, BERLIN, DEUTSCHLAND",
+      "date_of_posting": "2026-07-20",
+      "source_website": "bundesagentur",
+      "source_type": "api",
+      "url": "https://www.arbeitsagentur.de/jobsuche/jobdetail/13932-k18687.3323-S",
+      "search_term": "Software Engineer",
+      "remote_mode": null,
+      "raw_payload": {
+        "stellenangebotsart": "ARBEIT",
+        "stellenangebotsTitel": "Software Test Engineer (m/w/d)",
+        "quereinstiegGeeignet": false,
+        "arbeitszeitVollzeit": true,
+        "eintrittszeitraum": {
+          "von": "2026-07-22"
+        },
+        "verguetungsangabe": "KEINE_ANGABEN",
+        "vertragsdauer": "UNBEFRISTET",
+        "istGeringfuegigeBeschaeftigung": false,
+        "stellenlokationen": [
+          {
+            "adresse": {
+              "plz": "10585",
+              "ort": "Berlin",
+              "region": "BERLIN",
+              "land": "DEUTSCHLAND"
+            },
+            "breite": 52.515546764,
+            "laenge": 13.305806629
+          }
+        ],
+        "veroeffentlichungszeitraum": {
+          "von": "2026-07-20"
+        },
+        "datumErsteVeroeffentlichung": "2026-07-20",
+        "aenderungsdatum": "2026-07-21T10:30:42.140",
+        "hauptberuf": "Fachinformatiker/in - Systemintegration",
+        "alternativBeruf1": "Wirtschaftsinformatiker/in - IT-Systeme",
+        "alternativBeruf2": "Informatiker/in",
+        "firma": "PAR GmbH",
+        "arbeitgeberKundennummerHash": "yZJqE82IGMdaJMW0Y04y-dTCi0hDmN2IzmwevQTzDW4=",
+        "referenznummer": "13932-k18687.3323-S",
+        "entfernung": 8,
+        "alleBerufe": [
+          "Fachinformatiker/in - Systemintegration",
+          "Wirtschaftsinformatiker/in - IT-Systeme",
+          "Informatiker/in"
+        ]
+      },
+      "normalized_title": "software test engineer",
+      "canonical_url": "https://www.arbeitsagentur.de/jobsuche/jobdetail/13932-k18687.3323-S"
+    },
+    {
+      "job_id": "13635-bce522e9_JB5199951-S",
+      "title": "Software Engineer - Mobile Application | Android (m/w/d)",
+      "company": "blackned GmbH",
+      "location": "Berlin, BERLIN, DEUTSCHLAND",
+      "date_of_posting": "2026-07-20",
+      "source_website": "bundesagentur",
+      "source_type": "api",
+      "url": "https://www.arbeitsagentur.de/jobsuche/jobdetail/13635-bce522e9_JB5199951-S",
+      "search_term": "Software Engineer",
+      "remote_mode": null,
+      "raw_payload": {
+        "stellenangebotsart": "ARBEIT",
+        "stellenangebotsTitel": "Software Engineer - Mobile Application | Android (m/w/d)",
+        "quereinstiegGeeignet": false,
+        "arbeitszeitSchichtNachtWochenende": false,
+        "arbeitszeitTeilzeitAbend": false,
+        "arbeitszeitTeilzeitNachmittag": true,
+        "arbeitszeitTeilzeitVormittag": true,
+        "arbeitszeitTeilzeitFlexibel": false,
+        "arbeitszeitVollzeit": true,
+        "eintrittszeitraum": {
+          "von": "2026-07-20"
+        },
+        "verguetungsangabe": "KEINE_ANGABEN",
+        "vertragsdauer": "UNBEFRISTET",
+        "istGeringfuegigeBeschaeftigung": false,
+        "stellenlokationen": [
+          {
+            "adresse": {
+              "plz": "10961",
+              "ort": "Berlin",
+              "region": "BERLIN",
+              "land": "DEUTSCHLAND"
+            },
+            "breite": 52.4928267,
+            "laenge": 13.3974202
+          }
+        ],
+        "homeofficemoeglich": false,
+        "veroeffentlichungszeitraum": {
+          "von": "2026-07-20"
+        },
+        "datumErsteVeroeffentlichung": "2026-07-20",
+        "aenderungsdatum": "2026-07-20T14:15:05.680",
+        "externeURL": "https://www.jobexport.de/job/5199951.html?exp=81&cid=bce522e9-6bf9-40ec-8cf3-43715a21017a",
+        "hauptberuf": "Softwareentwickler/in",
+        "firma": "blackned GmbH",
+        "referenznummer": "13635-bce522e9_JB5199951-S",
+        "entfernung": 3,
+        "alleBerufe": [
+          "Softwareentwickler/in"
+        ]
+      },
+      "normalized_title": "software engineer mobile application android",
+      "canonical_url": "https://www.arbeitsagentur.de/jobsuche/jobdetail/13635-bce522e9_JB5199951-S"
+    },
+    {
+      "job_id": "12444-563465374108906-DT-S",
+      "title": "Senior Software Engineer Data (m/w/d/x)",
+      "company": "Deutsche Telekom AG",
+      "location": "Berlin, BERLIN, DEUTSCHLAND",
+      "date_of_posting": "2026-07-12",
+      "source_website": "bundesagentur",
+      "source_type": "api",
+      "url": "https://www.arbeitsagentur.de/jobsuche/jobdetail/12444-563465374108906-DT-S",
+      "search_term": "Software Engineer",
+      "remote_mode": null,
+      "raw_payload": {
+        "stellenangebotsart": "ARBEIT",
+        "stellenangebotsTitel": "Senior Software Engineer Data (m/w/d/x)",
+        "quereinstiegGeeignet": false,
+        "arbeitszeitSchichtNachtWochenende": false,
+        "arbeitszeitTeilzeitAbend": false,
+        "arbeitszeitTeilzeitNachmittag": false,
+        "arbeitszeitTeilzeitVormittag": false,
+        "arbeitszeitTeilzeitFlexibel": false,
+        "arbeitszeitVollzeit": true,
+        "eintrittszeitraum": {
+          "von": "2026-09-01"
+        },
+        "verguetungsangabe": "KEINE_ANGABEN",
+        "vertragsdauer": "KEINE_ANGABE",
+        "istGeringfuegigeBeschaeftigung": false,
+        "stellenlokationen": [
+          {
+            "adresse": {
+              "plz": "10781",
+              "ort": "Berlin",
+              "region": "BERLIN",
+              "land": "DEUTSCHLAND"
+            },
+            "breite": 52.4935487,
+            "laenge": 13.352611
+          }
+        ],
+        "homeofficemoeglich": false,
+        "chiffrenummer": "702557",
+        "veroeffentlichungszeitraum": {
+          "von": "2026-07-12"
+        },
+        "datumErsteVeroeffentlichung": "2026-07-12",
+        "aenderungsdatum": "2026-07-13T12:01:19.396",
+        "hauptberuf": "Data Engineer",
+        "firma": "Deutsche Telekom AG",
+        "arbeitgeberKundennummerHash": "8OXOy1m7_RVbLa7WOdBTIlXVfDi1gjMClhqu0-l4F18=",
+        "referenznummer": "12444-563465374108906-DT-S",
+        "entfernung": 5,
+        "alleBerufe": [
+          "Data Engineer"
+        ]
+      },
+      "normalized_title": "senior software engineer data x",
+      "canonical_url": "https://www.arbeitsagentur.de/jobsuche/jobdetail/12444-563465374108906-DT-S"
+    },
+    {
+      "job_id": "13509-0000211006b004-S",
+      "title": "Software Engineer Full Stack (m/w/d)",
+      "company": "BWI GmbH",
+      "location": "Berlin, BERLIN, DEUTSCHLAND",
+      "date_of_posting": "2026-06-29",
+      "source_website": "bundesagentur",
+      "source_type": "api",
+      "url": "https://www.arbeitsagentur.de/jobsuche/jobdetail/13509-0000211006b004-S",
+      "search_term": "Software Engineer",
+      "remote_mode": null,
+      "raw_payload": {
+        "stellenangebotsart": "ARBEIT",
+        "stellenangebotsTitel": "Software Engineer Full Stack (m/w/d)",
+        "quereinstiegGeeignet": false,
+        "arbeitszeitSchichtNachtWochenende": false,
+        "arbeitszeitTeilzeitAbend": false,
+        "arbeitszeitTeilzeitNachmittag": false,
+        "arbeitszeitTeilzeitVormittag": false,
+        "arbeitszeitTeilzeitFlexibel": false,
+        "arbeitszeitVollzeit": true,
+        "eintrittszeitraum": {
+          "von": "2026-07-06"
+        },
+        "verguetungsangabe": "KEINE_ANGABEN",
+        "vertragsdauer": "UNBEFRISTET",
+        "istGeringfuegigeBeschaeftigung": false,
+        "stellenlokationen": [
+          {
+            "adresse": {
+              "plz": "10115",
+              "ort": "Berlin",
+              "region": "BERLIN",
+              "land": "DEUTSCHLAND"
+            },
+            "breite": 52.5319761,
+            "laenge": 13.3867379
+          }
+        ],
+        "homeofficemoeglich": true,
+        "homeofficetyp": "NACH_VEREINBARUNG",
+        "chiffrenummer": "65411",
+        "veroeffentlichungszeitraum": {
+          "von": "2026-06-29"
+        },
+        "datumErsteVeroeffentlichung": "2026-06-29",
+        "aenderungsdatum": "2026-07-06T11:50:09.817",
+        "hauptberuf": "Informatiker/in",
+        "firma": "BWI GmbH",
+        "arbeitgeberKundennummerHash": "YllzIWAR0MdjVsi5dNGOXHuiLy55xF0e_EGmKFbGKr4=",
+        "referenznummer": "13509-0000211006b004-S",
+        "entfernung": 3,
+        "alleBerufe": [
+          "Informatiker/in"
+        ]
+      },
+      "normalized_title": "software engineer full stack",
+      "canonical_url": "https://www.arbeitsagentur.de/jobsuche/jobdetail/13509-0000211006b004-S"
+    },
+    {
+      "job_id": "12336-a26f539j0447970-S",
+      "title": "Senior Software Engineer Microservices (w/m/d)",
+      "company": "BWI GmbH",
+      "location": "Berlin, BERLIN, DEUTSCHLAND",
+      "date_of_posting": "2026-07-15",
+      "source_website": "bundesagentur",
+      "source_type": "api",
+      "url": "https://www.arbeitsagentur.de/jobsuche/jobdetail/12336-a26f539j0447970-S",
+      "search_term": "Software Engineer",
+      "remote_mode": null,
+      "raw_payload": {
+        "stellenangebotsart": "ARBEIT",
+        "stellenangebotsTitel": "Senior Software Engineer Microservices (w/m/d)",
+        "quereinstiegGeeignet": false,
+        "arbeitszeitSchichtNachtWochenende": false,
+        "arbeitszeitTeilzeitAbend": false,
+        "arbeitszeitTeilzeitNachmittag": false,
+        "arbeitszeitTeilzeitVormittag": false,
+        "arbeitszeitTeilzeitFlexibel": false,
+        "arbeitszeitVollzeit": true,
+        "eintrittszeitraum": {
+          "von": "2026-07-15"
+        },
+        "verguetungsangabe": "KEINE_ANGABEN",
+        "vertragsdauer": "KEINE_ANGABE",
+        "istGeringfuegigeBeschaeftigung": false,
+        "stellenlokationen": [
+          {
+            "adresse": {
+              "plz": "10115",
+              "ort": "Berlin",
+              "region": "BERLIN",
+              "land": "DEUTSCHLAND"
+            },
+            "breite": 52.5319761,
+            "laenge": 13.3867379
+          }
+        ],
+        "homeofficemoeglich": false,
+        "veroeffentlichungszeitraum": {
+          "von": "2026-07-15"
+        },
+        "datumErsteVeroeffentlichung": "2026-07-15",
+        "aenderungsdatum": "2026-07-15T07:02:30.500",
+        "externeURL": "https://gute-jobs.de/viewjob-w5t6g?utm_source=jsba-premium&utm_medium=n-a&utm_campaign=jsba-premium&utm_term=senior-software-engineer-microservices-w-m-d",
+        "hauptberuf": "Softwareentwickler/in",
+        "firma": "BWI GmbH",
+        "referenznummer": "12336-a26f539j0447970-S",
+        "entfernung": 3,
+        "alleBerufe": [
+          "Softwareentwickler/in"
+        ]
+      },
+      "normalized_title": "senior software engineer microservices",
+      "canonical_url": "https://www.arbeitsagentur.de/jobsuche/jobdetail/12336-a26f539j0447970-S"
+    },
+    {
+      "job_id": "13644-305866-S",
+      "title": "Software QA-Engineer (w/m/d)",
+      "company": "B. Braun",
+      "location": "Berlin, BERLIN, DEUTSCHLAND",
+      "date_of_posting": "2026-07-03",
+      "source_website": "bundesagentur",
+      "source_type": "api",
+      "url": "https://www.arbeitsagentur.de/jobsuche/jobdetail/13644-305866-S",
+      "search_term": "Software Engineer",
+      "remote_mode": null,
+      "raw_payload": {
+        "stellenangebotsart": "ARBEIT",
+        "stellenangebotsTitel": "Software QA-Engineer (w/m/d)",
+        "quereinstiegGeeignet": false,
+        "arbeitszeitSchichtNachtWochenende": false,
+        "arbeitszeitTeilzeitAbend": false,
+        "arbeitszeitTeilzeitNachmittag": false,
+        "arbeitszeitTeilzeitVormittag": false,
+        "arbeitszeitTeilzeitFlexibel": false,
+        "arbeitszeitVollzeit": false,
+        "eintrittszeitraum": {
+          "von": "2026-07-03"
+        },
+        "verguetungsangabe": "KEINE_ANGABEN",
+        "vertragsdauer": "KEINE_ANGABE",
+        "istGeringfuegigeBeschaeftigung": false,
+        "stellenlokationen": [
+          {
+            "adresse": {
+              "plz": "10178",
+              "ort": "Berlin",
+              "region": "BERLIN",
+              "land": "DEUTSCHLAND"
+            },
+            "breite": 52.5210906,
+            "laenge": 13.4099785
+          }
+        ],
+        "homeofficemoeglich": true,
+        "homeofficetyp": "NACH_VEREINBARUNG",
+        "chiffrenummer": "305866",
+        "veroeffentlichungszeitraum": {
+          "von": "2026-07-03"
+        },
+        "datumErsteVeroeffentlichung": "2026-07-03",
+        "aenderungsdatum": "2026-07-03T07:03:51.265",
+        "externeURL": "https://www.get-in-it.de/jobsuche/p305866?utm_source=arbeitsagentur&utm_medium=organic&utm_campaign=launch-basic",
+        "hauptberuf": "IT-Qualitätssicherungskoordinator/in",
+        "firma": "B. Braun",
+        "referenznummer": "13644-305866-S",
+        "entfernung": 2,
+        "alleBerufe": [
+          "IT-Qualitätssicherungskoordinator/in"
+        ]
+      },
+      "normalized_title": "software qa engineer",
+      "canonical_url": "https://www.arbeitsagentur.de/jobsuche/jobdetail/13644-305866-S"
+    },
+    {
+      "job_id": "10001-1003300096-S",
+      "title": "Senior AI Software Engineer",
+      "company": "CompuGroup Medical SE & Co. KGaA",
+      "location": "Berlin, BERLIN, DEUTSCHLAND",
+      "date_of_posting": "2026-06-29",
+      "source_website": "bundesagentur",
+      "source_type": "api",
+      "url": "https://www.arbeitsagentur.de/jobsuche/jobdetail/10001-1003300096-S",
+      "search_term": "Software Engineer",
+      "remote_mode": null,
+      "raw_payload": {
+        "stellenangebotsart": "ARBEIT",
+        "stellenangebotsTitel": "Senior AI Software Engineer",
+        "arbeitszeitVollzeit": true,
+        "eintrittszeitraum": {
+          "von": "2026-06-29"
+        },
+        "verguetungsangabe": "KEINE_ANGABEN",
+        "vertragsdauer": "UNBEFRISTET",
+        "stellenlokationen": [
+          {
+            "adresse": {
+              "strasse": "Ritterstraße",
+              "hausnummer": "24-27",
+              "plz": "10969",
+              "ort": "Berlin",
+              "region": "BERLIN",
+              "land": "DEUTSCHLAND"
+            },
+            "breite": 52.5022812,
+            "laenge": 13.407872
+          }
+        ],
+        "chiffrenummer": "JR109647",
+        "veroeffentlichungszeitraum": {
+          "von": "2026-06-29"
+        },
+        "datumErsteVeroeffentlichung": "2026-06-29",
+        "aenderungsdatum": "2026-06-29T12:24:45.365",
+        "hauptberuf": "KI-Engineer",
+        "alternativBeruf1": "Softwareentwickler/in",
+        "alternativBeruf2": "Softwareentwickler/in",
+        "firma": "CompuGroup Medical SE & Co. KGaA",
+        "arbeitgeberKundennummerHash": "4E3QkLoG14CY_sI571iQ32kdmSSMcZ4nQUH6mwUCWnk=",
+        "referenznummer": "10001-1003300096-S",
+        "entfernung": 2,
+        "alleBerufe": [
+          "Softwareentwickler/in",
+          "Softwareentwickler/in",
+          "KI-Engineer"
+        ]
+      },
+      "normalized_title": "senior ai software engineer",
+      "canonical_url": "https://www.arbeitsagentur.de/jobsuche/jobdetail/10001-1003300096-S"
+    },
+    {
+      "job_id": "17311-44270750-625-S",
+      "title": "Senior Software Engineer (w/m/d)",
+      "company": "Capgemini Deutschland GmbH",
+      "location": "Berlin, BERLIN, DEUTSCHLAND",
+      "date_of_posting": "2026-06-26",
+      "source_website": "bundesagentur",
+      "source_type": "api",
+      "url": "https://www.arbeitsagentur.de/jobsuche/jobdetail/17311-44270750-625-S",
+      "search_term": "Software Engineer",
+      "remote_mode": null,
+      "raw_payload": {
+        "stellenangebotsart": "ARBEIT",
+        "stellenangebotsTitel": "Senior Software Engineer (w/m/d)",
+        "quereinstiegGeeignet": false,
+        "arbeitszeitSchichtNachtWochenende": false,
+        "arbeitszeitTeilzeitAbend": false,
+        "arbeitszeitTeilzeitNachmittag": true,
+        "arbeitszeitTeilzeitVormittag": true,
+        "arbeitszeitTeilzeitFlexibel": false,
+        "arbeitszeitVollzeit": true,
+        "eintrittszeitraum": {
+          "von": "2026-07-13"
+        },
+        "verguetungsangabe": "KEINE_ANGABEN",
+        "vertragsdauer": "UNBEFRISTET",
+        "istGeringfuegigeBeschaeftigung": false,
+        "stellenlokationen": [
+          {
+            "adresse": {
+              "plz": "10785",
+              "ort": "Berlin",
+              "region": "BERLIN",
+              "land": "DEUTSCHLAND"
+            },
+            "breite": 52.506327,
+            "laenge": 13.3650884
+          }
+        ],
+        "homeofficemoeglich": true,
+        "homeofficetyp": "NACH_VEREINBARUNG",
+        "chiffrenummer": "340980",
+        "veroeffentlichungszeitraum": {
+          "von": "2026-06-26"
+        },
+        "datumErsteVeroeffentlichung": "2026-06-26",
+        "aenderungsdatum": "2026-07-13T11:58:03.393",
+        "hauptberuf": "Softwareentwickler/in",
+        "firma": "Capgemini Deutschland GmbH",
+        "arbeitgeberKundennummerHash": "oWT74Mpbdj5YwZ5RocquNMW_kXPfYT21lJCUoSyvOdA=",
+        "referenznummer": "17311-44270750-625-S",
+        "entfernung": 4,
+        "alleBerufe": [
+          "Softwareentwickler/in"
+        ]
+      },
+      "normalized_title": "senior software engineer",
+      "canonical_url": "https://www.arbeitsagentur.de/jobsuche/jobdetail/17311-44270750-625-S"
+    },
+    {
+      "job_id": "13644-272264-S",
+      "title": "Embedded Software Engineer (m/w/d)",
+      "company": "CarByte",
+      "location": "Berlin, BERLIN, DEUTSCHLAND",
+      "date_of_posting": "2026-07-03",
+      "source_website": "bundesagentur",
+      "source_type": "api",
+      "url": "https://www.arbeitsagentur.de/jobsuche/jobdetail/13644-272264-S",
+      "search_term": "Software Engineer",
+      "remote_mode": null,
+      "raw_payload": {
+        "stellenangebotsart": "ARBEIT",
+        "stellenangebotsTitel": "Embedded Software Engineer (m/w/d)",
+        "quereinstiegGeeignet": false,
+        "arbeitszeitSchichtNachtWochenende": false,
+        "arbeitszeitTeilzeitAbend": false,
+        "arbeitszeitTeilzeitNachmittag": false,
+        "arbeitszeitTeilzeitVormittag": false,
+        "arbeitszeitTeilzeitFlexibel": false,
+        "arbeitszeitVollzeit": false,
+        "eintrittszeitraum": {
+          "von": "2026-07-03"
+        },
+        "verguetungsangabe": "KEINE_ANGABEN",
+        "vertragsdauer": "KEINE_ANGABE",
+        "istGeringfuegigeBeschaeftigung": false,
+        "stellenlokationen": [
+          {
+            "adresse": {
+              "plz": "10178",
+              "ort": "Berlin",
+              "region": "BERLIN",
+              "land": "DEUTSCHLAND"
+            },
+            "breite": 52.5210906,
+            "laenge": 13.4099785
+          }
+        ],
+        "homeofficemoeglich": true,
+        "homeofficetyp": "NACH_VEREINBARUNG",
+        "chiffrenummer": "272264",
+        "veroeffentlichungszeitraum": {
+          "von": "2026-07-03"
+        },
+        "datumErsteVeroeffentlichung": "2026-07-03",
+        "aenderungsdatum": "2026-07-03T07:03:09.654",
+        "externeURL": "https://www.get-in-it.de/jobsuche/p272264?utm_source=arbeitsagentur&utm_medium=organic&utm_campaign=launch-basic",
+        "hauptberuf": "Anwendungsprogrammierer/in",
+        "firma": "CarByte",
+        "referenznummer": "13644-272264-S",
+        "entfernung": 2,
+        "alleBerufe": [
+          "Anwendungsprogrammierer/in"
+        ]
+      },
+      "normalized_title": "embedded software engineer",
+      "canonical_url": "https://www.arbeitsagentur.de/jobsuche/jobdetail/13644-272264-S"
+    },
+    {
+      "job_id": "13644-246571-S",
+      "title": "FullStack Software Engineer (m/w/d)",
+      "company": "SQLI",
+      "location": "Berlin, BERLIN, DEUTSCHLAND",
+      "date_of_posting": "2026-07-16",
+      "source_website": "bundesagentur",
+      "source_type": "api",
+      "url": "https://www.arbeitsagentur.de/jobsuche/jobdetail/13644-246571-S",
+      "search_term": "Software Engineer",
+      "remote_mode": null,
+      "raw_payload": {
+        "stellenangebotsart": "ARBEIT",
+        "stellenangebotsTitel": "FullStack Software Engineer (m/w/d)",
+        "quereinstiegGeeignet": false,
+        "arbeitszeitSchichtNachtWochenende": false,
+        "arbeitszeitTeilzeitAbend": false,
+        "arbeitszeitTeilzeitNachmittag": false,
+        "arbeitszeitTeilzeitVormittag": false,
+        "arbeitszeitTeilzeitFlexibel": false,
+        "arbeitszeitVollzeit": false,
+        "eintrittszeitraum": {
+          "von": "2026-07-16"
+        },
+        "verguetungsangabe": "KEINE_ANGABEN",
+        "vertragsdauer": "KEINE_ANGABE",
+        "istGeringfuegigeBeschaeftigung": false,
+        "stellenlokationen": [
+          {
+            "adresse": {
+              "plz": "10178",
+              "ort": "Berlin",
+              "region": "BERLIN",
+              "land": "DEUTSCHLAND"
+            },
+            "breite": 52.5210906,
+            "laenge": 13.4099785
+          }
+        ],
+        "homeofficemoeglich": true,
+        "homeofficetyp": "NACH_VEREINBARUNG",
+        "chiffrenummer": "246571",
+        "veroeffentlichungszeitraum": {
+          "von": "2026-07-16"
+        },
+        "datumErsteVeroeffentlichung": "2026-07-16",
+        "aenderungsdatum": "2026-07-16T07:28:04.582",
+        "externeURL": "https://www.get-in-it.de/jobsuche/p246571?utm_source=arbeitsagentur&utm_medium=organic&utm_campaign=launch-basic",
+        "hauptberuf": "Anwendungsprogrammierer/in",
+        "firma": "SQLI",
+        "referenznummer": "13644-246571-S",
+        "entfernung": 2,
+        "alleBerufe": [
+          "Anwendungsprogrammierer/in"
+        ]
+      },
+      "normalized_title": "fullstack software engineer",
+      "canonical_url": "https://www.arbeitsagentur.de/jobsuche/jobdetail/13644-246571-S"
+    },
+    {
+      "job_id": "13644-310179-S",
+      "title": "Fullstack Software Engineer (m/w/d) - Go/PHP",
+      "company": "Schwarz Digits",
+      "location": "Berlin, BERLIN, DEUTSCHLAND",
+      "date_of_posting": "2026-07-18",
+      "source_website": "bundesagentur",
+      "source_type": "api",
+      "url": "https://www.arbeitsagentur.de/jobsuche/jobdetail/13644-310179-S",
+      "search_term": "Software Engineer",
+      "remote_mode": null,
+      "raw_payload": {
+        "stellenangebotsart": "ARBEIT",
+        "stellenangebotsTitel": "Fullstack Software Engineer (m/w/d) - Go/PHP",
+        "quereinstiegGeeignet": false,
+        "arbeitszeitSchichtNachtWochenende": false,
+        "arbeitszeitTeilzeitAbend": false,
+        "arbeitszeitTeilzeitNachmittag": false,
+        "arbeitszeitTeilzeitVormittag": false,
+        "arbeitszeitTeilzeitFlexibel": false,
+        "arbeitszeitVollzeit": false,
+        "eintrittszeitraum": {
+          "von": "2026-07-18"
+        },
+        "verguetungsangabe": "KEINE_ANGABEN",
+        "vertragsdauer": "KEINE_ANGABE",
+        "istGeringfuegigeBeschaeftigung": false,
+        "stellenlokationen": [
+          {
+            "adresse": {
+              "plz": "10178",
+              "ort": "Berlin",
+              "region": "BERLIN",
+              "land": "DEUTSCHLAND"
+            },
+            "breite": 52.5210906,
+            "laenge": 13.4099785
+          }
+        ],
+        "homeofficemoeglich": false,
+        "chiffrenummer": "310179",
+        "veroeffentlichungszeitraum": {
+          "von": "2026-07-18"
+        },
+        "datumErsteVeroeffentlichung": "2026-07-18",
+        "aenderungsdatum": "2026-07-18T13:08:38.385",
+        "externeURL": "https://www.get-in-it.de/jobsuche/p310179?utm_source=arbeitsagentur&utm_medium=organic&utm_campaign=launch-premium",
+        "hauptberuf": "Anwendungsprogrammierer/in",
+        "firma": "Schwarz Digits",
+        "referenznummer": "13644-310179-S",
+        "entfernung": 2,
+        "alleBerufe": [
+          "Anwendungsprogrammierer/in"
+        ]
+      },
+      "normalized_title": "fullstack software engineer go php",
+      "canonical_url": "https://www.arbeitsagentur.de/jobsuche/jobdetail/13644-310179-S"
+    },
+    {
+      "job_id": "13635-ce738b23_JB5199180-S",
+      "title": "Software Engineer – Fullstack (m/w/d)",
+      "company": "blackned GmbH",
+      "location": "Berlin, BERLIN, DEUTSCHLAND",
+      "date_of_posting": "2026-07-17",
+      "source_website": "bundesagentur",
+      "source_type": "api",
+      "url": "https://www.arbeitsagentur.de/jobsuche/jobdetail/13635-ce738b23_JB5199180-S",
+      "search_term": "Software Engineer",
+      "remote_mode": null,
+      "raw_payload": {
+        "stellenangebotsart": "ARBEIT",
+        "stellenangebotsTitel": "Software Engineer – Fullstack (m/w/d)",
+        "quereinstiegGeeignet": false,
+        "arbeitszeitSchichtNachtWochenende": false,
+        "arbeitszeitTeilzeitAbend": false,
+        "arbeitszeitTeilzeitNachmittag": true,
+        "arbeitszeitTeilzeitVormittag": true,
+        "arbeitszeitTeilzeitFlexibel": false,
+        "arbeitszeitVollzeit": true,
+        "eintrittszeitraum": {
+          "von": "2026-07-20"
+        },
+        "verguetungsangabe": "KEINE_ANGABEN",
+        "vertragsdauer": "UNBEFRISTET",
+        "istGeringfuegigeBeschaeftigung": false,
+        "stellenlokationen": [
+          {
+            "adresse": {
+              "plz": "10961",
+              "ort": "Berlin",
+              "region": "BERLIN",
+              "land": "DEUTSCHLAND"
+            },
+            "breite": 52.4928267,
+            "laenge": 13.3974202
+          }
+        ],
+        "homeofficemoeglich": false,
+        "veroeffentlichungszeitraum": {
+          "von": "2026-07-17"
+        },
+        "datumErsteVeroeffentlichung": "2026-07-17",
+        "aenderungsdatum": "2026-07-17T14:13:58.982",
+        "externeURL": "https://www.jobexport.de/job/5199180.html?exp=81&cid=ce738b23-dc86-47db-ac9c-0fae2c8ef281",
+        "hauptberuf": "Fullstack-Entwickler/in",
+        "firma": "blackned GmbH",
+        "referenznummer": "13635-ce738b23_JB5199180-S",
+        "entfernung": 3,
+        "alleBerufe": [
+          "Fullstack-Entwickler/in"
+        ]
+      },
+      "normalized_title": "software engineer - fullstack",
+      "canonical_url": "https://www.arbeitsagentur.de/jobsuche/jobdetail/13635-ce738b23_JB5199180-S"
+    },
+    {
+      "job_id": "13635-54eae55a_JB5199184-S",
+      "title": "Software Engineer - Security (m/w/d)",
+      "company": "blackned GmbH",
+      "location": "Berlin, BERLIN, DEUTSCHLAND",
+      "date_of_posting": "2026-07-17",
+      "source_website": "bundesagentur",
+      "source_type": "api",
+      "url": "https://www.arbeitsagentur.de/jobsuche/jobdetail/13635-54eae55a_JB5199184-S",
+      "search_term": "Software Engineer",
+      "remote_mode": null,
+      "raw_payload": {
+        "stellenangebotsart": "ARBEIT",
+        "stellenangebotsTitel": "Software Engineer - Security (m/w/d)",
+        "quereinstiegGeeignet": false,
+        "arbeitszeitSchichtNachtWochenende": false,
+        "arbeitszeitTeilzeitAbend": false,
+        "arbeitszeitTeilzeitNachmittag": true,
+        "arbeitszeitTeilzeitVormittag": true,
+        "arbeitszeitTeilzeitFlexibel": false,
+        "arbeitszeitVollzeit": true,
+        "eintrittszeitraum": {
+          "von": "2026-07-20"
+        },
+        "verguetungsangabe": "KEINE_ANGABEN",
+        "vertragsdauer": "UNBEFRISTET",
+        "istGeringfuegigeBeschaeftigung": false,
+        "stellenlokationen": [
+          {
+            "adresse": {
+              "plz": "10961",
+              "ort": "Berlin",
+              "region": "BERLIN",
+              "land": "DEUTSCHLAND"
+            },
+            "breite": 52.4928267,
+            "laenge": 13.3974202
+          }
+        ],
+        "homeofficemoeglich": false,
+        "veroeffentlichungszeitraum": {
+          "von": "2026-07-17"
+        },
+        "datumErsteVeroeffentlichung": "2026-07-17",
+        "aenderungsdatum": "2026-07-17T14:13:59.144",
+        "externeURL": "https://www.jobexport.de/job/5199184.html?exp=81&cid=54eae55a-0bf6-424c-bdd2-47997768a202",
+        "hauptberuf": "Softwareentwickler/in",
+        "firma": "blackned GmbH",
+        "referenznummer": "13635-54eae55a_JB5199184-S",
+        "entfernung": 3,
+        "alleBerufe": [
+          "Softwareentwickler/in"
+        ]
+      },
+      "normalized_title": "software engineer security",
+      "canonical_url": "https://www.arbeitsagentur.de/jobsuche/jobdetail/13635-54eae55a_JB5199184-S"
+    },
+    {
+      "job_id": "praktikant-im-bereich-business-development-berlin-369071",
+      "title": "Praktikant im Bereich Business Development (m/w/d)",
+      "company": "CKM Group",
+      "location": "Berlin",
+      "date_of_posting": "2026-07-22",
+      "source_website": "arbeitnow",
+      "source_type": "api",
+      "url": "https://www.arbeitnow.com/jobs/companies/ckm-group/praktikant-im-bereich-business-development-berlin-369071",
+      "search_term": "junior business development",
+      "remote_mode": null,
+      "raw_payload": {
+        "slug": "praktikant-im-bereich-business-development-berlin-369071",
+        "company_name": "CKM Group",
+        "title": "Praktikant im Bereich Business Development (m/w/d)",
+        "description": "<h2>Intro</h2>\n<p>Zur  gehören eine Vielzahl von Unternehmen sowie eine Klinik, die alle dazu beitragen, unserer Vision von einer gesünderen Welt näher zu kommen.<br>\nUnser Ziel ist es, durch präventive Dienstleistungsmedizin, eHealth und Public Health eine führende und wegweisende Rolle im Gesundheitssystem von morgen einzunehmen. Dabei setzen wir auf smarte Logistik, Digitalisierung, Diagnostik und individuelle Prävention. Wir denken Gesundheitsversorgung und Diagnostik neu und hinterfragen dazu stets den Status Quo.</p>\n<p>Ein neuer Pfeiler dieser Vision ist <strong>:</strong> Mit unserem telemedizinischen Service gestalten wir den Zugang zu medizinischem Cannabis für Menschen mit chronischen Beschwerden so einfach, niedrigschwellig, erschwinglich und sicher wie möglich, und wollen dabei unterstützen, Symptome zu lindern und die Lebensqualität nachhaltig zu verbessern.</p>\n<p>Du willst im Venture Development durchstarten und konntest bereits erste Erfahrungen sammeln? Dann bewirb dich jetzt für ein <strong>6-monatiges Praktikum</strong> und werde ein zentraler Akteur in der Entwicklung eines neuen HealthTech Ventures. Bringe deinen unternehmerischen Geist ein und hilf uns, innovativen Zugang zu Gesundheit zu ermöglichen.</p>\n<h2>Deine Mission bei uns</h2>\n<ul>\n<li>Du entdeckst durch Markt- und Wettbewerbsanalysen ungenutzte Wachstumspotenziale und entwickelst Strategien, um diese Chancen zu nutzen.</li>\n<li>Du unterstützt den Aufbau und die Pflege wertvoller Partnerschaften und bist aktiv an der Identifizierung und Umsetzung von Kooperationen beteiligt.</li>\n<li>Du unterstützt bei der Entwicklung von Marketing und Sales Strategien, insbesondere für unser Projekt GreenMedical</li>\n<li>Du gestaltest und optimierst Inhalte für unsere Kommunikationskanäle, um unsere Zielgruppen effektiv und kreativ zu erreichen.</li>\n<li>Du nutzt deine analytischen Fähigkeiten zur Prozessoptimierung und übernimmst vom ersten Tag an eigenverantwortlich Projekte.</li>\n</ul>\n<h2>Was du mitbringen solltest</h2>\n<ul>\n<li><strong>Entrepreneurial Spirit:</strong> Du hast ein starkes unternehmerisches Mindset, bist kreativ und scheust dich nicht davor, neue Ideen auszuprobieren und Verantwortung zu übernehmen.</li>\n<li><strong>Analytische Fähigkeiten:</strong> Du bist zahlenaffin und liebst es, Daten zu analysieren und daraus strategische Empfehlungen abzuleiten.</li>\n<li><strong>Interesse an Go-to-Market:</strong> Du bringst ein starkes Interesse an den Bereichen Marketing und Vertrieb mit und möchtest hier Erfahrungen sammeln und innovative Ansätze entwickeln.</li>\n<li><strong>Praktische Arbeitserfahrungen:</strong> Du bringst ein praktisch erprobtes Verständnis für die Herausforderungen und Chancen eines dynamischen Umfeldes mit.</li>\n<li><strong>Sprachen:</strong> Du verfügst über sehr gute Deutsch- und Englischkenntnisse in Wort und Schrift.</li>\n</ul>\n<h2>Was wir dir bieten</h2>\n<ul>\n<li><strong>Abwechslungsreiche Aufgaben:</strong> Spannende Einblicke in verschiedene Unternehmensbereiche und die Möglichkeit, dein Wissen direkt in der Praxis anzuwenden.</li>\n<li><strong>Eigenverantwortung &#x26; Gestaltungsspielraum:</strong> Übernimm eigene Aufgaben und bringe deine Ideen aktiv ein.</li>\n<li><strong>Persönliche Weiterentwicklung:</strong> Sammle wertvolle Praxiserfahrung in einem innovativen und dynamischen Arbeitsumfeld.</li>\n<li><strong>Dynamisches Team:</strong> Arbeite mit motivierten Kolleginnen und Kollegen in einer offenen und kollegialen Atmosphäre zusammen.</li>\n<li><strong>Wellpass:</strong> Profitiere von unserem Wellpass-Angebot für Sport und Gesundheit.</li>\n<li><strong>Flexible Arbeitszeiten:</strong> Wir bieten dir hybrides Arbeiten und flexible Arbeitszeiten.</li>\n<li><strong>Modernes Büro:</strong> Arbeite in unserem Büro im Herzen von Berlin-Friedrichshain mit Blick auf die Spree und einer schönen Dachterrasse.</li>\n</ul>\n<h2>Du hast Fragen? Wir sind für dich da.</h2>\n<p>Find <a href=\"https://www.arbeitnow.com/\">Jobs in Germany</a> on Arbeitnow</a>",
+        "remote": false,
+        "url": "https://www.arbeitnow.com/jobs/companies/ckm-group/praktikant-im-bereich-business-development-berlin-369071",
+        "tags": [
+          "Business Development"
+        ],
+        "job_types": [
+          "Internship",
+          "berufseinstieg"
+        ],
+        "location": "Berlin",
+        "created_at": 1784701833
+      },
+      "normalized_title": "praktikant im bereich business development",
+      "canonical_url": "https://www.arbeitnow.com/jobs/companies/ckm-group/praktikant-im-bereich-business-development-berlin-369071"
+    },
+    {
+      "job_id": "software-engineer-data-infrastructure-acquisition-berlin-germany-255908",
+      "title": "Software Engineer, Data Infrastructure & Acquisition - Berlin, Germany",
+      "company": "Speechify",
+      "location": "Berlin, Germany",
+      "date_of_posting": "2026-07-20",
+      "source_website": "arbeitnow",
+      "source_type": "api",
+      "url": "https://www.arbeitnow.com/jobs/companies/speechify/software-engineer-data-infrastructure-acquisition-berlin-germany-255908",
+      "search_term": "Software Engineer",
+      "remote_mode": null,
+      "raw_payload": {
+        "slug": "software-engineer-data-infrastructure-acquisition-berlin-germany-255908",
+        "company_name": "Speechify",
+        "title": "Software Engineer, Data Infrastructure & Acquisition - Berlin, Germany",
+        "description": "<p>The mission of Speechify is to make sure that reading is never a barrier to learning.</p>\n<p>Over 50 million people use Speechify's text-to-speech products to turn whatever they're reading – PDFs, books, Google Docs, news articles, websites – into audio, so they can read faster, read more, and remember more. Speechify's text-to-speech reading products include its iOS app, Android App, Mac App, Chrome Extension, and Web App.&nbsp;Google recently named Speechify the Chrome Extension of the Year and Apple named Speechify its 2025 Design Award winner for Inclusivity.&nbsp;&nbsp;</p>\n<p>Today, nearly 200 people around the globe work on Speechify in a 100% distributed setting – Speechify has no office. These include frontend and backend engineers, AI research scientists, and others from Amazon, Microsoft, and Google, leading PhD programs like Stanford, high growth startups like Stripe, Vercel, Bolt, and many founders of their own companies.</p>\n<p><strong>Overview</strong></p>\n<p>We're looking to hire for our Data side of our AI team at Speechify. This role is responsible for all aspects of data collection to support our model training operations. We are able to build high-quality datasets at petabyte-scale and low cost through a tight integration of infrastructure, engineering, and research work. We are looking for a skilled Software Engineer to join us.</p>\n<p><strong>What You'll Do</strong></p>\n<ul>\n<li>Be scrappy to find new sources of audio data and bring it into our ingestion pipeline</li>\n<li>Operate and extend the cloud infrastructure for our ingestion pipeline, currently running on GCP and managed with Terraform.</li>\n<li>Collaborate closely with our Scientists to shift the cost/throughput/quality frontier, delivering richer data at bigger scale and lower cost to power our next-generation models.</li>\n<li>Collaborate with others on the AI Team and Speechify Leadership to craft the AI Team's dataset roadmap to power Speechify's next-generation consumer and enterprise products.</li>\n</ul>\n<p><strong>An Ideal Candidate Should Have</strong></p>\n<ul>\n<li>BS/MS/PhD in Computer Science or a related field.</li>\n<li>5+ years of industry experience in software development.</li>\n<li>Proficiency with bash/Python scripting in Linux environments</li>\n<li>Proficiency in Docker and Infrastructure-as-Code concepts and professional experience with at least one major Cloud Provider (we use GCP)</li>\n<li>Experience with web crawlers, large-scale data processing workflows is a plus</li>\n<li>Ability to handle multiple tasks and adapt to changing priorities.</li>\n<li>Strong communication skills, both written and verbal.</li>\n</ul>\n<p><strong>What we offer</strong></p>\n<ul>\n<li>A fast-growing environment where you can help shape the company and product.</li>\n<li>An entrepreneurial-minded team that supports risk, intuition, and hustle.</li>\n<li>A hands-off management approach so you can focus and do your best work.</li>\n<li>An opportunity to make a big impact in a transformative industry.</li>\n<li>Competitive salaries, a friendly and laid-back atmosphere, and a commitment to building a great asynchronous culture.</li>\n<li>Opportunity to work on a life-changing product that millions of people use.</li>\n<li>Build products that directly impact and support people with learning differences like dyslexia, ADD, low vision, concussions, autism, and more.</li>\n<li>Work in one of the fastest-growing sectors of tech, the intersection of artificial intelligence and audio.</li>\n</ul>\n<p><strong>The Germany Based </strong>Salary range for this role is: 30,000-120,000 USD/Year + Bonus + Stock depending on experience.</p>\n<p><strong>Think you're a good fit for this job?&nbsp;</strong></p>\n<p>Tell us more about yourself and why you're interested in the role when you apply. <br>And don't forget to include links to your portfolio and LinkedIn.</p>\n<p><strong>Not looking but know someone who would make a great fit?&nbsp;</strong></p>\n<p>Refer them!&nbsp;</p>\n<p><strong>Speechify is committed to a diverse and inclusive workplace.&nbsp;</strong></p>\n<p>Speechify does not discriminate on the basis of race, national origin, gender, gender identity, sexual orientation, protected veteran status, disability, age, or other legally protected status.</p><p>Find more <a href=\"https://www.arbeitnow.com/english-speaking-jobs\">English Speaking Jobs in Germany</a> on Arbeitnow</a>",
+        "remote": false,
+        "url": "https://www.arbeitnow.com/jobs/companies/speechify/software-engineer-data-infrastructure-acquisition-berlin-germany-255908",
+        "tags": [],
+        "job_types": [],
+        "location": "Berlin, Germany",
+        "created_at": 1784580327
+      },
+      "normalized_title": "software engineer data infrastructure and acquisition berlin germany",
+      "canonical_url": "https://www.arbeitnow.com/jobs/companies/speechify/software-engineer-data-infrastructure-acquisition-berlin-germany-255908"
+    },
+    {
+      "job_id": "founding-mobile-engineer-react-native-berlin-187747",
+      "title": "Founding Mobile Engineer (React Native)",
+      "company": "acemate.ai",
+      "location": "Berlin",
+      "date_of_posting": "2026-07-20",
+      "source_website": "arbeitnow",
+      "source_type": "api",
+      "url": "https://www.arbeitnow.com/jobs/companies/acemateai/founding-mobile-engineer-react-native-berlin-187747",
+      "search_term": "React Developer",
+      "remote_mode": null,
+      "raw_payload": {
+        "slug": "founding-mobile-engineer-react-native-berlin-187747",
+        "company_name": "acemate.ai",
+        "title": "Founding Mobile Engineer (React Native)",
+        "description": "<p>acemate is building an AI learning &#x26; teaching platform for higher and further education institutions. We have strong traction, secured funding and are entering an exciting growth phase. We're looking for a passionate <strong>Founding Mobile Engineer (React Native)</strong> to drive our product forward and help us scale.</p>\n<p><strong>About acemate</strong></p>\n<p>Founded in 2024, acemate has quickly become the leading AI learning platform for higher and further education, trusted by top-tier institutions across four countries, including <strong>University of Cologne</strong>, <strong>WHU</strong> and the <strong>German Chambers of Commerce and Industry (IHKs)</strong>.</p>\n<ul>\n<li><strong>Our Mission:</strong> Democratizing access to personalized learning. We don’t believe that AI will replace educators. Instead, we empower them to design and deliver personalized learning experiences at scale.</li>\n<li><strong>Our Growth:</strong> We've raised pre-seed funding and are growing rapidly. While we focus on higher and further education in the DACH area today, we're already expanding into new regions and markets.</li>\n<li><strong>Our Culture:</strong> We’re a young, driven team passionate about tackling the toughest challenges in education. We embrace builder culture and minimize scheduled meetings for ad-hoc discussions and maximized focus on coding and creating.</li>\n</ul>\n<h2>Tasks</h2>\n<p><strong>Tasks</strong></p>\n<p><strong>What You'll Be Doing</strong></p>\n<p>As an early-stage Mobile Software Developer, you'll take significant ownership of the app's architecture and user experience. You'll build our mobile technical foundation from the ground up, making the key calls on UI architecture, state management, API integration and performance monitoring.</p>\n<ul>\n<li><strong>Own the product beyond the interface:</strong> You'll take full accountability for your features end to end. That means managing complex local state, building smooth user journeys and ensuring native-level performance. You'll write, ship and iterate on your own code.</li>\n<li><strong>Design scalable, smart architecture:</strong> You'll build a robust mobile foundation using patterns like MVVM or TCA that connect seamlessly with our Effect-based backend and AI systems. Expect to take on tough engineering challenges around real-time synchronization, offline-first capabilities and streaming AI responses.</li>\n<li><strong>Keep the technical bar high:</strong> You'll track down and fix performance issues like sluggish render cycles or slow app startup times. At the same time, you'll push for better maintainability, strict type safety and a consistent UX across the codebase.</li>\n</ul>\n<h2>Requirements</h2>\n<p><strong>Requirements</strong></p>\n<p><strong>What We're Looking For</strong></p>\n<ul>\n<li>Solid experience with <strong>TypeScript</strong> and <strong>React Native</strong>.</li>\n<li><strong>End-to-End Ownership:</strong> You don't throw things over the wall. You own your features until they're running successfully in production and used by real learners.</li>\n<li><strong>Startup experience:</strong> You're at home in fast-paced, evolving environments.</li>\n<li><strong>Balanced AI approach:</strong> You knew how to code before Cursor and Claude Code, but you understand how to put them to good use.</li>\n<li><strong>Product passion:</strong> Strong identification with our mission to transform education.</li>\n</ul>\n<h2>Benefits</h2>\n<p><strong>Benefits</strong></p>\n<ul>\n<li>Competitive salary package including an equity component</li>\n<li>Fully covered Deutschlandticket</li>\n<li>BusinessBike (bike or e-bike via leasing, private use included)</li>\n<li>Working in a small but driven team built around performance and learning</li>\n<li>Flexible environment with a high degree of autonomy</li>\n<li>Regular team events and acemate parties!</li>\n</ul>\n<p>Find more <a href=\"https://www.arbeitnow.com/english-speaking-jobs\">English Speaking Jobs in Germany</a> on Arbeitnow</a>",
+        "remote": false,
+        "url": "https://www.arbeitnow.com/jobs/companies/acemateai/founding-mobile-engineer-react-native-berlin-187747",
+        "tags": [
+          "IT"
+        ],
+        "job_types": [],
+        "location": "Berlin",
+        "created_at": 1784547036
+      },
+      "normalized_title": "founding mobile engineer react native",
+      "canonical_url": "https://www.arbeitnow.com/jobs/companies/acemateai/founding-mobile-engineer-react-native-berlin-187747"
+    },
+    {
+      "job_id": "fullstack-softwareentwickler-braunschweig-456113",
+      "title": "Fullstack Softwareentwickler (m/w/d)",
+      "company": "TecFox GmbH",
+      "location": "Braunschweig",
+      "date_of_posting": "2026-07-20",
+      "source_website": "arbeitnow",
+      "source_type": "api",
+      "url": "https://www.arbeitnow.com/jobs/companies/tecfox-gmbh/fullstack-softwareentwickler-braunschweig-456113",
+      "search_term": "Full Stack Developer",
+      "remote_mode": "remote",
+      "raw_payload": {
+        "slug": "fullstack-softwareentwickler-braunschweig-456113",
+        "company_name": "TecFox GmbH",
+        "title": "Fullstack Softwareentwickler (m/w/d)",
+        "description": "<p><strong>Du willst an zeitgemäßen Softwarelösungen mitwirken – von der Backend-Logik über Schnittstellen bis zur Benutzeroberfläche? Du bewegst dich sicher in skalierbaren Systemlandschaften und agilen Teamstrukturen? Dann bist du bei TecFox richtig aufgehoben.</strong></p>\n<p>Als innovativer IT-Dienstleister mit Sitz in der Region Braunschweig/Wolfsburg setzen wir bundesweit anspruchsvolle IT-Projekte für renommierte Unternehmen aus unterschiedlichen Branchen um. Mit fundiertem Fachwissen, hohem Qualitätsbewusstsein und kontinuierlichem Entwicklungsstreben schaffen wir nachhaltige digitale Lösungen. Unsere Unternehmenskultur zeichnet sich durch Offenheit, Professionalität und ein echtes Gemeinschaftsgefühl aus. Kurze Kommunikationswege, schlanke Prozesse und eine kompakte Struktur sind bei uns selbstverständlich.</p>\n<h2>Aufgaben</h2>\n<p>Als Fullstack-Entwickler:in gestaltest du leistungsstarke Systeme mit und bringst dich fachlich wie konzeptionell ein:</p>\n<ul>\n<li>Entwicklung, Weiterentwicklung und Betrieb skalierbarer Anwendungen auf Basis moderner Microservices-Architekturen</li>\n<li>Fullstack-Entwicklung unter Einsatz von Technologien wie Spring Boot, Apache Kafka, REST-APIs und Angular (ab Version 18)</li>\n<li>Enge Abstimmung mit UI/UX-, Frontend- und Backend-Teams – von der Anforderungsanalyse bis zur Inbetriebnahme</li>\n<li>Gewährleistung von Performance, Sicherheit und Skalierbarkeit über den gesamten Stack hinweg</li>\n<li>Untersuchung bestehender Systeme, Behebung von Fehlern und laufende Optimierung der Anwendungen</li>\n<li>Beteiligung an Architekturentscheidungen, Code-Reviews und agilen Entwicklungsabläufen</li>\n<li>Optional: Mitwirkung beim Aufbau, der Pflege und dem Ausbau moderner CI/CD-Pipelines</li>\n</ul>\n<h2>Qualifikation</h2>\n<p>Du passt gut zu uns, wenn du über ein stabiles technisches Fundament verfügst, selbstständig arbeitest und Herausforderungen systematisch löst:</p>\n<ul>\n<li>Mindestens fünf Jahre Berufserfahrung in der Fullstack-Entwicklung</li>\n<li>Fundierte Kenntnisse in Java, Spring Boot und Apache Kafka sowie in der Konzeption und Implementierung von REST-Schnittstellen</li>\n<li>Erfahrung mit Angular oder einem ähnlichen zeitgemäßen Frontend-Framework</li>\n<li>Solides Verständnis von Microservices-Architekturen und ihren grundlegenden Prinzipien</li>\n<li>Praktische Erfahrung mit Message-Brokern wie Apache Kafka oder RabbitMQ</li>\n<li>Know-how im Bereich CI/CD sowie Erfahrung mit gängigen DevOps-Werkzeugen</li>\n<li>Erfahrung mit Cloud-Plattformen wie AWS, Google Cloud oder Microsoft Azure sowie mit Docker und Kubernetes</li>\n<li>Analytisches Denkvermögen, systematische Arbeitsweise und ausgeprägte Kommunikationsstärke</li>\n<li>Sehr gute Deutschkenntnisse in Wort und Schrift (mindestens Niveau C1)</li>\n</ul>\n<h2>Benefits</h2>\n<p>Bei TecFox erwartet dich ein Umfeld, das deine persönliche Weiterentwicklung ebenso fördert wie flexible Arbeitsbedingungen:</p>\n<ul>\n<li>Flexible Arbeitszeiten sowie die Möglichkeit zu mobilem Arbeiten und Homeoffice</li>\n<li>Eine offene, wertschätzende Kultur mit flachen Hierarchien und zügigen Entscheidungswegen</li>\n<li>Abwechslungsreiche, spannende Projekte für namhafte nationale und internationale Kunden</li>\n<li>Zeitgemäße Arbeitsplätze mit individuell wählbarer technischer Ausstattung</li>\n<li>Kostenfreie Getränke, frisches Obst und diverse Kaffeespezialitäten im Büro</li>\n<li>Regelmäßige Teamevents und ein starkes Zusammengehörigkeitsgefühl</li>\n<li>Individuelle Möglichkeiten zur Fort- und Weiterbildung</li>\n<li>Attraktive und faire Bezahlung zu transparenten Konditionen</li>\n</ul>\n<p>**Klingt das nach dir?<br>\n**Wir freuen uns auf deine Bewerbung! Sende uns deine Unterlagen bitte mit Angabe deines frühestmöglichen Eintrittstermins und deiner Gehaltsvorstellung – wir sind gespannt darauf, dich kennenzulernen.</p>\n<p>Find <a href=\"https://www.arbeitnow.com/\">Jobs in Germany</a> on Arbeitnow</a>",
+        "remote": true,
+        "url": "https://www.arbeitnow.com/jobs/companies/tecfox-gmbh/fullstack-softwareentwickler-braunschweig-456113",
+        "tags": [
+          "Remote",
+          "Software Development"
+        ],
+        "job_types": [
+          "berufserfahren"
+        ],
+        "location": "Braunschweig",
+        "created_at": 1784548865
+      },
+      "normalized_title": "fullstack softwareentwickler",
+      "canonical_url": "https://www.arbeitnow.com/jobs/companies/tecfox-gmbh/fullstack-softwareentwickler-braunschweig-456113"
+    },
+    {
+      "job_id": "frontend-softwareentwickler-braunschweig-186839",
+      "title": "Frontend Softwareentwickler (m/w/d)",
+      "company": "TecFox GmbH",
+      "location": "Braunschweig",
+      "date_of_posting": "2026-07-20",
+      "source_website": "arbeitnow",
+      "source_type": "api",
+      "url": "https://www.arbeitnow.com/jobs/companies/tecfox-gmbh/frontend-softwareentwickler-braunschweig-186839",
+      "search_term": "Frontend Developer",
+      "remote_mode": "remote",
+      "raw_payload": {
+        "slug": "frontend-softwareentwickler-braunschweig-186839",
+        "company_name": "TecFox GmbH",
+        "title": "Frontend Softwareentwickler (m/w/d)",
+        "description": "<p><strong>Begeisterst du dich für moderne Webanwendungen, gut strukturierte Software und leistungsfähige Single-Page-Applikationen? Dann ist TecFox vielleicht genau der richtige nächste Schritt in deiner Karriere.</strong></p>\n<p>Als vorausschauend agierender IT-Dienstleister realisieren wir bundesweit anspruchsvolle Projekte für namhafte Kunden aus vielfältigen Branchen. Wir kombinieren fundiertes technisches Wissen mit praxisnahen, sofort umsetzbaren Lösungsansätzen. Geprägt wird unser Arbeitsalltag von flachen Hierarchien, effizienten Prozessen und einer bewusst schlanken Organisationsstruktur.</p>\n<h2>Aufgaben</h2>\n<p>In deiner Rolle als Frontend-Entwickler:in gestaltest du bei uns innovative Benutzeroberflächen und bringst dich aktiv in technische wie qualitätsbezogene Entscheidungsprozesse ein:</p>\n<ul>\n<li>Erfassung und Analyse von Anforderungen sowie eigenständige Entwicklung zeitgemäßer UI-Konzepte</li>\n<li>Konzeption, Ausgestaltung und Realisierung von Architektur- und Umsetzungslösungen</li>\n<li>Umsetzung leistungsfähiger und nutzerfreundlicher Frontends mit Angular (Version 18 oder höher) auf Basis bestehender Designvorgaben</li>\n<li>Bei Bedarf Einsatz von UI-Bibliotheken wie beispielsweise PrimeNG</li>\n<li>Erstellung, Pflege und Ausführung von Tests zur nachhaltigen Sicherstellung der Codequalität</li>\n</ul>\n<h2>Qualifikation</h2>\n<p>Du passt gut zu uns, wenn du methodisch vorgehst und großen Wert auf Qualität sowie sauberen, langfristig tragfähigen Code legst:</p>\n<ul>\n<li>Mehrjährige Berufserfahrung in der Frontend- und UI-Entwicklung</li>\n<li>Fundierte Angular-Kenntnisse, idealerweise ab Version 18</li>\n<li>Solides Verständnis moderner Frontend-Architekturen und bewährter Vorgehensweisen</li>\n<li>Praxiserfahrung in der Entwicklung von Single-Page-Anwendungen, idealerweise mit Bezug zu Micro-Frontend-Architekturen</li>\n<li>Solide TypeScript-Kenntnisse sowie Erfahrung bei der Anbindung von REST-APIs nach dem API-First-Prinzip</li>\n<li>Sicherer Umgang mit Test-Frameworks wie Jest oder Jasmine</li>\n<li>Praxis im Schreiben klar strukturierter und aussagekräftiger Unit-Tests</li>\n<li>Gespür für Responsive Design sowie ein Auge für aktuelle UI- und UX-Entwicklungen</li>\n<li>Hoher Anspruch an wartbaren, nachvollziehbaren und stabilen Code</li>\n<li>Sehr gute Deutschkenntnisse in Wort und Schrift (mindestens Niveau C1)</li>\n</ul>\n<h2>Benefits</h2>\n<p>Wir schaffen Bedingungen, die sowohl deine berufliche Weiterentwicklung als auch eine gute Work-Life-Balance fördern:</p>\n<ul>\n<li>Flexible Arbeitszeitgestaltung sowie Möglichkeiten für mobiles Arbeiten und Homeoffice</li>\n<li>Großer Gestaltungsspielraum für eigene Ideen und ein hohes Maß an Eigenverantwortung</li>\n<li>Eine offene, wertschätzende Firmenkultur mit kurzen Entscheidungswegen</li>\n<li>Abwechslungsreiche, anspruchsvolle Projekte mit renommierten, teils internationalen Kunden</li>\n<li>Moderne Arbeitsausstattung mit frei wählbarer Hardware</li>\n<li>Kostenfreie Getränke, frisches Obst und hochwertiger Kaffee im Büro</li>\n<li>Regelmäßige Team-Veranstaltungen und ein ausgeprägtes Gemeinschaftsgefühl</li>\n<li>Breites Weiterbildungsangebot sowie individuelle Entwicklungs- und Aufstiegsmöglichkeiten</li>\n<li>Attraktive Vergütung und sehr gute Vertragsbedingungen</li>\n</ul>\n<p><strong>Neugierig geworden?</strong></p>\n<p>Wir freuen uns auf deine Bewerbung! Schick uns deine Unterlagen gerne zusammen mit deinem frühestmöglichen Eintrittstermin und deiner Gehaltsvorstellung – wir sind gespannt darauf, dich kennenzulernen.</p>\n<p>Find more <a href=\"https://www.arbeitnow.com/english-speaking-jobs\">English Speaking Jobs in Germany</a> on Arbeitnow</a>",
+        "remote": true,
+        "url": "https://www.arbeitnow.com/jobs/companies/tecfox-gmbh/frontend-softwareentwickler-braunschweig-186839",
+        "tags": [
+          "Remote",
+          "Software Development"
+        ],
+        "job_types": [
+          "berufserfahren"
+        ],
+        "location": "Braunschweig",
+        "created_at": 1784548866
+      },
+      "normalized_title": "frontend softwareentwickler",
+      "canonical_url": "https://www.arbeitnow.com/jobs/companies/tecfox-gmbh/frontend-softwareentwickler-braunschweig-186839"
+    },
+    {
+      "job_id": "12518-FKCHJC-3OK-S",
+      "title": "Area Manager (m/w/d) Business Development",
+      "company": "Aramark Deutschland",
+      "location": "Berlin, BERLIN, DEUTSCHLAND",
+      "date_of_posting": "2026-07-17",
+      "source_website": "bundesagentur",
+      "source_type": "api",
+      "url": "https://www.arbeitsagentur.de/jobsuche/jobdetail/12518-FKCHJC-3OK-S",
+      "search_term": "Business Development",
+      "remote_mode": null,
+      "raw_payload": {
+        "stellenangebotsart": "ARBEIT",
+        "stellenangebotsTitel": "Area Manager (m/w/d) Business Development",
+        "quereinstiegGeeignet": false,
+        "arbeitszeitSchichtNachtWochenende": false,
+        "arbeitszeitTeilzeitAbend": false,
+        "arbeitszeitTeilzeitNachmittag": false,
+        "arbeitszeitTeilzeitVormittag": false,
+        "arbeitszeitTeilzeitFlexibel": false,
+        "arbeitszeitVollzeit": true,
+        "eintrittszeitraum": {
+          "von": "2026-07-18"
+        },
+        "verguetungsangabe": "KEINE_ANGABEN",
+        "vertragsdauer": "KEINE_ANGABE",
+        "istGeringfuegigeBeschaeftigung": false,
+        "stellenlokationen": [
+          {
+            "adresse": {
+              "plz": "12109",
+              "ort": "Berlin",
+              "region": "BERLIN",
+              "land": "DEUTSCHLAND"
+            },
+            "breite": 52.4461877,
+            "laenge": 13.3992186
+          }
+        ],
+        "homeofficemoeglich": false,
+        "veroeffentlichungszeitraum": {
+          "von": "2026-07-18"
+        },
+        "datumErsteVeroeffentlichung": "2026-07-17",
+        "aenderungsdatum": "2026-07-18T13:11:34.692",
+        "externeURL": "https://www.hogapage.de/jobs/gebietsleiter-1-in-berlin/FKCHJC-3OK/?hp_source=api-arbeitsamt&utm_medium=API&utm_source=arbeitsamt",
+        "hauptberuf": "Bereichsleiter/in",
+        "firma": "Aramark Deutschland",
+        "referenznummer": "12518-FKCHJC-3OK-S",
+        "entfernung": 7,
+        "alleBerufe": [
+          "Bereichsleiter/in"
+        ]
+      },
+      "normalized_title": "area manager business development",
+      "canonical_url": "https://www.arbeitsagentur.de/jobsuche/jobdetail/12518-FKCHJC-3OK-S"
+    },
+    {
+      "job_id": "senior-backend-engineer-typescript-nestjs-nodejs-berlin-317808",
+      "title": "Senior Backend Engineer (TypeScript, NestJS/Node.js) (m/f/x)",
+      "company": "Atolls",
+      "location": "Berlin, Berlin, Germany",
+      "date_of_posting": "2026-07-17",
+      "source_website": "arbeitnow",
+      "source_type": "api",
+      "url": "https://www.arbeitnow.com/jobs/companies/atolls/senior-backend-engineer-typescript-nestjs-nodejs-berlin-317808",
+      "search_term": "TypeScript Developer",
+      "remote_mode": null,
+      "raw_payload": {
+        "slug": "senior-backend-engineer-typescript-nestjs-nodejs-berlin-317808",
+        "company_name": "Atolls",
+        "title": "Senior Backend Engineer (TypeScript, NestJS/Node.js) (m/f/x)",
+        "description": "<div class=\"content-intro\"><p><img style=\"display: block; max-width: 100%;\" src=\"https://atolls.com/wp-content/uploads/2025/10/Atolls-Banner_01_Greenhouse_1400x200-scaled.jpg\" alt=\"Atolls top banner\"></p>\n<hr>\n<h3 class=\"mb-2 whitespace-pre-wrap\"><strong>Atolls is the world's largest community-driven shopping platform, active in 20+ markets.&nbsp;</strong></h3>\n<p class=\"mb-2 whitespace-pre-wrap\">We help millions make smarter spending decisions across discovery, evaluation, and (re-)purchase by connecting people with the right brands and retailers.</p>\n<p class=\"mb-2 whitespace-pre-wrap\">Our 1,000+ team across 10 countries builds products used every day at global scale, where you'll have real ownership and see your impact. Want to shape the destinations people rely on to shop with confidence? Keep reading.</p></div><section>\n<section><hr>\n<h3><strong>About This Role:</strong></h3>\n<p class=\"isSelectedEnd\">We are looking for a <strong>Senior Backend Engineer (TypeScript, NestJS/Node.js)</strong> to join our Fulfilment team in <strong>Berlin or remotely from Germany.</strong> In this role, you will build and improve the backend systems behind cashback, reward processing, partner integrations, and reliable fulfilment flows across Atolls' reward platforms.</p>\n<p>You will work on stable, scalable services that sit close to the customer experience, helping users earn, track, and redeem cashback with more clarity, trust, and fewer points of friction.</p>\n<hr>\n<h3>Our Benefits:</h3>\n<p>At Atolls, we believe in nurturing both your professional and personal growth. Here's what you can expect:</p>\n<p>&nbsp; &nbsp; • &nbsp; &nbsp;A culture that values personal and professional development, with internal mobility opportunities.<br>&nbsp; &nbsp; • &nbsp; &nbsp;A supportive and open-minded team that embraces diverse perspectives and innovative ideas.<br>&nbsp; &nbsp; • &nbsp; &nbsp;32 days of paid vacation plus your birthday off, giving you the time you need to recharge.<br>&nbsp; &nbsp; • &nbsp; &nbsp;A flexible hybrid working scheme to balance work and life.<br>&nbsp; &nbsp; • &nbsp; &nbsp;Access to a learning budget and internal training to help you grow in your role.<br>&nbsp; &nbsp; • &nbsp; &nbsp;Mental health coaching to support your well-being.<br>&nbsp; &nbsp; • &nbsp; &nbsp;Regular global and local get-togethers to celebrate successes and build connections.<br>&nbsp; &nbsp; • &nbsp; &nbsp;The possibility of taking a sabbatical after three years with the company.<br>&nbsp; &nbsp; • &nbsp; &nbsp;A cloud-based company setup, providing flexibility and collaboration opportunities no matter where you are.</p>\n<p><em>*These are global benefits that apply to all employees, with additional local perks based on your location.</em></p>\n<hr>\n<h3><strong>Responsibilities:</strong></h3>\n<p>As a Backend/ Full-Stack Engineer, you will:</p>\n<ul>\n<li>Build and improve backend services that support cashback, redemption, fulfilment flows, and reliable reward experiences across Atolls platforms.</li>\n<li>Develop scalable APIs and services using <strong>TypeScript, Node.js, NestJS,</strong> and related backend technologies, with a focus on reliability and maintainability.</li>\n<li>Collaborate with Product, Engineering, and business stakeholders to translate fulfilment needs into clear technical solutions.</li>\n<li>Integrate and maintain partner APIs, third-party systems, and internal services that support transaction and reward processing.</li>\n<li>Improve performance, observability, testing, and documentation across services that sit close to the customer cashback journey.</li>\n<li>Guide technical decisions, contribute to code reviews, and support engineering quality through mentoring and knowledge sharing.</li>\n</ul>\n</section>\n<hr>\n<h3><strong>Your Profile:</strong></h3>\n<section>\n<p class=\"isSelectedEnd\">We're looking for someone with backend engineering experience in scalable product environments, ideally with exposure to cashback, rewards, payments, fulfilment, or other transaction-heavy systems.</p>\n<ul data-spread=\"false\">\n<li>You have 6+ years of experience in software development, with strong backend engineering skills.</li>\n<li>You are confident working with TypeScript, Node.js, NestJS, REST APIs, and service-oriented or microservice architectures.</li>\n<li>You have experience with cloud technologies such as AWS, GCP, or Azure, including databases, queues, event-driven systems, or distributed services.</li>\n<li>You understand common backend architecture patterns and can design systems that are scalable, maintainable, and reliable.</li>\n<li>You care about clean code, automated testing, documentation, observability, and long-term maintainability.</li>\n<li>You bring a structured approach to problem-solving and can balance technical quality with product and business priorities.</li>\n<li>You communicate clearly in English and enjoy working in a collaborative, cross-functional environment.</li>\n<li>Experience with GraphQL, federation, Supergraph concepts, Elasticsearch, DynamoDB, GitLab, Docker, or CI/CD practices is a plus.</li>\n</ul>\n<hr>\n<h3><strong>Our Hiring Process</strong>:</h3>\n<p><strong>TA Call</strong>: Meet one of our Talent Experts and get to know Atolls better.</p>\n<p><strong>Technical Round</strong>: Focus on the technical aspects of the role <em>(Through a Live Case)</em>, and meet your potential manager.</p>\n<p><strong>Final Round</strong>: Meet other Atollians 🏝️<br><em>It varies from 1 to 3 interviews</em></p>\n<p><em>*Some processes might slightly change according to needs</em></p>\n<hr>\n<h4><strong>Ready to apply?</strong></h4>\n<p>Be part of a destination where your work helps millions of people make better decisions every day.<strong> </strong>One focused application is all we need. If you truly fit more than one role, you're welcome to apply to <strong>up to three. </strong>This helps us match you with the right opportunity faster.<br><strong><br>We review every application with equal care and will reach out if your profile aligns. Apply now with your CV in English.</strong><br><em><span style=\"color: rgb(255, 255, 255);\">#LI-AK1 &nbsp;#LI-Hybrid</span><br></em></p>\n</section>\n</section><div class=\"content-conclusion\"><hr>\n<p><span style=\"font-weight: 400;\">At Atolls, we want to ensure that all employees can thrive in an inclusive environment. Our employment opportunities are open to every gender, race, religion, age, sexual orientation, ability, place of origin, or socioeconomic status. We remain committed to a culture of diversity, equity and belonging, where all employees are welcomed, respected, connected, and engaged.&nbsp;</span></p>\n<p style=\"text-align: center; margin: 0;\"><img style=\"display: block; margin: 0 auto; max-width: 100%;\" src=\"https://atolls.com/wp-content/uploads/2025/09/Email-banner-bottom-2.jpg\" alt=\"Atolls bottom banner\" width=\"1000\"></p></div><p>Find more <a href=\"https://www.arbeitnow.com/english-speaking-jobs\">English Speaking Jobs in Germany</a> on Arbeitnow</a>",
+        "remote": false,
+        "url": "https://www.arbeitnow.com/jobs/companies/atolls/senior-backend-engineer-typescript-nestjs-nodejs-berlin-317808",
+        "tags": [],
+        "job_types": [],
+        "location": "Berlin, Berlin, Germany",
+        "created_at": 1784321122
+      },
+      "normalized_title": "senior backend engineer typescript nestjs node.js m f x",
+      "canonical_url": "https://www.arbeitnow.com/jobs/companies/atolls/senior-backend-engineer-typescript-nestjs-nodejs-berlin-317808"
+    },
+    {
+      "job_id": "data-engineer-berlin-466297",
+      "title": "Data Engineer",
+      "company": "Atolls",
+      "location": "Berlin, Germany",
+      "date_of_posting": "2026-07-17",
+      "source_website": "arbeitnow",
+      "source_type": "api",
+      "url": "https://www.arbeitnow.com/jobs/companies/atolls/data-engineer-berlin-466297",
+      "search_term": "AI Engineer",
+      "remote_mode": null,
+      "raw_payload": {
+        "slug": "data-engineer-berlin-466297",
+        "company_name": "Atolls",
+        "title": "Data Engineer",
+        "description": "<div class=\"content-intro\"><p><img style=\"display: block; max-width: 100%;\" src=\"https://atolls.com/wp-content/uploads/2025/10/Atolls-Banner_01_Greenhouse_1400x200-scaled.jpg\" alt=\"Atolls top banner\"></p>\n<hr>\n<h3 class=\"mb-2 whitespace-pre-wrap\"><strong>Atolls is the world's largest community-driven shopping platform, active in 20+ markets.&nbsp;</strong></h3>\n<p class=\"mb-2 whitespace-pre-wrap\">We help millions make smarter spending decisions across discovery, evaluation, and (re-)purchase by connecting people with the right brands and retailers.</p>\n<p class=\"mb-2 whitespace-pre-wrap\">Our 1,000+ team across 10 countries builds products used every day at global scale, where you'll have real ownership and see your impact. Want to shape the destinations people rely on to shop with confidence? Keep reading.</p></div><section>\n<section><hr>\n<h3><strong>About This Role:</strong></h3>\n<p>We are looking for a <strong>Data Engineer </strong>to join our <strong>Data Products team.</strong> At Atolls, your role will be instrumental in helping us shape the future of internal data products, creating exceptional user experiences and empowering consumers to make informed and confident shopping decisions. As a key part of our team, you'll be directly involved in building and enhancing the digital destinations our users rely on throughout their shopping journeys.</p>\n<p>Your contributions will help shape how millions of consumers interact with our platforms, guiding them to make smart, fair, and rewarding choices.</p>\n<hr>\n<h3><strong>Our Benefits:</strong></h3>\n<p>At Atolls, we believe in nurturing both your professional and personal growth. Here's what you can expect:</p>\n<ul>\n<li>A culture that values personal and professional development, with internal mobility opportunities.</li>\n<li>A supportive and open-minded team that embraces diverse perspectives and innovative ideas.</li>\n<li>32 days of paid vacation plus your birthday off, giving you the time you need to recharge.</li>\n<li>A flexible hybrid working scheme to balance work and life.</li>\n<li>Access to a learning budget and internal training to help you grow in your role.</li>\n<li>Mental health coaching to support your well-being.</li>\n<li>Regular global and local get-togethers to celebrate successes and build connections.</li>\n<li>The possibility of taking a sabbatical after three years with the company.</li>\n<li>A cloud-based company setup, providing flexibility and collaboration opportunities no matter where you are.</li>\n</ul>\n<p><em>*These are global benefits that apply to all employees, with additional local perks based on your location.</em></p>\n<hr>\n<h3><strong>Responsibilities:</strong></h3>\n<p>In this role, you will:</p>\n<ul>\n<li><strong>Design, Build</strong> and <strong>optimize</strong> batch and streaming data pipelines with strong performance, fault tolerance, and observability using Python, Spark, and Clickhouse.</li>\n<li><strong>Develop</strong> and <strong>operate</strong> workflow orchestration with Apache Airflow to schedule, monitor, and manage data pipelines and transformations.</li>\n<li><strong>Manage, model and document</strong> critical data systems for analytics using SQL and dbt to support business intelligence and reporting workloads.</li>\n<li><strong>Implement</strong> infrastructure-as-code (e.g., Terraform) to provision and manage cloud-based data platform components.</li>\n<li><strong>Containerize</strong> and <strong>deploy</strong> services using Docker and Kubernetes (and related tooling such as Helm).</li>\n<li><strong>Collaborate</strong> with analysts, application teams and other stakeholders to turn requirements into technical designs and delivered solutions.</li>\n</ul>\n<hr>\n<h3><strong>&nbsp;</strong><strong>Your Profile:</strong></h3>\n<p>We're looking for someone with data engineering experience, who is dedicated to creating exceptional user experiences and driving innovation.</p>\n<p>Must have:</p>\n<ul>\n<li>4+ years building and running production data pipelines.</li>\n<li>Python - strong, idiomatic, tested. You write pipelines that other people can read and easily debug.</li>\n<li>SQL - advanced. Window functions, CTEs, query plans, and the instinct to know why a query got slow.</li>\n<li>Data modeling &amp; warehousing - dimensional modeling, incremental vs. full-refresh strategies, slowly changing dimensions, and the trade-offs between them.</li>\n<li>dbt - building, testing, and documenting models in a real project.</li>\n<li>Apache Airflow - authoring DAGs, plus the operational side: backfills, retries, SLAs, and debugging a failed run.</li>\n<li>AWS - hands-on experience with S3 and the surrounding data services (Athena, Kinesis, EKS, Lambda).</li>\n<li>Docker &amp; Kubernetes - you can containerize a job and understand what happens when a pod won't schedule.</li>\n<li>Git and CI/CD - branching, code review, and pipelines that gate merges.</li>\n</ul>\n<p>Nice to have:</p>\n<ul>\n<li>Knowledge of ClickHouse or another columnar OLAP engine (BigQuery, Redshift) table engines, partitioning, and MergeTree tuning are a big plus.</li>\n<li>Good experience with streaming data ingestion technologies such as Kafka, Kinesis, or similar.</li>\n<li>Familiarity with infrastructure as code (IaC) - Terraform, Helm, Ansible.</li>\n<li>Experience with data lake architectures - Parquet, Iceberg, or Delta Lake, and an understanding of layered lake design (bronze → silver → gold).</li>\n<li>Experience with BI tooling - Apache Superset, Looker, Tableau, or equivalent.</li>\n<li>Strong experience integrating third-party APIs - handling inconsistent schemas, rate limits, and unpredictable failure modes at scale.</li>\n<li>Working knowledge ofApache Spark - PySpark or Scala.</li>\n</ul>\n<p>Soft skills:</p>\n<ul>\n<li>Attention to detail - You care about correctness and you build the checks that prove it. In data engineering, a silently wrong number is worse than a loud failure.</li>\n<li>Ownership - you run what you build, and you improve it when needed.</li>\n<li>Clear communication - you can effectively explain in a pipeline to an analyst and a trade-off to a stakeholder.</li>\n<li>Pragmatism - you can tell the difference between the right long-term design and the short-term solution, and you know when each one applies.</li>\n<li>Collaboration - you work well with data engineers, analysts, and other product and backend teams.</li>\n</ul>\n<p>Language requirements:</p>\n<ul>\n<li>English - fluent, written and spoken.</li>\n</ul>\n<hr>\n<h3><strong>Our hiring process</strong>:</h3>\n<ol>\n<li><strong>TA Call</strong>: Meet one of our Talent Experts and get to know Atolls better.</li>\n<li><strong>Technical Round</strong>: Focus on the technical aspects of the role <em>(Through a Live Case)</em>, and meet your potential manager.</li>\n<li><strong>Final Round</strong>: Meet other Atollians 🏝️<br><em>It varies from 1 to 3 interviews</em></li>\n</ol>\n<p><em>*Some processes might slightly change according to needs</em></p>\n<hr>\n<h4><strong>Ready to apply?</strong></h4>\n<p>Be part of a destination where your work helps millions of people make better decisions every day.<strong> </strong>One focused application is all we need. If you truly fit more than one role, you're welcome to apply to <strong>up to three. </strong>This helps us match you with the right opportunity faster.<br><strong><br>We review every application with equal care and will reach out if your profile aligns. Apply now with your CV in English.</strong><br><em>*Portfolios, writing samples, or certifications may be requested based on the role.</em><br>&nbsp;<span style=\"color: rgb(255, 255, 255);\">#LI-PM1</span></p>\n</section>\n</section><div class=\"content-conclusion\"><hr>\n<p><span style=\"font-weight: 400;\">At Atolls, we want to ensure that all employees can thrive in an inclusive environment. Our employment opportunities are open to every gender, race, religion, age, sexual orientation, ability, place of origin, or socioeconomic status. We remain committed to a culture of diversity, equity and belonging, where all employees are welcomed, respected, connected, and engaged.&nbsp;</span></p>\n<p style=\"text-align: center; margin: 0;\"><img style=\"display: block; margin: 0 auto; max-width: 100%;\" src=\"https://atolls.com/wp-content/uploads/2025/09/Email-banner-bottom-2.jpg\" alt=\"Atolls bottom banner\" width=\"1000\"></p></div><p>Find more <a href=\"https://www.arbeitnow.com/english-speaking-jobs\">English Speaking Jobs in Germany</a> on Arbeitnow</a>",
+        "remote": false,
+        "url": "https://www.arbeitnow.com/jobs/companies/atolls/data-engineer-berlin-466297",
+        "tags": [],
+        "job_types": [],
+        "location": "Berlin, Germany",
+        "created_at": 1784321122
+      },
+      "normalized_title": "data engineer",
+      "canonical_url": "https://www.arbeitnow.com/jobs/companies/atolls/data-engineer-berlin-466297"
+    },
+    {
+      "job_id": "senior-php-software-engineer-berlin-407683",
+      "title": "Senior PHP Software Engineer",
+      "company": "Atolls",
+      "location": "Berlin, Berlin, Germany",
+      "date_of_posting": "2026-07-17",
+      "source_website": "arbeitnow",
+      "source_type": "api",
+      "url": "https://www.arbeitnow.com/jobs/companies/atolls/senior-php-software-engineer-berlin-407683",
+      "search_term": "Software Engineer",
+      "remote_mode": null,
+      "raw_payload": {
+        "slug": "senior-php-software-engineer-berlin-407683",
+        "company_name": "Atolls",
+        "title": "Senior PHP Software Engineer",
+        "description": "<div class=\"content-intro\"><p><img style=\"display: block; max-width: 100%;\" src=\"https://atolls.com/wp-content/uploads/2025/10/Atolls-Banner_01_Greenhouse_1400x200-scaled.jpg\" alt=\"Atolls top banner\"></p>\n<hr>\n<h3 class=\"mb-2 whitespace-pre-wrap\"><strong>Atolls is the world's largest community-driven shopping platform, active in 20+ markets.&nbsp;</strong></h3>\n<p class=\"mb-2 whitespace-pre-wrap\">We help millions make smarter spending decisions across discovery, evaluation, and (re-)purchase by connecting people with the right brands and retailers.</p>\n<p class=\"mb-2 whitespace-pre-wrap\">Our 1,000+ team across 10 countries builds products used every day at global scale, where you'll have real ownership and see your impact. Want to shape the destinations people rely on to shop with confidence? Keep reading.</p></div><section>\n<section><hr>\n<h3><strong>About This Role:</strong></h3>\n<p class=\"isSelectedEnd\">We are looking for a <strong>Senior PHP Software Engineer</strong> to join our <strong>Engineering team in Berlin</strong>. In this role, you will build and scale the core web applications and community platforms that help users discover, discuss, and decide on the best deals.</p>\n<p>You will work on high-traffic systems where performance, reliability, and clean backend architecture matter, contributing to platforms used by large shopping communities across Atolls.</p>\n<hr>\n<h3><strong>Our Benefits:</strong></h3>\n<p>At Atolls, we believe in nurturing both your professional and personal growth. Here's what you can expect:</p>\n<ul>\n<li>A culture that values personal and professional development, with internal mobility opportunities.</li>\n<li>A supportive and open-minded team that embraces diverse perspectives and innovative ideas.</li>\n<li>32 days of paid vacation plus your birthday off, giving you the time you need to recharge.</li>\n<li>A flexible hybrid working scheme to balance work and life.</li>\n<li>Access to a learning budget and internal training to help you grow in your role.</li>\n<li>Mental health coaching to support your well-being.</li>\n<li>Regular global and local get-togethers to celebrate successes and build connections.</li>\n<li>The possibility of taking a sabbatical after three years with the company.</li>\n<li>A cloud-based company setup, providing flexibility and collaboration opportunities no matter where you are.</li>\n</ul>\n<p><em>*These are global benefits that apply to all employees, with additional local perks based on your location.</em></p>\n<hr>\n<h3><strong>Responsibilities:</strong></h3>\n<p>In this role, you will:</p>\n<ul>\n<li>Develop and maintain robust, scalable web applications and community platforms using PHP and the Laravel framework.</li>\n<li>Design, implement, and optimize high-performance GraphQL and REST APIs to support our front-end applications and services.</li>\n<li>Collaborate with cross-functional teams, including product managers and front-end developers, to plan and deliver new features.</li>\n<li>Manage database performance and scalability, working with MySQL, PostgreSQL, and NoSQL databases like MongoDB and Elasticsearch.</li>\n<li>Implement comprehensive unit tests and follow TDD principles to ensure code quality, reliability, and maintainability.</li>\n<li>Optimize our CI/CD pipelines using Docker, Jenkins, and GitLab CI to ensure smooth and reliable deployments.</li>\n</ul>\n<hr>\n<h3><strong>&nbsp;</strong><strong>Your Profile:</strong></h3>\n<p>We're looking for someone with scalable web applications and community platforms using PHP/Laravel experience,&nbsp;with expertise in high-performance APIs (GraphQL/REST), database optimization, and cross-team delivery of production-ready features,&nbsp;who is dedicated to creating exceptional user experiences and driving innovation.</p>\n<ul>\n<li>Technical Skills: PHP, Laravel, MySQL, PostgreSQL, Elasticsearch, MongoDB, Redis, Memcache, OOP, design patterns, unit testing, TDD, GraphQL APIs, REST APIs, Composer, AWS, Docker, Jenkins, GitLab CI, CloudWatch, BugSnag, Atatus, Grafana.</li>\n<li>Soft Skills: Collaboration, Problem-solving, Team communication, Continuous learning, Code documentation, Cross-functional alignment.</li>\n<li>Language requirements: Fluent in English with excellent communication skills.</li>\n</ul>\n<hr>\n<h3><strong>Our hiring process</strong>:</h3>\n<ol>\n<li><strong>TA Call</strong>: Meet one of our Talent Experts and get to know Atolls better.</li>\n<li><strong>Technical Round</strong>: Focus on the technical aspects of the role <em>(Through a Live Case)</em>, and meet your potential manager.</li>\n<li><strong>Final Round</strong>: Meet other Atollians 🏝️<br><em>It varies from 1 to 3 interviews</em></li>\n</ol>\n<p><em>*Some processes might slightly change according to needs</em></p>\n<hr>\n<h4><strong>Ready to apply?</strong></h4>\n<p>Be part of a destination where your work helps millions of people make better decisions every day.<strong> </strong>One focused application is all we need. If you truly fit more than one role, you're welcome to apply to <strong>up to three. </strong>This helps us match you with the right opportunity faster.<br><strong><br>We review every application with equal care and will reach out if your profile aligns. Apply now with your CV in English.</strong><br><em>*Portfolios, writing samples, or certifications may be requested based on the role.</em><br><span style=\"color: rgb(255, 255, 255);\">#LI-PM1</span></p>\n</section>\n</section><div class=\"content-conclusion\"><hr>\n<p><span style=\"font-weight: 400;\">At Atolls, we want to ensure that all employees can thrive in an inclusive environment. Our employment opportunities are open to every gender, race, religion, age, sexual orientation, ability, place of origin, or socioeconomic status. We remain committed to a culture of diversity, equity and belonging, where all employees are welcomed, respected, connected, and engaged.&nbsp;</span></p>\n<p style=\"text-align: center; margin: 0;\"><img style=\"display: block; margin: 0 auto; max-width: 100%;\" src=\"https://atolls.com/wp-content/uploads/2025/09/Email-banner-bottom-2.jpg\" alt=\"Atolls bottom banner\" width=\"1000\"></p></div><p>Find <a href=\"https://www.arbeitnow.com/\">Jobs in Germany</a> on Arbeitnow</a>",
+        "remote": false,
+        "url": "https://www.arbeitnow.com/jobs/companies/atolls/senior-php-software-engineer-berlin-407683",
+        "tags": [],
+        "job_types": [],
+        "location": "Berlin, Berlin, Germany",
+        "created_at": 1784321122
+      },
+      "normalized_title": "senior php software engineer",
+      "canonical_url": "https://www.arbeitnow.com/jobs/companies/atolls/senior-php-software-engineer-berlin-407683"
+    },
+    {
+      "job_id": "senior-full-stack-python-engineer-network-planning-berlin-414270",
+      "title": "Senior Full-stack Python Engineer (m/f/d) - Network Planning",
+      "company": "Flix",
+      "location": "Berlin, Berlin, Germany",
+      "date_of_posting": "2026-07-18",
+      "source_website": "arbeitnow",
+      "source_type": "api",
+      "url": "https://www.arbeitnow.com/jobs/companies/flix/senior-full-stack-python-engineer-network-planning-berlin-414270",
+      "search_term": "Full Stack Developer",
+      "remote_mode": null,
+      "raw_payload": {
+        "slug": "senior-full-stack-python-engineer-network-planning-berlin-414270",
+        "company_name": "Flix",
+        "title": "Senior Full-stack Python Engineer (m/f/d) - Network Planning",
+        "description": "<p><span style=\"font-size: 12pt;\"><span data-contrast=\"none\">At Flix, we offer a tech-driven environment where innovation meets real-world impact, with competitive pay,&nbsp;strong growth&nbsp;opportunities, and a culture of collaboration and ownership.</span><span data-ccp-props=\"{&quot;134233117&quot;:false,&quot;134233118&quot;:false,&quot;335551550&quot;:1,&quot;335551620&quot;:1,&quot;335559738&quot;:0,&quot;335559739&quot;:281}\">&nbsp;</span></span></p>\n<p><span style=\"font-size: 12pt;\"><span data-contrast=\"none\">We're&nbsp;looking for an experienced&nbsp;</span><strong><span data-contrast=\"none\">Senior Full-stack Python Engineer (m/f/d)</span></strong><span data-contrast=\"none\">&nbsp;to join&nbsp;our Supply Division.&nbsp;You'll&nbsp;make&nbsp;an impact by&nbsp;taking&nbsp;ownership of core backend systems that power our network planning optimization product. Your work&nbsp;will&nbsp;directly support&nbsp;network planners in scheduling vehicles, drivers, and timetables — improving travel experiences for millions of passengers while driving profitability.</span><span data-ccp-props=\"{&quot;134233117&quot;:false,&quot;134233118&quot;:false,&quot;335557856&quot;:16777215,&quot;335559738&quot;:180,&quot;335559739&quot;:0}\">&nbsp;</span></span></p>\n<p><span style=\"font-size: 12pt;\"><span data-contrast=\"none\">Our team builds and&nbsp;maintains&nbsp;an optimization platform addressing use cases from vehicle and driver scheduling to timetable optimization. We follow modern system design — Domain-Driven Design, Hexagonal Architecture, and SOLID principles — with strict architectural boundaries enforced by tooling. Our backend workloads (APIs, event consumers, Kubernetes jobs) are built to scale with high code quality standards.</span><span data-ccp-props=\"{&quot;134233117&quot;:false,&quot;134233118&quot;:false,&quot;335557856&quot;:16777215,&quot;335559738&quot;:180,&quot;335559739&quot;:0}\">&nbsp;</span></span></p>\n<p><span style=\"font-size: 12pt;\"><span data-contrast=\"none\">The product's algorithm engine is developed by Operations Research Engineers using mathematical optimization. As a Senior Python Engineer, you will own the engineering shell around these algorithms: the APIs, use cases, data pipelines, infrastructure, and the domain models that connect optimization output to the rest of the system.</span><span data-ccp-props=\"{&quot;134233117&quot;:false,&quot;134233118&quot;:false,&quot;335557856&quot;:16777215,&quot;335559738&quot;:180,&quot;335559739&quot;:0}\">&nbsp;</span></span></p>\n<p><span style=\"font-size: 12pt;\"><span data-ccp-props=\"{&quot;134233117&quot;:false,&quot;134233118&quot;:false,&quot;335557856&quot;:16777215,&quot;335559738&quot;:180,&quot;335559739&quot;:0}\"><span data-teams=\"true\">You'll collaborate closely with other engineering teams to design and implement the interfaces and contracts that connect our platform to the wider system landscape.</span></span></span></p>\n<p><span style=\"font-size: 12pt;\"><strong><span data-contrast=\"none\">Our current tech stack and toolset include:</span></strong><span data-ccp-props=\"{&quot;134233117&quot;:false,&quot;134233118&quot;:false,&quot;335557856&quot;:16777215,&quot;335559738&quot;:180,&quot;335559739&quot;:0}\">&nbsp;</span></span></p>\n<ul>\n<li style=\"font-size: 12pt;\"><span style=\"font-size: 12pt;\"><span data-contrast=\"none\">Python, TypeScript, Shell scripting</span><span data-ccp-props=\"{&quot;134233117&quot;:false,&quot;134233118&quot;:false,&quot;335557856&quot;:16777215,&quot;335559738&quot;:240,&quot;335559739&quot;:240}\">&nbsp;</span></span></li>\n<li style=\"font-size: 12pt;\"><span style=\"font-size: 12pt;\"><span data-contrast=\"none\">Flask, React,&nbsp;Pytest</span><span data-ccp-props=\"{&quot;134233117&quot;:false,&quot;134233118&quot;:false,&quot;335557856&quot;:16777215,&quot;335559738&quot;:240,&quot;335559739&quot;:240}\">&nbsp;</span></span></li>\n<li style=\"font-size: 12pt;\"><span style=\"font-size: 12pt;\"><span data-contrast=\"none\">PostgreSQL, Confluent Kafka,&nbsp;DataDog</span><span data-ccp-props=\"{&quot;134233117&quot;:false,&quot;134233118&quot;:false,&quot;335557856&quot;:16777215,&quot;335559738&quot;:240,&quot;335559739&quot;:240}\">&nbsp;</span></span></li>\n<li style=\"font-size: 12pt;\"><span data-teams=\"true\">AWS tools, Terraform</span></li>\n<li style=\"font-size: 12pt;\"><span style=\"font-size: 12pt;\"><span data-contrast=\"none\">GitLab, Kubernetes, Docker, Azure AD</span><span data-ccp-props=\"{&quot;134233117&quot;:false,&quot;134233118&quot;:false,&quot;335557856&quot;:16777215,&quot;335559738&quot;:240,&quot;335559739&quot;:240}\">&nbsp;</span></span></li>\n</ul>\n<p><span style=\"font-size: 24pt;\"><strong data-renderer-mark=\"true\">About the Role</strong></span></p>\n<ul>\n<li style=\"font-size: 12pt;\"><span style=\"font-size: 12pt;\" data-contrast=\"none\">Own and evolve the backend: APIs, use case layer, domain models, serialization, and event-driven pipelines (Kafka)</span></li>\n<li style=\"font-size: 12pt;\"><span style=\"font-size: 12pt;\" data-contrast=\"none\">Take engineering ownership of new product modules — designing the architectural scaffold, wiring layers, and ensuring clean boundaries</span></li>\n<li style=\"font-size: 12pt;\"><span style=\"font-size: 12pt;\"><span data-contrast=\"none\">Build and maintain infrastructure: Kubernetes deployments, CI/CD pipelines, and cloud resources (AWS)</span><span data-ccp-props=\"{&quot;134233117&quot;:false,&quot;134233118&quot;:false,&quot;335557856&quot;:16777215,&quot;335559738&quot;:240,&quot;335559739&quot;:240}\">&nbsp;</span></span></li>\n<li style=\"font-size: 12pt;\"><span style=\"font-size: 12pt;\" data-contrast=\"none\">Collaborate closely with Operations Research Engineers to integrate optimization algorithms into the product</span></li>\n<li><span style=\"font-size: 12pt;\" data-contrast=\"none\">Work in an AI-augmented development workflow — actively using code agents and AI assistants as a natural part of how you ship software</span></li>\n<li style=\"font-size: 12pt;\"><span style=\"font-size: 12pt;\"><span data-contrast=\"none\">Contribute to architecture decisions and uphold code quality through reviews, testing, and continuous improvement</span><span data-ccp-props=\"{&quot;134233117&quot;:false,&quot;134233118&quot;:false,&quot;335557856&quot;:16777215,&quot;335559738&quot;:240,&quot;335559739&quot;:240}\">&nbsp;</span></span></li>\n<li style=\"font-size: 12pt;\"><span style=\"font-size: 12pt;\" data-contrast=\"none\">Write well-tested, self-documenting code following hexagonal architecture patterns</span></li>\n<li style=\"font-size: 12pt;\"><span style=\"font-size: 12pt;\" data-contrast=\"none\">Share your expertise and mentor colleagues, promoting a culture of knowledge sharing and learning</span></li>\n</ul>\n<p><span style=\"font-size: 24pt;\"><strong data-renderer-mark=\"true\">About You</strong></span></p>\n<ul>\n<li style=\"font-family: helvetica, arial, sans-serif; font-size: 12pt;\" data-renderer-start-pos=\"10944\"><span style=\"font-family: helvetica, arial, sans-serif; font-size: 12pt;\">Academic background in Computer Science or equivalent</span></li>\n<li style=\"font-family: helvetica, arial, sans-serif; font-size: 12pt;\" data-renderer-start-pos=\"11016\"><span style=\"font-family: helvetica, arial, sans-serif; font-size: 12pt;\">5+ years of experience in backend software engineering with Python</span></li>\n<li><span style=\"font-family: helvetica, arial, sans-serif; font-size: 12pt;\">Experience with modern front-end stack (some basic front-end tasks are part of our scope)</span></li>\n<li style=\"font-family: helvetica, arial, sans-serif; font-size: 12pt;\"><span style=\"font-family: helvetica, arial, sans-serif; font-size: 12pt;\">Experience applying clean architecture principles (hexagonal, ports-and-adapters, DDD) or similar approaches in production — able to contribute from day one</span></li>\n<li style=\"font-family: helvetica, arial, sans-serif; font-size: 12pt;\"><span style=\"font-family: helvetica, arial, sans-serif; font-size: 12pt;\">Experience with relational databases (PostgreSQL) and event-driven systems (Kafka or similar)</span></li>\n<li style=\"font-family: helvetica, arial, sans-serif; font-size: 12pt;\"><span style=\"font-family: helvetica, arial, sans-serif; font-size: 12pt;\">Strong experience in AI-augmented development — actively using code agents or AI assistants in daily work</span></li>\n<li style=\"font-family: helvetica, arial, sans-serif; font-size: 12pt;\"><span style=\"font-family: helvetica, arial, sans-serif; font-size: 12pt;\">Solid experience with containerization (Docker, Kubernetes) and CI/CD pipelines</span></li>\n<li style=\"font-family: helvetica, arial, sans-serif; font-size: 12pt;\"><span style=\"font-family: helvetica, arial, sans-serif; font-size: 12pt;\">Familiar with testing best practices: unit, integration, acceptance testing</span></li>\n<li style=\"font-family: helvetica, arial, sans-serif; font-size: 12pt;\"><span style=\"font-family: helvetica, arial, sans-serif; font-size: 12pt;\">Experience with cloud platforms (AWS or similar) and infrastructure as code (Terraform)</span></li>\n<li style=\"font-family: helvetica, arial, sans-serif; font-size: 12pt;\"><span style=\"font-family: helvetica, arial, sans-serif; font-size: 12pt;\">Familiarity with mathematical optimization or data-intensive applications is a plus</span></li>\n</ul>\n<p style=\"line-height: 1.4;\"><span style=\"font-size: 12pt;\">We recognize that everyone carries a unique set of valuable skills and experiences. If you think you could have an impact even though you don't meet 100% of the requirements, we still encourage you to apply. We want to hear from you! &nbsp;</span></p>\n<p><span style=\"font-size: 24pt;\"><strong>What We Offer</strong></span></p>\n<ul>\n<li data-renderer-start-pos=\"11445\"><span style=\"font-size: 12pt;\"><strong data-renderer-mark=\"true\">Travel perks</strong>: 12 free Flix vouchers + 12 discount vouchers for friends &amp; family.&nbsp;</span></li>\n<li data-renderer-start-pos=\"11530\"><span style=\"font-size: 12pt;\"><strong data-renderer-mark=\"true\">Work from (M)Anywhere</strong>: Depending on your role, work from another location for up to 60 days per year.&nbsp;</span></li>\n<li data-renderer-start-pos=\"11636\"><span style=\"font-size: 12pt;\"><strong data-renderer-mark=\"true\">Hybrid work model</strong>: We are an office-first company, but we offer flexibility to balance work and life.&nbsp;</span></li>\n<li data-renderer-start-pos=\"11742\"><span style=\"font-size: 12pt;\"><strong data-renderer-mark=\"true\">Wellbeing support</strong>: Access confidential 1:1 counselling, courses, and stress management for yourself and up to four family members.&nbsp;</span></li>\n<li data-renderer-start-pos=\"11877\"><span style=\"font-size: 12pt;\"><strong data-renderer-mark=\"true\">Learning &amp; Development</strong>: Take advantage of language classes, training courses, and expert-led sessions to grow your skills.&nbsp;</span></li>\n<li data-renderer-start-pos=\"12004\"><span style=\"font-size: 12pt;\"><strong data-renderer-mark=\"true\">Mentoring Program</strong>: Connect with experienced colleagues to gain insights and accelerate your career.&nbsp;</span></li>\n</ul>\n<p style=\"line-height: 1.4;\"><span style=\"font-size: 12pt;\">To view more local benefits specific to each office location, please check out this link:&nbsp;<a href=\"https://flix.careers/locations/\">Locations - Flix Career</a></span></p>\n<hr>\n<p style=\"line-height: 1.4;\"><span style=\"font-size: 18pt;\"><strong>Why Join Flix?</strong></span></p>\n<p style=\"line-height: 1.4;\" data-renderer-start-pos=\"14351\"><span style=\"font-size: 12pt;\">At Flix, we empower our teams to push boundaries and shape the future of mobility. As we continue to scale globally, we harness cutting-edge technology to make mobility smarter, more sustainable, and more affordable.</span></p>\n<p style=\"line-height: 1.4;\" data-renderer-start-pos=\"14569\"><span style=\"font-size: 12pt;\">If you're looking for a place where you can drive change and redefine how millions of people travel, Flix is the place where you can lead your journey!&nbsp;</span></p>\n<p style=\"line-height: 1.4;\"><iframe src=\"https://www.youtube.com/embed/YlHz7TiiRAw\" width=\"560\" height=\"314\"></iframe></p>\n<p style=\"line-height: 1.4;\">&nbsp;</p><p>Find <a href=\"https://www.arbeitnow.com/\">Jobs in Germany</a> on Arbeitnow</a>",
+        "remote": false,
+        "url": "https://www.arbeitnow.com/jobs/companies/flix/senior-full-stack-python-engineer-network-planning-berlin-414270",
+        "tags": [],
+        "job_types": [],
+        "location": "Berlin, Berlin, Germany",
+        "created_at": 1784357131
+      },
+      "normalized_title": "senior full stack python engineer network planning",
+      "canonical_url": "https://www.arbeitnow.com/jobs/companies/flix/senior-full-stack-python-engineer-network-planning-berlin-414270"
+    },
+    {
+      "job_id": "13635-55dfcfcf_JB5199274-S",
+      "title": "Technical Documentation Engineer – (m/f/d)| Legal AI Tech Scale-Up | Full Remote",
+      "company": "Noxtua AG",
+      "location": "Berlin, BERLIN, DEUTSCHLAND",
+      "date_of_posting": "2026-07-17",
+      "source_website": "bundesagentur",
+      "source_type": "api",
+      "url": "https://www.arbeitsagentur.de/jobsuche/jobdetail/13635-55dfcfcf_JB5199274-S",
+      "search_term": "AI Engineer",
+      "remote_mode": "remote",
+      "raw_payload": {
+        "stellenangebotsart": "ARBEIT",
+        "stellenangebotsTitel": "Technical Documentation Engineer – (m/f/d)| Legal AI Tech Scale-Up | Full Remote",
+        "quereinstiegGeeignet": false,
+        "arbeitszeitSchichtNachtWochenende": false,
+        "arbeitszeitTeilzeitAbend": false,
+        "arbeitszeitTeilzeitNachmittag": false,
+        "arbeitszeitTeilzeitVormittag": false,
+        "arbeitszeitTeilzeitFlexibel": false,
+        "arbeitszeitVollzeit": true,
+        "eintrittszeitraum": {
+          "von": "2026-07-20"
+        },
+        "verguetungsangabe": "KEINE_ANGABEN",
+        "vertragsdauer": "UNBEFRISTET",
+        "istGeringfuegigeBeschaeftigung": false,
+        "stellenlokationen": [
+          {
+            "adresse": {
+              "plz": "10115",
+              "ort": "Berlin",
+              "region": "BERLIN",
+              "land": "DEUTSCHLAND"
+            },
+            "breite": 52.5319761,
+            "laenge": 13.3867379
+          }
+        ],
+        "homeofficemoeglich": false,
+        "chiffrenummer": "2695851",
+        "veroeffentlichungszeitraum": {
+          "von": "2026-07-17"
+        },
+        "datumErsteVeroeffentlichung": "2026-07-17",
+        "aenderungsdatum": "2026-07-17T14:14:00.222",
+        "externeURL": "https://www.jobexport.de/job/5199274.html?exp=81&cid=55dfcfcf-71fd-4206-b860-bf0d2e364650",
+        "hauptberuf": "Informatiker/in",
+        "firma": "Noxtua AG",
+        "referenznummer": "13635-55dfcfcf_JB5199274-S",
+        "entfernung": 3,
+        "alleBerufe": [
+          "Informatiker/in"
+        ]
+      },
+      "normalized_title": "technical documentation engineer - legal ai tech scale up full remote",
+      "canonical_url": "https://www.arbeitsagentur.de/jobsuche/jobdetail/13635-55dfcfcf_JB5199274-S"
+    },
+    {
+      "job_id": "10001-1003400417-S",
+      "title": "Teamcenter® Engineer (m/w/d) – Junior bis Senior / 100% remote",
+      "company": "Profi Talent Recruitment UG PTR",
+      "location": "Berlin, BERLIN, DEUTSCHLAND",
+      "date_of_posting": "2026-07-17",
+      "source_website": "bundesagentur",
+      "source_type": "api",
+      "url": "https://www.arbeitsagentur.de/jobsuche/jobdetail/10001-1003400417-S",
+      "search_term": "Junior Software Engineer",
+      "remote_mode": "remote",
+      "raw_payload": {
+        "stellenangebotsart": "ARBEIT",
+        "stellenangebotsTitel": "Teamcenter® Engineer (m/w/d) – Junior bis Senior / 100% remote",
+        "arbeitszeitVollzeit": true,
+        "eintrittszeitraum": {
+          "von": "2026-07-17"
+        },
+        "verguetungsangabe": "JAHRESGEHALT",
+        "artDerVerguetung": "GEHALTSSPANNE",
+        "gehaltsspanneVon": 60000,
+        "gehaltsspanneBis": 90000,
+        "vertragsdauer": "UNBEFRISTET",
+        "stellenlokationen": [
+          {
+            "adresse": {
+              "ort": "Berlin",
+              "region": "BERLIN",
+              "land": "DEUTSCHLAND"
+            },
+            "breite": 52.492683263,
+            "laenge": 13.402575309
+          }
+        ],
+        "veroeffentlichungszeitraum": {
+          "von": "2026-07-17"
+        },
+        "datumErsteVeroeffentlichung": "2026-07-17",
+        "aenderungsdatum": "2026-07-17T08:02:29.238",
+        "hauptberuf": "Software-Architect",
+        "alternativBeruf1": "Softwareentwickler/in",
+        "alternativBeruf2": "IT-Lösungsentwickler/in",
+        "firma": "Profi Talent Recruitment UG PTR",
+        "arbeitgeberKundennummerHash": "noCDMcVZ9z5OcswPsx14OyXfeptBsrvyi1FOUwot1yI=",
+        "referenznummer": "10001-1003400417-S",
+        "entfernung": 3,
+        "alleBerufe": [
+          "Softwareentwickler/in",
+          "Software-Architect",
+          "IT-Lösungsentwickler/in"
+        ]
+      },
+      "normalized_title": "teamcenter engineer - junior bis senior 100 remote",
+      "canonical_url": "https://www.arbeitsagentur.de/jobsuche/jobdetail/10001-1003400417-S"
+    },
+    {
+      "job_id": "18251-31308-S",
+      "title": "Software Engineer (all genders) - ZEOS (1 year limited contract)",
+      "company": "Zalando SE",
+      "location": "Berlin, BERLIN, DEUTSCHLAND",
+      "date_of_posting": "2026-07-17",
+      "source_website": "bundesagentur",
+      "source_type": "api",
+      "url": "https://www.arbeitsagentur.de/jobsuche/jobdetail/18251-31308-S",
+      "search_term": "Software Engineer",
+      "remote_mode": null,
+      "raw_payload": {
+        "stellenangebotsart": "ARBEIT",
+        "stellenangebotsTitel": "Software Engineer (all genders) - ZEOS (1 year limited contract)",
+        "quereinstiegGeeignet": false,
+        "arbeitszeitVollzeit": true,
+        "eintrittszeitraum": {
+          "von": "2026-09-01"
+        },
+        "verguetungsangabe": "KEINE_ANGABEN",
+        "vertragsdauer": "KEINE_ANGABE",
+        "istGeringfuegigeBeschaeftigung": false,
+        "stellenlokationen": [
+          {
+            "adresse": {
+              "strasse": "Valeska-Gert-Straße 5",
+              "plz": "10243",
+              "ort": "Berlin",
+              "region": "BERLIN",
+              "land": "DEUTSCHLAND"
+            },
+            "breite": 52.506468,
+            "laenge": 13.441248
+          }
+        ],
+        "veroeffentlichungszeitraum": {
+          "von": "2026-07-17"
+        },
+        "datumErsteVeroeffentlichung": "2026-07-17",
+        "aenderungsdatum": "2026-07-17T07:28:15.590",
+        "hauptberuf": "Softwareentwickler/in",
+        "firma": "Zalando SE",
+        "arbeitgeberKundennummerHash": "6j1LD7GT5Ptmu4Kjh_aAXrzBy8l2iE9iGSfd_WjRWHc=",
+        "referenznummer": "18251-31308-S",
+        "entfernung": 1,
+        "alleBerufe": [
+          "Softwareentwickler/in"
+        ]
+      },
+      "normalized_title": "software engineer zeos 1 year limited contract",
+      "canonical_url": "https://www.arbeitsagentur.de/jobsuche/jobdetail/18251-31308-S"
+    },
+    {
+      "job_id": "senior-talent-acquisition-partner-flixtrain-berlin-436841",
+      "title": "Senior Talent Acquisition Partner (m/f/d) – FlixTrain",
+      "company": "Flix",
+      "location": "Berlin, Berlin, Germany",
+      "date_of_posting": "2026-06-03",
+      "source_website": "arbeitnow",
+      "source_type": "api",
+      "url": "https://www.arbeitnow.com/jobs/companies/flix/senior-talent-acquisition-partner-flixtrain-berlin-436841",
+      "search_term": "Talent Acquisition Specialist",
+      "remote_mode": null,
+      "raw_payload": {
+        "slug": "senior-talent-acquisition-partner-flixtrain-berlin-436841",
+        "company_name": "Flix",
+        "title": "Senior Talent Acquisition Partner (m/f/d) – FlixTrain",
+        "description": "<p style=\"line-height: 1.4;\"><span style=\"font-size: 12pt;\">Bei FlixTrain gestaltest du die Zukunft der Mobilität aktiv mit. Wir bieten dir nicht nur sichere Arbeitsplätze sowie attraktive Zusatzleistungen, sondern auch ein dynamisches, internationales Umfeld, in dem deine Ideen echten Einfluss haben.</span></p>\n<p style=\"line-height: 1.4;\"><span style=\"font-size: 12pt;\">Mit dem weiteren Wachstum unseres Train Geschäfts suchen wir einen <strong>Senior Recruiter/Senior Talent Acquisition Partner (m/w/d</strong>), der/die das Recruiting für FlixTrain maßgeblich prägt und vorantreibt</span></p>\n<p style=\"line-height: 1.4;\"><span style=\"font-size: 12pt;\">Du handelst eigenständig, setzt klare Prioritäten und findest deinen Weg auch dann, wenn sich Rahmenbedingungen schnell ändern? Bei FlixTrain verantwortest du das End to End Recruiting für ein breites Rollenspektrum über verschiedene Senioritätsstufen hinweg – und bist echte Sparringspartner:in für Senior Stakeholder mit aktivem Einfluss auf Hiring Entscheidungen. Du arbeitest in einem vierköpfigen Recruiting Team mit hybridem Modell in <strong>Berlin</strong> (60/40).</span></p>\n<p><span style=\"font-size: 24pt;\"><strong data-renderer-mark=\"true\">Über die Rolle</strong></span></p>\n<ul>\n<li><span style=\"font-size: 12pt;\">Eigenverantwortliches 360° Recruiting für FlixTrain Headquarter-Rollen (Commercial, Finance, Operations, Engineering) sowie für Onboard Personal (Triebfahrzeugführer:innen, Zugbegleiter:innen) </span></li>\n<li><span style=\"font-size: 12pt;\">Enge Zusammenarbeit mit Hiring Manager:innen und Senior Stakeholdern bei der Entwicklung passgenauer Sourcing &nbsp;und Auswahlstrategien </span></li>\n<li><span style=\"font-size: 12pt;\">Aktive Ansprache relevanter Talentpools über kreative Online &nbsp;und Offline Kanäle sowie Einbringung von Markt &nbsp;und Recruiting Insights </span></li>\n<li><span style=\"font-size: 12pt;\">Datenbasierte Steuerung von Hiring Entscheidungen durch KPIs und ATS Reporting (Greenhouse) </span></li>\n<li><span style=\"font-size: 12pt;\">Sicherstellung einer exzellenten Candidate Experience durch klare, wertschätzende und transparente Kommunikation </span></li>\n<li><span style=\"font-size: 12pt;\">Positionierung von FlixTrain als attraktive Arbeitgebermarke entlang des gesamten Recruiting Prozesses </span></li>\n<li><span style=\"font-size: 12pt;\">Mitgestaltung übergreifender Talent Acquisition Initiativen zur Prozessoptimierung und &nbsp;automatisierung</span></li>\n</ul>\n<p><span style=\"font-size: 24pt;\"><strong>Über Dich</strong></span></p>\n<ul>\n<li><span style=\"font-size: 12pt;\">Mindestens 5 Jahre Erfahrung im Full‑Cycle‑Inhouse‑Recruiting in einem dynamischen Umfeld (idealerweise stark reguliert oder hohes Wachstum)</span></li>\n<li><span style=\"font-size: 12pt;\">Erfahrung in der Besetzung operativer, technischer oder kaufmännischer Rollen über verschiedene Senioritätsstufen hinweg, idealerweise in Transport, Produktion oder Engineering</span></li>\n<li><span style=\"font-size: 12pt;\">Hohe Sicherheit im Stakeholder‑ und Offer‑Management, auch auf Senior‑Level<br></span></li>\n<li><span style=\"font-size: 12pt;\">Ausgeprägte Resilienz im Umgang mit Unsicherheiten und sich schnell ändernden Prioritäten</span></li>\n<li><span style=\"font-size: 12pt;\">Starke Sourcing‑Expertise und Erfahrung im Aufbau nachhaltiger Talentpools</span></li>\n<li><span style=\"font-size: 12pt;\">Datengetriebene Arbeitsweise und sicherer Umgang mit Recruiting‑Kennzahlen</span></li>\n<li><span style=\"font-size: 12pt;\">Verhandlungssicheres Deutsch und Englisch</span><span style=\"font-size: 12pt;\"><br></span></li>\n</ul>\n<p style=\"line-height: 1.4;\"><span style=\"font-size: 12pt;\">Bei uns zählt der Blick auf das Ganze – auch wenn du nicht alle Anforderungen zu 100 % erfüllst, aber dennoch glaubst, etwas bewegen zu können, freuen wir uns auf deine Bewerbung!&nbsp;</span></p>\n<p><span style=\"font-size: 24pt;\"><strong>Was Wir Bieten</strong></span></p>\n<ul>\n<li data-renderer-start-pos=\"12004\"><span style=\"font-size: 12pt;\"><strong>Reisevorteile</strong>: 12 kostenlose Flix-Gutscheine + 12 Rabattgutscheine für Freunde &amp; Familie. </span></li>\n<li data-renderer-start-pos=\"12004\"><span style=\"font-size: 12pt;\"><strong>Arbeiten von Überall</strong>: Je nach Rolle kannst du bis zu 60 Tage pro Jahr von einem anderen Standort aus arbeiten. </span></li>\n<li data-renderer-start-pos=\"12004\"><span style=\"font-size: 12pt;\"><strong>Hybrides Arbeitsmodell:</strong> Wir sind ein Unternehmen mit Bürokultur, bieten jedoch Flexibilität, um Arbeit und Leben in Einklang zu bringen.&nbsp;</span></li>\n<li data-renderer-start-pos=\"12004\"><span style=\"font-size: 12pt;\"><strong>Gesundheits- und Wohlfühlangebote:</strong> Zugang zu vertraulichen Einzelberatungen, Kursen und Stressbewältigungsmaßnahmen – für dich und bis zu vier Familienangehörige. </span></li>\n<li data-renderer-start-pos=\"12004\"><span style=\"font-size: 12pt;\"><strong>Lernen &amp; Entwicklung</strong>: Nutze Sprachkurse, Schulungen und Experten-Sessions, um deine Fähigkeiten auszubauen. </span></li>\n<li data-renderer-start-pos=\"12004\"><span style=\"font-size: 12pt;\"><strong>Mentoring-Programm</strong>: Vernetze dich mit erfahrenen Kollegen, um Einblicke zu gewinnen und deine Karriere zu beschleunigen.&nbsp;</span></li>\n</ul>\n<hr>\n<p style=\"line-height: 1.4;\"><span style=\"font-size: 18pt;\"><strong>Warum Teil von Flix werden?</strong></span></p>\n<p><span style=\"font-size: 12pt;\">Bei Flix konzentrieren wir uns darauf, Reisen einfach, sicher und erschwinglich zu gestalten – sowohl für unsere Passagiere als auch für unsere Mitarbeiter. Hier geht es schnell voran, und es gibt viel Raum, etwas zu bewegen. Wir wachsen und entwickeln uns täglich weiter und suchen Menschen, die bereit sind, sich einzubringen und die Art und Weise, wie wir arbeiten, mitzugestalten. &nbsp;</span></p>\n<p><span style=\"font-size: 12pt;\">Wenn du einen Job suchst, in dem du wachsen und etwas bewirken kannst, dann bist du bei FlixTrain genau richtig. Hier kannst du Teil eines Teams werden, in dem dein Beitrag zählt und du deine Reise selbst gestalten kannst!&nbsp;</span></p>\n<p><iframe src=\"https://www.youtube.com/embed/YlHz7TiiRAw\" width=\"560\" height=\"314\"></iframe></p>\n<p>&nbsp;</p><p>Find more <a href=\"https://www.arbeitnow.com/english-speaking-jobs\">English Speaking Jobs in Germany</a> on Arbeitnow</a>",
+        "remote": false,
+        "url": "https://www.arbeitnow.com/jobs/companies/flix/senior-talent-acquisition-partner-flixtrain-berlin-436841",
+        "tags": [],
+        "job_types": [],
+        "location": "Berlin, Berlin, Germany",
+        "created_at": 1780519523
+      },
+      "normalized_title": "senior talent acquisition partner - flixtrain",
+      "canonical_url": "https://www.arbeitnow.com/jobs/companies/flix/senior-talent-acquisition-partner-flixtrain-berlin-436841"
+    },
+    {
+      "job_id": "senior-product-manager-web-german-speaking-berlin-119701",
+      "title": "Senior Product Manager - Web (m/w/d) - German speaking - Berlin",
+      "company": "Patronus",
+      "location": "Berlin",
+      "date_of_posting": "2026-06-04",
+      "source_website": "arbeitnow",
+      "source_type": "api",
+      "url": "https://www.arbeitnow.com/jobs/companies/patronus/senior-product-manager-web-german-speaking-berlin-119701",
+      "search_term": "Web Developer",
+      "remote_mode": null,
+      "raw_payload": {
+        "slug": "senior-product-manager-web-german-speaking-berlin-119701",
+        "company_name": "Patronus",
+        "title": "Senior Product Manager - Web (m/w/d) - German speaking - Berlin",
+        "description": "<p><strong>Dein Einfluss</strong></p>\n<p>Um unsere Vision zu verwirklichen, suchen wir einen Product Manager - Web (m/w/d). Du übernimmst die Verantwortung für unsere webbasierten Anwendungen (Webshop, Customer Portal, Backoffice) und gestaltest entscheidend mit, wie Patronus wächst. Gemeinsam mit CTPO und Product Team entwickelst du Produkte, die Menschen in kritischen Momenten Sicherheit geben. In dieser Rolle arbeitest du mit viel Ownership, kurzen Entscheidungswegen und direktem Einfluss auf Strategie und Produkt – und bietest unseren Kund*innen die beste Customer Experience.</p>\n<h2>Deine Mission</h2>\n<ul>\n<li><strong>Produktverantwortung Web:</strong> Produktverantwortung Web: Du übernimmst die volle Ownership unserer Web-Anwendungen (Webshop, Customer Portal, Backoffice) inkl. Roadmap und begleitest Features von der Idee bis über den Release hinaus – in MVPs und schnellen Iterationen statt Perfektion.</li>\n<li><strong>Discovery &#x26; Anforderungen:</strong> Du validierst Bedürfnisse durch Nutzerforschung und Kundengespräche und übersetzt Business- und Kundenanforderungen in klare User Stories, Akzeptanzkriterien und ein priorisiertes Backlog.</li>\n<li><strong>Datengetriebene Entscheidungen:</strong> Du lebst einen datengetriebenen Ansatz für alle Produktentscheidungen und misst nach jedem Release KPIs, wertest Nutzerfeedback systematisch aus und ziehst klare Schlüsse für die nächste Iteration.</li>\n<li><strong>Prozesse:</strong> Du verstehst komplexe Kundenprozesse, baust daraus durchdachte Workflows und schaffst so eine herausragende User Experience (UX).</li>\n<li><strong>Monetarisierung &#x26; Growth:</strong> Mit Erfahrung in Subscription-Modellen und Billing-Systemen (z. B. Stripe) sowie einem starken Gespür für E-Commerce, CRO und A/B-Testing machst du unseren Webshop zum Wachstumstreiber.</li>\n<li><strong>Strategie &#x26; Stakeholder:</strong> Gemeinsam mit dem CTPO gestaltest du aktiv die Produktstrategie Web. Als Brücke zwischen Stakeholdern, Engineers und QA kommunizierst du Ziele und Updates, koordinierst Releases und löst Blocker.</li>\n<li><strong>Qualität &#x26; Support:</strong> Du testest Features hands-on, unterstützt den Customer Support beim Troubleshooting und begleitest QA-Prozesse bis zum Release.</li>\n<li><strong>AI &#x26; Prototyping:</strong> Du nutzt AI-Tools für schnelleres Prototyping und die Generierung von User Interfaces (UI) – von der ersten Idee bis zum testbaren Entwurf.</li>\n</ul>\n<h2>Dein Talent</h2>\n<ul>\n<li>Du bringst mind. 5 Jahre Erfahrung als Product Manager mit, idealerweise mit Fokus auf Web-Anwendungen</li>\n<li>Du hast in einem Startup oder kleinen Team gearbeitet – mit schneller Umsetzung, wechselnden Anforderungen und viel Gestaltungsspielraum</li>\n<li>Du arbeitest nachweislich datengetrieben – KPIs, Analytics und Nutzerfeedback sind für dich die Grundlage jeder Produktentscheidung</li>\n<li>Du hast Erfahrung mit Kundenprozessen, sowie UX/UI-Design und Prototyping (z. B. Figma)</li>\n<li>Du kennst dich in E-Commerce-/Webshop-Umgebungen inkl. CRO und A/B-Testing aus</li>\n<li>Du betreibst exzellentes Stakeholder-Management und schaffst Alignment und Klarheit, auch in komplexen Situationen</li>\n<li>Du gehst sicher mit modernen Produkt-, Design- und Analytics-Tools (z. B. Figma, Hotjar, Miro, Mixpanel, Jira) sowie AI-Tools im Produktprozess um</li>\n<li>Du sprichst Deutsch auf muttersprachlichem Niveau (C2) und verfügst über sehr gute Englischkenntnisse (mind. C1)</li>\n</ul>\n<h2>Wünschenswert</h2>\n<ul>\n<li>Du hast Erfahrung mit Subscription-Modellen und Billing-Systemen (z. B. Stripe, Adyen)</li>\n</ul>\n<h2>Unser Angebot</h2>\n<p><em><strong>🧘 Wellbeing:</strong></em></p>\n<ul>\n<li>Urban Sports Club-Mitgliedschaft für deine Fitness</li>\n<li>Family &#x26; Friends Coupon für die Patronus Uhr</li>\n<li>Bis zu 30 Urlaubstage (nach einem Start mit 26 Tagen im ersten Jahr und 28 Tagen im zweiten Jahr)</li>\n</ul>\n<p><em><strong>📚 Learning &#x26; Development:</strong></em></p>\n<ul>\n<li>Jährliches Learning &#x26; Development Budget für individuelles Lernen und Wachstum</li>\n<li>Klar strukturierter Career Framework für deinen nächsten Karriereschritt</li>\n<li>360-Grad-Feedbackgespräche zur kontinuierlichen Weiterentwicklung</li>\n</ul>\n<p><em><strong>💰 Compensation:</strong></em></p>\n<ul>\n<li>Exklusive Corporate Benefits für deine Vorteile</li>\n<li>Rabatte in Restaurants in der Nähe des Büros</li>\n<li>Freie Wahl der Hardware (Macbook oder Lenovo)</li>\n</ul>\n<p><em><strong>🏠 Mobilität &#x26; Flexibilität:</strong></em></p>\n<ul>\n<li>Modernes Büro im pulsierenden Friedrichshain</li>\n<li>Job Ticket für eine stressfreie tägliche Anreise</li>\n<li>Bis zu 2 Tage pro Woche mobil arbeiten</li>\n<li>Weg vom Fleck. Über Mein Dienstrad vergünstigt ein Fahrrad leasen</li>\n</ul>\n<p><em>🙌 Unternehmenskultur:</em></p>\n<ul>\n<li>Regelmäßige Company- und Teamevents fördern unseren Zusammenhalt</li>\n<li>Teamgeist statt Ellenbogenmentalität - gemeinsam erreichen wir mehr</li>\n<li>Entwickle ein Produkt, das gesellschaftlich einen echten Mehrwert bietet</li>\n<li>Vierteljährliche Company Brunches, zum Austauschen und Vernetzen</li>\n<li>Ein Volunteering-Tag im Jahr, an dem wir gemeinsam etwas Gutes tun können</li>\n</ul>\n<p><strong>Einfach. Sicher. Leben.<br>\nMit Patronus.</strong></p>\n<p>Wir sind mehr als nur ein Anbieter für intelligente Notruf-Uhren. Wir sind echte Visionär*innen. Als modernes Healthtech Start-up aus Berlin mit finanzstarken Investoren im Rücken sind wir fest dazu entschlossen, den Alltag von Senior*innen überall auf der Welt sicherer und unabhängiger zu machen. Damit in Zukunft jeder Mensch sein Leben so leben kann, wie er es möchte.</p>\n<p>Genau das erreichen wir mit unserer revolutionären Patronus-Uhr.</p>\n<p>Auf den ersten Blick nicht als Notruf zu erkennen, ermöglicht sie Nutzer*innen, ab sofort immer und überall unkompliziert Hilfe zu rufen. Damit sorgen wir für die Extraportion Sicherheit und retten im wahrsten Sinne des Wortes Leben. Die Patronus-Uhr selbst ist jedoch nur der Türöffner. Sie gibt uns die Chance, zahlreiche weitere wegweisende Produkte zu entwickeln, die das Leben älterer Menschen sowie deren Angehöriger und Pflegepersonen verbessern. Unsere Vision ist es, die enormen Möglichkeiten der modernen Technologie zu nutzen, um unserer Kundschaft die beste Gesundheitsversorgung zu bieten. So machen wir das Gesundheitssystem effektiver - und ihr Leben lebenswerter.</p>\n<p>Klingt nach einer perfekten Stelle für dich?<br>\nWir freuen uns auf deine Bewerbung und darauf, dich kennenzulernen!</p>\n<p>Wir leben Vielfalt. In unseren Teams bringen wir Menschen mit unterschiedlichen Perspektiven, Fähigkeiten und Hintergründen zusammen und begrüßen alle Geschlechteridentitäten, sexuelle Orientierungen, persönliche Ausdrucksformen, ethnische Zugehörigkeiten, religiöse Überzeugungen, und Menschen mit und ohne Behinderung. Jede Personalentscheidung wird auf der Grundlage von Qualifikationen, Leistungen und den Anforderungen des Unternehmens getroffen.</p>\n<p>Auch wenn du unserem Anforderungsprofil nicht zu 100 % entsprichst, ermutigen wir dich trotzdem, dich bei uns zu bewerben.</p>\n<p>Find more <a href=\"https://www.arbeitnow.com/english-speaking-jobs\">English Speaking Jobs in Germany</a> on Arbeitnow</a>",
+        "remote": false,
+        "url": "https://www.arbeitnow.com/jobs/companies/patronus/senior-product-manager-web-german-speaking-berlin-119701",
+        "tags": [
+          "IT"
+        ],
+        "job_types": [],
+        "location": "Berlin",
+        "created_at": 1780579845
+      },
+      "normalized_title": "senior product manager web german speaking berlin",
+      "canonical_url": "https://www.arbeitnow.com/jobs/companies/patronus/senior-product-manager-web-german-speaking-berlin-119701"
+    },
+    {
+      "job_id": "mandatory-internshipunpaid-backend-full-stack-developer-for-ai-saas-berlin-152480",
+      "title": "Mandatory Internship(Unpaid): Backend / Full-Stack Developer for AI SaaS",
+      "company": "IndieKidz GmbH",
+      "location": "Berlin",
+      "date_of_posting": "2026-06-04",
+      "source_website": "arbeitnow",
+      "source_type": "api",
+      "url": "https://www.arbeitnow.com/jobs/companies/indiekidz-gmbh/mandatory-internshipunpaid-backend-full-stack-developer-for-ai-saas-berlin-152480",
+      "search_term": "Full Stack Developer",
+      "remote_mode": "remote",
+      "raw_payload": {
+        "slug": "mandatory-internshipunpaid-backend-full-stack-developer-for-ai-saas-berlin-152480",
+        "company_name": "IndieKidz GmbH",
+        "title": "Mandatory Internship(Unpaid): Backend / Full-Stack Developer for AI SaaS",
+        "description": "<p>IndieKidz GmbH is a Berlin-based early stage startup building creative learning products for children.</p>\n<p>Our software product, <strong>Occibo</strong>, is an AI-assisted children’s book creation platform. It helps authors, parents, teachers, and small publishers turn a manuscript into a complete children’s book workflow, including editing, illustration planning, character consistency, layout, export, and promotional assets.</p>\n<p>We are looking for a motivated <strong>Backend / Full-Stack Developer Intern</strong> to support the development of Occibo mainly open to work in early stage startup.</p>\n<p>Duration: <strong>3–6 months /</strong> Compensation: <strong>Unpaid mandatory internship</strong></p>\n<h2>Tasks</h2>\n<p>You will work on the technical development of Occibo, mainly on backend services, APIs, database logic, file handling, AI workflow integration, and selected full-stack features.</p>\n<p>This role is ideal for a student who wants hands-on experience building a real SaaS product using modern backend and AI infrastructure.</p>\n<ol>\n<li>Build and improve backend APIs using Node.js, TypeScript, and Express.js</li>\n<li>Work with Supabase for database, authentication, and data management</li>\n<li>Support file storage workflows using Cloudflare R2</li>\n<li>Help build AI workflow orchestration for book creation, illustration, layout, and export</li>\n<li>Work with queue-based processing using Redis and BullMQ</li>\n<li>Support integration with AI image-generation workflows such as ComfyUI</li>\n<li>Create clean, maintainable, and well-documented code</li>\n<li>Debug, test, and improve existing backend services</li>\n<li>Support selected frontend or full-stack tasks when needed</li>\n<li>Collaborate with product, design, and content team members</li>\n</ol>\n<h2>Requirements</h2>\n<ul>\n<li>You have hands-on knowledge of JavaScript / TypeScript</li>\n<li>You understand backend development, APIs, databases, and Git</li>\n<li>You are interested in early stage AI, SaaS products, and product development</li>\n<li>You can work independently in a remote setup</li>\n<li>You write clean code and are willing to learn</li>\n<li>You are reliable, curious, and proactive</li>\n</ul>\n<h2>Benefits</h2>\n<ul>\n<li>Real experience building an AI SaaS product from early stage</li>\n<li>Hands-on work with modern backend and AI infrastructure</li>\n<li>Exposure to product thinking, architecture, and startup execution</li>\n<li>Opportunity to work directly with the founder</li>\n<li>Remote and flexible working setup</li>\n<li>Internship certificate after successful completion</li>\n<li>Recommendation letter based on performance</li>\n</ul>\n<p>Company</p>\n<p><strong>IndieKidz GmbH / Occibo</strong></p>\n<p>Location</p>\n<p><strong>Remote</strong></p>\n<p>Employment Type</p>\n<p><strong>Mandatory Internship / Pflichtpraktikum</strong></p>\n<p>Duration</p>\n<p><strong>3–6 months</strong></p>\n<p>Compensation</p>\n<p><strong>Unpaid mandatory internship</strong></p>\n<p><strong>Please send us:</strong></p>\n<p>Your CV</p>\n<p>GitHub profile or portfolio</p>\n<p>Short note explaining why you are interested in this internship</p>\n<p>Your required internship duration and earliest start date</p>\n<p>Find <a href=\"https://www.arbeitnow.com/\">Jobs in Germany</a> on Arbeitnow</a>",
+        "remote": true,
+        "url": "https://www.arbeitnow.com/jobs/companies/indiekidz-gmbh/mandatory-internshipunpaid-backend-full-stack-developer-for-ai-saas-berlin-152480",
+        "tags": [
+          "Remote",
+          "Software Development"
+        ],
+        "job_types": [
+          "entry"
+        ],
+        "location": "Berlin",
+        "created_at": 1780572669
+      },
+      "normalized_title": "mandatory internship unpaid backend full stack developer for ai saas",
+      "canonical_url": "https://www.arbeitnow.com/jobs/companies/indiekidz-gmbh/mandatory-internshipunpaid-backend-full-stack-developer-for-ai-saas-berlin-152480"
+    }
+  ],
+  "manual_search_links": [],
+  "errors": []
+}
