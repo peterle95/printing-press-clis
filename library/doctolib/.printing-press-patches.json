@@ -13,6 +13,16 @@
         "internal/cli/find_doctors_test.go"
       ],
       "validated_outcome": "go test ./... passed; live proktologe Berlin search returned Dr. med. Paul Bogen with first slot 2026-05-18T11:30:00.000+02:00."
+    },
+    {
+      "id": "current-frauenarzt-search-slug",
+      "summary": "Map gynecology aliases to Doctolib's current frauenarzt search slug.",
+      "reason": "Doctolib no longer serves the generated frauenarzt-gynakologe route.",
+      "files": [
+        "internal/cli/find_doctors.go",
+        "internal/cli/find_doctors_test.go"
+      ],
+      "validated_outcome": "Live /frauenarzt/berlin page returned HTTP 200; gynecology and urology alias regression tests added."
     }
   ]
 }
