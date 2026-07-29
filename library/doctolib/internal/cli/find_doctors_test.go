@@ -43,3 +43,39 @@ func TestResolveSearchURLUsesProctologyAlias(t *testing.T) {
 		t.Fatalf("url = %q, want %q", gotURL, want)
 	}
 }
+
+func TestResolveSearchURLUsesCurrentGynecologyAlias(t *testing.T) {
+	t.Parallel()
+	for _, reason := range []string{"frauenarzt", "Gynäkologe", "gynaekologe"} {
+		gotURL, gotReason, gotLocation, err := resolveSearchURL("https://www.doctolib.de", findDoctorsOptions{
+			reason:   reason,
+			location: "Berlin",
+		})
+		if err != nil {
+			t.Fatal(err)
+		}
+		if gotReason != "frauenarzt" || gotLocation != "berlin" {
+			t.Fatalf("resolveSearchURL(%q) = reason %q, location %q", reason, gotReason, gotLocation)
+		}
+		if want := "https://www.doctolib.de/frauenarzt/berlin"; gotURL != want {
+			t.Fatalf("resolveSearchURL(%q) = %q, want %q", reason, gotURL, want)
+		}
+	}
+}
+
+func TestResolveSearchURLUsesCurrentUrologyAlias(t *testing.T) {
+	t.Parallel()
+	gotURL, gotReason, gotLocation, err := resolveSearchURL("https://www.doctolib.de", findDoctorsOptions{
+		reason:   "Urologe",
+		location: "Berlin",
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if gotReason != "urologie" || gotLocation != "berlin" {
+		t.Fatalf("resolveSearchURL = reason %q, location %q", gotReason, gotLocation)
+	}
+	if want := "https://www.doctolib.de/urologie/berlin"; gotURL != want {
+		t.Fatalf("url = %q, want %q", gotURL, want)
+	}
+}
