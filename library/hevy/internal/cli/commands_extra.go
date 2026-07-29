@@ -181,6 +181,7 @@ func routinesCmd(f *flags) *cobra.Command {
 	}
 	c.AddCommand(&cobra.Command{Use: "list", RunE: inspect}, &cobra.Command{Use: "inspect", RunE: inspect})
 	var createExercises []string
+	var createForce bool
 	create := &cobra.Command{Use: "create <name>", Args: cobra.ExactArgs(1), RunE: func(_ *cobra.Command, args []string) error {
 		a, close, err := open(f)
 		if err != nil {
@@ -196,7 +197,13 @@ func routinesCmd(f *flags) *cobra.Command {
 		}
 		for _, routine := range remote {
 			if strings.EqualFold(routine.Name, args[0]) {
-				return fmt.Errorf("routine already exists: %q", args[0])
+				if !createForce {
+					return fmt.Errorf("routine already exists: %q (use --force to replace)", args[0])
+				}
+				if err := browser.DeleteRoutine(context.Background(), browserOptions(a), routine.Name); err != nil {
+					return fmt.Errorf("delete existing routine: %w", err)
+				}
+				break
 			}
 		}
 		exercises := make([]plans.Exercise, 0, len(createExercises))
@@ -222,6 +229,7 @@ func routinesCmd(f *flags) *cobra.Command {
 		return emit(f, map[string]any{"version": 1, "created": args[0]}, "created "+args[0])
 	}}
 	create.Flags().StringArrayVar(&createExercises, "exercise", nil, "exercise to add; repeat flag; defaults to 3 sets of 10 reps")
+	create.Flags().BoolVar(&createForce, "force", false, "replace existing routine")
 	c.AddCommand(create)
 	c.AddCommand(&cobra.Command{Use: "diff <plan>", Args: cobra.ExactArgs(1), RunE: func(_ *cobra.Command, args []string) error {
 		a, close, err := open(f)
