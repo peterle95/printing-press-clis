@@ -30,6 +30,7 @@ Canonical location: `~/printing-press/library/<project>`.
 | Jobs — Remotive / remote | `library/job-research-cli/providers/remotive-jobs` |
 | Jobs — Stepstone | `library/job-research-cli/providers/stepstone` |
 | Jobs — Xing | `library/job-research-cli/providers/xing` |
+| Jobs — get in IT | `library/job-research-cli/providers/getinit` |
 
 ## Validation
 

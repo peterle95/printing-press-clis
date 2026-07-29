@@ -9,7 +9,7 @@
     {"name": "englishjobs", "path": "library/job-research-cli/providers/englishjobs", "runtimes": ["go"]},
     {"name": "flight", "path": "library/flight", "runtimes": ["go"]},
     {"name": "germantechjobs", "path": "library/job-research-cli/providers/germantechjobs", "runtimes": ["go"]},
-    {"name": "getinit", "path": "library/getinit", "runtimes": ["go"]},
+    {"name": "getinit", "path": "library/job-research-cli/providers/getinit", "runtimes": ["go"]},
     {"name": "hevy", "path": "library/hevy", "runtimes": ["go"]},
     {"name": "google-calendar", "path": "library/google-calendar", "runtimes": ["go"]},
     {"name": "indeed", "path": "library/job-research-cli/providers/indeed", "runtimes": ["go"]},

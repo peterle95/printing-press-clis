@@ -105,9 +105,13 @@ def main() -> int:
         projects = json.loads(workspace.read_text(encoding="utf-8")).get("projects", [])
         declared = {project["path"] for project in projects}
         actual = {
-            f"library/{path.name}"
-            for path in (ROOT / "library").iterdir()
-            if path.is_dir() and not path.name.startswith(".")
+            str(marker.parent.relative_to(ROOT))
+            for pattern in ("go.mod", "pyproject.toml", "package.json")
+            for marker in (ROOT / "library").rglob(pattern)
+            if not any(
+                part.startswith(".") or part in {"node_modules", ".venv"}
+                for part in marker.relative_to(ROOT).parts
+            )
         }
         if declared != actual:
             failures.append(
