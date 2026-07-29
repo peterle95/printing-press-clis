@@ -73,6 +73,9 @@ func Login(ctx context.Context, o Options) error {
 	if _, err = p.Goto(loginURL); err != nil {
 		return err
 	}
+	if err := waitForPage(context.Background(), p, 30*time.Second, func(body string) bool { return !strings.Contains(body, "Loading...") }); err != nil {
+		return fmt.Errorf("login page did not finish loading: %w", err)
+	}
 	fmt.Fprintln(os.Stderr, "Complete Hevy login in the browser. Credentials are never read by this CLI.")
 	deadline := time.Now().Add(o.Timeout)
 	for time.Now().Before(deadline) {
@@ -81,13 +84,17 @@ func Login(ctx context.Context, o Options) error {
 			return ctx.Err()
 		default:
 		}
-		cur := p.URL()
-		if !strings.Contains(cur, "/login") && !strings.Contains(cur, "/wp-login.php") {
+		body, err := p.Locator("body").InnerText()
+		if err == nil && !isLoginPage(body) {
 			return nil
 		}
 		time.Sleep(500 * time.Millisecond)
 	}
 	return fmt.Errorf("login timed out; finish the visible browser flow and retry")
+}
+
+func isLoginPage(body string) bool {
+	return strings.Contains(body, "Log In") && strings.Contains(body, "Sign Up")
 }
 func AuthStatus(ctx context.Context, o Options) Status {
 	st := Status{Status: "missing", CheckedAt: time.Now().UTC().Format(time.RFC3339)}
@@ -119,8 +126,18 @@ func AuthStatus(ctx context.Context, o Options) Status {
 		st.Detail = "could not reach Hevy"
 		return st
 	}
-	cur := p.URL()
-	if strings.Contains(cur, "/login") || strings.Contains(cur, "/wp-login.php") {
+	if err := waitForPage(context.Background(), p, 15*time.Second, func(body string) bool { return !strings.Contains(body, "Loading...") }); err != nil {
+		st.Status = "unknown"
+		st.Detail = "page did not finish loading"
+		return st
+	}
+	body, err := p.Locator("body").InnerText()
+	if err != nil {
+		st.Status = "unknown"
+		st.Detail = "could not read page"
+		return st
+	}
+	if isLoginPage(body) {
 		st.Status = "expired"
 	} else {
 		st.Status = "authenticated"
@@ -354,6 +371,77 @@ func parseRoutineText(title, body string) (plans.Routine, error) {
 	}
 	return routine, nil
 }
+func DeleteRoutine(ctx context.Context, o Options, name string) error {
+	st := AuthStatus(ctx, o)
+	if st.Status != "authenticated" {
+		return fmt.Errorf("authentication is %s", st.Status)
+	}
+	pw, err := playwright.Run()
+	if err != nil {
+		return fmt.Errorf("start Playwright: %w", err)
+	}
+	defer pw.Stop()
+	if o.Browser != "chromium" {
+		return fmt.Errorf("unsupported browser %q; only chromium is currently supported", o.Browser)
+	}
+	b, err := pw.Chromium.LaunchPersistentContext(o.Profile, playwright.BrowserTypeLaunchPersistentContextOptions{Headless: playwright.Bool(!o.Headed)})
+	if err != nil {
+		return err
+	}
+	defer b.Close()
+	p := b.Pages()[0]
+
+	getURL := func() string {
+		links := p.Locator(`a[href^="/routine/"]`)
+		c, _ := links.Count()
+		for i := 0; i < c; i++ {
+			text, _ := links.Nth(i).InnerText()
+			if strings.HasPrefix(text, name) {
+				href, _ := links.Nth(i).GetAttribute("href")
+				return "https://hevy.com" + href
+			}
+		}
+		return ""
+	}
+
+	if _, err = p.Goto("https://hevy.com/routines"); err != nil {
+		return err
+	}
+	if err := waitForPage(ctx, p, o.Timeout, func(body string) bool { return !strings.Contains(body, "Loading...") }); err != nil {
+		return fmt.Errorf("load routines page: %w", err)
+	}
+	routineURL := getURL()
+	if routineURL == "" {
+		return fmt.Errorf("routine not found: %q", name)
+	}
+
+	if _, err = p.Goto(routineURL); err != nil {
+		return err
+	}
+	if err := waitForPage(ctx, p, o.Timeout, func(body string) bool { return !strings.Contains(body, "Loading...") }); err != nil {
+		return fmt.Errorf("load routine page: %w", err)
+	}
+	dots := p.Locator(`[type="vertical-dots"]`).Last()
+	if err := dots.Click(); err != nil {
+		return fmt.Errorf("open menu: %w", err)
+	}
+	time.Sleep(500 * time.Millisecond)
+	if err := p.GetByText("Delete Routine").First().Click(); err != nil {
+		return fmt.Errorf("click delete in menu: %w", err)
+	}
+	time.Sleep(500 * time.Millisecond)
+	confirm := p.GetByRole("button", playwright.PageGetByRoleOptions{Name: "Delete Routine", Exact: playwright.Bool(true)}).Last()
+	if err := confirm.Click(); err != nil {
+		return fmt.Errorf("confirm delete: %w", err)
+	}
+	if err := waitForPage(ctx, p, o.Timeout, func(body string) bool {
+		return strings.Contains(body, "My Routines") || strings.Contains(body, "New Routine")
+	}); err != nil {
+		return fmt.Errorf("verify deletion: %w", err)
+	}
+	return nil
+}
+
 func Logout(profile string) error {
 	if profile == "" || filepath.Base(profile) != "browser-profile" {
 		return fmt.Errorf("refusing to remove unexpected browser profile path")
