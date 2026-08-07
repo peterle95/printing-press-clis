@@ -120,6 +120,14 @@ func (p *Provider) Archive(ctx context.Context, id string) error {
 	return p.withScopes(ScopeModify).do(ctx, http.MethodPost, "/users/me/messages/"+url.PathEscape(rawID)+"/modify", nil, body, nil)
 }
 
+func (p *Provider) Trash(ctx context.Context, id string) error {
+	rawID, err := p.rawID(id)
+	if err != nil {
+		return err
+	}
+	return p.withScopes(ScopeModify).do(ctx, http.MethodPost, "/users/me/messages/"+url.PathEscape(rawID)+"/trash", nil, nil, nil)
+}
+
 func (p *Provider) Label(ctx context.Context, id string, add, remove []string) (*ppmail.LabelResult, error) {
 	rawID, err := p.rawID(id)
 	if err != nil {
