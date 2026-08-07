@@ -88,7 +88,7 @@ doctolib-pp-cli find-doctors --reason hausarzt --location berlin --within-days 7
 doctolib-pp-cli find-doctors --reason allgemeinmedizin --location berlin --visit-reason akut --limit 5 --json
 
 # Filter around coordinates
-doctolib-pp-cli find-doctors --url https://www.doctolib.de/allgemeinmedizin/berlin --lat 52.52 --lng 13.405 --radius-km 10 --json
+doctolib-pp-cli find-doctors --url 'https://www.doctolib.de/search?keyword=allgemeinmedizin&city=berlin' --lat 52.52 --lng 13.405 --radius-km 10 --json
 ```
 
 `--reason` accepts Doctolib slugs such as `allgemeinmedizin` and a few common aliases such as `hausarzt`. For exact control, pass a copied Doctolib search URL with `--url`.
