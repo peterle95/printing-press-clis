@@ -26,6 +26,10 @@ type ArchiveProvider interface {
 	Archive(ctx context.Context, id string) error
 }
 
+type TrashProvider interface {
+	Trash(ctx context.Context, id string) error
+}
+
 type LabelProvider interface {
 	Label(ctx context.Context, id string, add, remove []string) (*LabelResult, error)
 }
