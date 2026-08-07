@@ -403,6 +403,44 @@ func newArchiveCmd(flags *rootFlags) *cobra.Command {
 	return cmd
 }
 
+func newTrashCmd(flags *rootFlags) *cobra.Command {
+	var accountRef, id string
+	cmd := &cobra.Command{
+		Use:     "trash",
+		Aliases: []string{"delete"},
+		Short:   "Move a Gmail message to Trash when gmail.modify scope is available",
+		Args:    cobra.NoArgs,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			app, err := loadApp(flags)
+			if err != nil {
+				return err
+			}
+			_, provider, err := app.resolveProvider(accountRef)
+			if err != nil {
+				return err
+			}
+			trashier, ok := provider.(ppmail.TrashProvider)
+			if !ok {
+				return fmt.Errorf("provider %s does not support trash", provider.ProviderName())
+			}
+			ctx, cancel := commandContext(flags)
+			defer cancel()
+			if err := trashier.Trash(ctx, id); err != nil {
+				return err
+			}
+			return outputValue(flags, map[string]any{"trashed": true, "id": id}, func() error {
+				fmt.Fprintf(cmd.OutOrStdout(), "Trashed %s\n", id)
+				return nil
+			})
+		},
+	}
+	cmd.Flags().StringVar(&accountRef, "account", "", "Account name or address")
+	cmd.Flags().StringVar(&id, "id", "", "Message ID returned by inbox/search")
+	_ = cmd.MarkFlagRequired("account")
+	_ = cmd.MarkFlagRequired("id")
+	return cmd
+}
+
 func newLabelCmd(flags *rootFlags) *cobra.Command {
 	var accountRef, id string
 	var add, remove []string
