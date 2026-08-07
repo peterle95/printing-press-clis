@@ -23,6 +23,17 @@
         "internal/cli/find_doctors_test.go"
       ],
       "validated_outcome": "Live /frauenarzt/berlin page returned HTTP 200; gynecology and urology alias regression tests added."
+    },
+    {
+      "id": "current-hcp-search-and-public-insurance",
+      "summary": "Use Doctolib's current provider endpoint and reject private or paid appointments from public-insurance results.",
+      "reason": "Doctolib removed /phs_proxy/raw and can label private practices or self-pay appointment motives PUBLIC when a shared agenda accepts statutory insurance.",
+      "files": [
+        "internal/cli/find_doctors.go",
+        "internal/cli/find_doctors_test.go",
+        "README.md"
+      ],
+      "validated_outcome": "Live Berlin dermatology search returned bookable public-insurance motives after filtering private and self-pay results."
     }
   ]
 }
