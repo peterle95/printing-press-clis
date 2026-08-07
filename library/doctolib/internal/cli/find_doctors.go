@@ -165,7 +165,7 @@ session context as the website, then checks each matching provider's slot
 availability endpoint. Booking is intentionally not implemented yet.`,
 		Example: `  doctolib-pp-cli find-doctors --reason allgemeinmedizin --location berlin
   doctolib-pp-cli find-doctors --reason hausarzt --location berlin --visit-reason akut --within-days 7
-  doctolib-pp-cli find-doctors --url https://www.doctolib.de/allgemeinmedizin/berlin --lat 52.52 --lng 13.40 --radius-km 5 --json`,
+  doctolib-pp-cli find-doctors --url 'https://www.doctolib.de/search?keyword=allgemeinmedizin&city=berlin' --lat 52.52 --lng 13.40 --radius-km 5 --json`,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if flags.dryRun {
 				return printFindDoctorsDryRun(cmd, flags, opts)
@@ -336,6 +336,9 @@ func resolveSearchURL(baseURL string, opts findDoctorsOptions) (string, string, 
 		if err != nil {
 			return "", "", "", err
 		}
+		if keyword, city := parsed.Query().Get("keyword"), parsed.Query().Get("city"); keyword != "" || city != "" {
+			return opts.searchURL, keyword, city, nil
+		}
 		parts := splitPath(parsed.Path)
 		if len(parts) < 2 {
 			return opts.searchURL, "", "", nil
@@ -351,7 +354,12 @@ func resolveSearchURL(baseURL string, opts findDoctorsOptions) (string, string, 
 	if err != nil {
 		return "", "", "", err
 	}
-	u.Path = "/" + url.PathEscape(reason) + "/" + url.PathEscape(location)
+	// PATCH: Doctolib replaced specialty/location routes with /search query parameters.
+	u.Path = "/search"
+	q := u.Query()
+	q.Set("keyword", reason)
+	q.Set("city", location)
+	u.RawQuery = q.Encode()
 	return u.String(), reason, location, nil
 }
 
@@ -391,7 +399,8 @@ func fetchSearchContext(httpClient *http.Client, c *client.Client, searchURL str
 }
 
 func fetchProvidersPage(httpClient *http.Client, c *client.Client, ctx searchContext, opts findDoctorsOptions, page int) (phsResponse, error) {
-	base := strings.TrimRight(c.BaseURL, "/") + "/phs_proxy/raw"
+	// PATCH: Doctolib replaced the removed /phs_proxy/raw endpoint with hcp/search.
+	base := strings.TrimRight(c.BaseURL, "/") + "/patient-health-search/api/v1/hcp/search"
 	u, err := url.Parse(base)
 	if err != nil {
 		return phsResponse{}, err
@@ -572,6 +581,19 @@ func providerMatches(p healthcareProvider, opts findDoctorsOptions) bool {
 	if !opts.includeTelehealth && p.OnlineBooking.Telehealth {
 		return false
 	}
+	if opts.insuranceSector != "" && opts.insuranceSector != "all" {
+		if p.MatchedVisitMotive.Insurance == nil || strings.ToLower(p.MatchedVisitMotive.Insurance.Type) != strings.ToLower(opts.insuranceSector) {
+			return false
+		}
+		// PATCH: Doctolib can label private practices and paid motives PUBLIC when a shared agenda accepts public insurance.
+		if strings.EqualFold(opts.insuranceSector, "public") && ((p.OrganizationStatus != nil && strings.EqualFold(p.OrganizationStatus.Slug, "privatpraxis")) || strings.Contains(strings.ToLower(p.Link), "/privatpraxis/") ||
+			containsFold(p.RegulationSector, "nur_privat") || containsFold(p.RegulationSector, "selbstzahl") ||
+			containsFold(p.MatchedVisitMotive.Name, "selbstzahl") || containsFold(p.MatchedVisitMotive.Name, "self-pay") ||
+			containsFold(p.MatchedVisitMotive.Name, "privat") || containsFold(p.MatchedVisitMotive.Name, "exklusivtermin") ||
+			containsFold(p.MatchedVisitMotive.Name, "euro") || strings.Contains(p.MatchedVisitMotive.Name, "€")) {
+			return false
+		}
+	}
 	if opts.visitReason != "" && !containsFold(p.MatchedVisitMotive.Name, opts.visitReason) {
 		return false
 	}
@@ -677,9 +699,9 @@ func normalizeReasonSlug(reason string) string {
 		"hausarzt":           "allgemeinmedizin",
 		"hausaerzte":         "allgemeinmedizin",
 		"hausaerztin":        "allgemeinmedizin",
-		"hautarzt":           "hautarzt-dermatologe",
-		"dermatologe":        "hautarzt-dermatologe",
-		"dermatologie":       "hautarzt-dermatologe",
+		"hautarzt":           "hautarzt",
+		"dermatologe":        "hautarzt",
+		"dermatologie":       "hautarzt",
 		"zahnarzt":           "zahnarzt",
 		// PATCH: Doctolib's current search route is /frauenarzt/<city>.
 		"gynaekologe": "frauenarzt",
