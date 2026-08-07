@@ -69,6 +69,7 @@ func RootCmd() *cobra.Command {
 	root.AddCommand(newSummarizeCmd(flags))
 	root.AddCommand(newWriteReplyCmd(flags))
 	root.AddCommand(newArchiveCmd(flags))
+	root.AddCommand(newTrashCmd(flags))
 	root.AddCommand(newLabelCmd(flags))
 	return root
 }
