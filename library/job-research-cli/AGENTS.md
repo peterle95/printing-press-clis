@@ -20,6 +20,16 @@ research from Berlin/Germany.
 - Use dry-run before adding or changing live source behavior.
 - Unit tests must mock or avoid external network calls.
 
+## Job Search Workflow
+
+- Use all available job CLIs and public/API-backed sources for every search.
+- Include LinkedIn, XING, Indeed, and StepStone by generating manual search links.
+- Never scrape protected pages or automate applications; the operator applies manually.
+- Present every found job in a table before finishing a search.
+- Record every presented job in `job-status.json`.
+- Keep previously recorded jobs in future results unless status filtering is explicitly requested.
+- Mark a job `applied` in `job-status.json` only after the operator confirms application.
+
 ## Build And Test
 
 Use Python 3.11+.
