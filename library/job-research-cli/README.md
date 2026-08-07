@@ -5,6 +5,16 @@ API-first sources, deduplicates postings, stores structured results in SQLite,
 exports Markdown/CSV/JSON/SQLite, and generates manual search links for
 restricted job boards instead of scraping them.
 
+## Search Workflow
+
+Every search uses all available job CLIs and sources. LinkedIn, XING, Indeed,
+and StepStone are searched by producing direct manual links; protected pages are
+not scraped. The operator reviews links and applies manually.
+
+Results are always presented in a table and recorded in `job-status.json`.
+Recorded jobs use `status: "shown"` until the operator confirms an application,
+then change to `status: "applied"`.
+
 The default research profile is tuned for Berlin/Germany software roles:
 frontend, full-stack, React, JavaScript, TypeScript, web/software engineering,
 and related recruiting roles across Berlin, Germany, Remote Germany, and Remote
