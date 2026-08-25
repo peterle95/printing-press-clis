@@ -153,6 +153,10 @@ Preview what would be queried without making requests:
 jobs search --title "frontend developer" --location Berlin --days 7 --dry-run
 ```
 
+Dry-run reports capability, enabled state, configuration status, and safe setup
+guidance for every configured source. It performs no requests, retries, or
+persistence; manual-only, unavailable, and misconfigured sources remain visible.
+
 Search Berlin frontend jobs and print a table:
 
 ```bash

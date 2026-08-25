@@ -1,7 +1,9 @@
 from __future__ import annotations
 
+from dataclasses import dataclass
 from enum import Enum
 import logging
+import os
 from pathlib import Path
 import webbrowser
 
@@ -42,6 +44,24 @@ class ExportFormat(str, Enum):
     csv = "csv"
     json = "json"
     sqlite = "sqlite"
+
+
+@dataclass(frozen=True)
+class SourceDiagnostic:
+    name: str
+    enabled: bool
+    capability: str
+    status: str
+    guidance: str
+
+
+_SOURCE_CAPABILITIES = {
+    "api": "API",
+    "rss": "RSS",
+    "public_page": "permitted public-page",
+    "permitted_public_page": "permitted public-page",
+    "manual_search_link": "manual-only",
+}
 
 
 @app.command("init")
@@ -85,7 +105,7 @@ def search_command(
     source: str | None = typer.Option(None, "--source", help="Comma-separated source names."),
     output_format: SearchFormat = typer.Option(SearchFormat.table, "--format", help="table, csv, json, or markdown."),
     out: Path | None = typer.Option(None, "--out", help="Write results to a file."),
-    dry_run: bool = typer.Option(False, "--dry-run", help="Show sources and URLs without making HTTP requests."),
+    dry_run: bool = typer.Option(False, "--dry-run", help="Show source capabilities, setup status, and URLs without HTTP requests."),
     verbose: bool = typer.Option(False, "--verbose", help="Enable debug logs."),
     config_dir: Path | None = typer.Option(None, "--config-dir", help="Config directory."),
     db: Path | None = typer.Option(None, "--db", help="SQLite database path."),
@@ -96,14 +116,16 @@ def search_command(
     titles = _resolve_titles(title, titles_file, titles_config)
     locations = [location] if location else list(titles_config.get("locations") or ["Berlin"])
     requested_sources = _parse_source_filter(source)
-    selected_sources = _select_sources(sources_config.get("sources", {}), requested_sources)
+    source_settings = sources_config.get("sources", {})
+    selected_sources = _select_sources(source_settings, requested_sources)
     parameters = SearchParameters(titles=titles, locations=locations, remote=remote, days=days, limit=limit, sources=selected_sources)
 
     if dry_run:
-        _print_dry_run(sources_config.get("sources", {}), selected_sources, parameters)
+        diagnostic_sources = list(source_settings)
+        _print_dry_run(source_settings, selected_sources, diagnostic_sources, parameters)
         return
 
-    report = _run_search(sources_config.get("sources", {}), selected_sources, parameters)
+    report = _run_search(source_settings, selected_sources, parameters)
     store = JobStore(db)
     if report.structured_results:
         inserted, updated = store.upsert_postings(report.structured_results)
@@ -209,7 +231,10 @@ def _run_search(source_settings: dict[str, dict], selected_sources: list[str], p
     try:
         for source_name in selected_sources:
             settings = source_settings[source_name]
-            if settings.get("type") == "manual_search_link":
+            if not isinstance(settings, dict):
+                errors.append(SourceError(source=source_name, message="Source settings must be a mapping."))
+                continue
+            if _normalize_source_type(settings.get("type")) == "manual_search_link":
                 for title in parameters.titles:
                     for location in parameters.locations:
                         link = build_manual_link(source_name, title, location, parameters.remote, parameters.days)
@@ -244,7 +269,34 @@ def _run_search(source_settings: dict[str, dict], selected_sources: list[str], p
     return SearchReport(parameters=parameters, structured_results=deduped, manual_search_links=manual_links, errors=errors)
 
 
-def _print_dry_run(source_settings: dict[str, dict], selected_sources: list[str], parameters: SearchParameters) -> None:
+def _print_dry_run(
+    source_settings: dict[str, dict],
+    selected_sources: list[str],
+    diagnostic_sources: list[str],
+    parameters: SearchParameters,
+) -> None:
+    table = Table(title="Configuration diagnostics")
+    table.add_column("Source")
+    table.add_column("Enabled")
+    table.add_column("Capability", no_wrap=True)
+    table.add_column("Status", no_wrap=True)
+    diagnostics = {
+        name: _diagnose_source(name, source_settings.get(name, {}))
+        for name in diagnostic_sources
+    }
+    for diagnostic in diagnostics.values():
+        table.add_row(
+            diagnostic.name,
+            "yes" if diagnostic.enabled else "no",
+            diagnostic.capability,
+            diagnostic.status,
+        )
+    console.print(table)
+    console.print("Setup guidance:")
+    for diagnostic in diagnostics.values():
+        console.print(f"{diagnostic.name}: {diagnostic.guidance}", overflow="ignore")
+
+    rows: list[tuple[str, str, str, str]] = []
     http = PoliteHttpClient()
     table = Table(title="Dry run: planned source queries")
     table.add_column("Source")
@@ -253,27 +305,120 @@ def _print_dry_run(source_settings: dict[str, dict], selected_sources: list[str]
     table.add_column("URL or action")
     try:
         for source_name in selected_sources:
-            settings = source_settings[source_name]
+            settings = source_settings.get(source_name, {})
+            diagnostic = diagnostics.get(source_name) or _diagnose_source(source_name, settings)
+            if diagnostic.status in {"misconfigured", "unavailable"}:
+                continue
             for title in parameters.titles:
                 for location in parameters.locations:
                     label = f"{title} / {location}"
-                    if settings.get("type") == "manual_search_link":
+                    source_type = _normalize_source_type(settings.get("type"))
+                    if source_type == "manual_search_link":
                         link = build_manual_link(source_name, title, location, parameters.remote, parameters.days)
-                        table.add_row(source_name, "manual_search_link", label, link.url if link else "manual only")
+                        rows.append((source_name, "manual_search_link", label, link.url if link else "manual only"))
                         continue
                     if source_name not in SOURCE_REGISTRY:
-                        table.add_row(source_name, str(settings.get("type", "api")), label, "No adapter implemented")
                         continue
                     adapter = make_source(source_name, settings, http)
-                    urls = adapter.dry_run_urls(title, location, parameters.remote, parameters.days, _per_query_limit(parameters))
+                    try:
+                        urls = adapter.dry_run_urls(title, location, parameters.remote, parameters.days, _per_query_limit(parameters))
+                    except (KeyError, TypeError, ValueError):
+                        rows.append((source_name, str(settings.get("type", "api")), label, "Unable to plan from source configuration"))
+                        continue
                     if urls:
                         for url in urls:
-                            table.add_row(source_name, "api", label, url)
+                            rows.append((source_name, "api", label, url))
                     else:
-                        table.add_row(source_name, "api", label, "No configured boards/slugs to query")
+                        rows.append((source_name, "api", label, "No configured boards/slugs to query"))
     finally:
         http.close()
-    console.print(table)
+    if rows:
+        for row in rows:
+            table.add_row(*row)
+        console.print(table)
+
+
+def _diagnose_source(source_name: str, settings: object) -> SourceDiagnostic:
+    if not isinstance(settings, dict):
+        return SourceDiagnostic(
+            name=source_name,
+            enabled=False,
+            capability="unavailable",
+            status="misconfigured",
+            guidance="Source settings must be a mapping.",
+        )
+
+    source_type = _normalize_source_type(settings.get("type"))
+    capability = _SOURCE_CAPABILITIES.get(source_type, "unavailable")
+    enabled = settings.get("enabled") is True
+    issues: list[str] = []
+    unavailable = False
+
+    if "enabled" not in settings or not isinstance(settings.get("enabled"), bool):
+        issues.append("Set enabled to true or false.")
+    if not source_type:
+        issues.append("Set source type to api, rss, permitted_public_page, or manual_search_link.")
+    elif source_type not in _SOURCE_CAPABILITIES:
+        unavailable = True
+        issues.append(f"Unsupported source type: {source_type}.")
+
+    if source_type in {"api", "rss", "public_page", "permitted_public_page"}:
+        if not isinstance(settings.get("base_url"), str) or not settings["base_url"].strip():
+            issues.append("Set a public base_url.")
+        if source_name not in SOURCE_REGISTRY:
+            unavailable = True
+            issues.append("No adapter is implemented for this source.")
+        else:
+            adapter_type = getattr(SOURCE_REGISTRY[source_name], "source_type", "api")
+            if adapter_type != source_type:
+                unavailable = True
+                issues.append(f"No {capability} adapter is implemented for this source.")
+            issues.extend(_source_setup_requirements(source_name, settings))
+    elif source_type == "manual_search_link" and build_manual_link(source_name, "", "", False, 0) is None:
+        unavailable = True
+        issues.append("No manual search-link builder is available for this source.")
+
+    if unavailable:
+        status = "unavailable"
+    elif issues:
+        status = "misconfigured"
+    else:
+        status = "ready" if enabled else "disabled"
+    if not enabled and "Disabled in sources.yaml." not in issues:
+        issues.append("Disabled in sources.yaml.")
+    guidance = " ".join(issues) or "Ready; dry-run makes no requests."
+    return SourceDiagnostic(source_name, enabled, capability, status, guidance)
+
+
+def _source_setup_requirements(source_name: str, settings: dict) -> list[str]:
+    requirements: list[str] = []
+    if settings.get("requires_api_key"):
+        missing_env = [
+            str(settings.get(key))
+            for key in ("app_id_env", "app_key_env")
+            if settings.get(key) and not os.environ.get(str(settings[key]))
+        ]
+        if missing_env:
+            requirements.append(f"Set {' and '.join(missing_env)} in the environment (or run jobs init).")
+    api_key_env = settings.get("api_key_env")
+    if api_key_env and not settings.get("default_api_key") and not os.environ.get(str(api_key_env)):
+        requirements.append(f"Set {api_key_env} in the environment (or run jobs init).")
+    if source_name == "greenhouse" and not _configured_values(settings.get("board_tokens")):
+        requirements.append("Add at least one board_tokens value to sources.yaml.")
+    if source_name == "lever" and not _configured_values(settings.get("company_slugs")):
+        requirements.append("Add at least one company_slugs value to sources.yaml.")
+    return requirements
+
+
+def _configured_values(value: object) -> bool:
+    return isinstance(value, list) and any(isinstance(item, str) and item.strip() for item in value)
+
+
+def _normalize_source_type(value: object) -> str:
+    source_type = str(value or "").strip().lower().replace("-", "_")
+    if source_type in {"manual", "manual_only"}:
+        return "manual_search_link"
+    return source_type
 
 
 def _resolve_titles(title: str | None, titles_file: Path | None, titles_config: dict) -> list[str]:
@@ -303,7 +448,7 @@ def _select_sources(source_settings: dict[str, dict], requested_sources: list[st
         if unknown:
             raise typer.BadParameter(f"Unknown source(s): {', '.join(unknown)}")
         return requested_sources
-    return [name for name, settings in source_settings.items() if settings.get("enabled", False)]
+    return [name for name, settings in source_settings.items() if isinstance(settings, dict) and settings.get("enabled") is True]
 
 
 def _parse_source_filter(source: str | None) -> list[str] | None:
