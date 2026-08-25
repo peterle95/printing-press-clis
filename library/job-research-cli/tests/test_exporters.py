@@ -1,5 +1,5 @@
-from job_research_cli.exporters import to_csv, to_markdown
-from job_research_cli.models import JobPosting, ManualSearchLink, SearchParameters, SearchReport
+from job_research_cli.exporters import to_csv, to_json, to_markdown
+from job_research_cli.models import JobPosting, ManualSearchLink, ProviderOutcome, SearchParameters, SearchReport
 
 
 def test_markdown_export_has_structured_and_manual_sections() -> None:
@@ -32,6 +32,7 @@ def test_markdown_export_has_structured_and_manual_sections() -> None:
                 url="https://www.linkedin.com/jobs/search/?keywords=Frontend+Developer&location=Berlin",
             )
         ],
+        provider_outcomes=[ProviderOutcome(source="arbeitnow", status="queried", query_count=1, result_count=1)],
     )
 
     markdown = to_markdown(report)
@@ -39,8 +40,16 @@ def test_markdown_export_has_structured_and_manual_sections() -> None:
     assert "# Job Research Results" in markdown
     assert "## Structured results" in markdown
     assert "## Manual search links" in markdown
+    assert "## Provider outcomes" in markdown
+    assert "queried" in markdown
     assert "Frontend Developer" in markdown
     assert "linkedin" in markdown
+    json_text = to_json(report)
+    assert '"provider_outcomes"' in json_text
+    assert '"source": "arbeitnow"' in json_text
+    assert '"status": "queried"' in json_text
+    assert '"query_count": 1' in json_text
+    assert '"result_count": 1' in json_text
 
 
 def test_csv_export_includes_manual_rows_marked_as_manual_search_link() -> None:

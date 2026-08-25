@@ -90,6 +90,23 @@ def to_markdown(report: SearchReport, generated_at: datetime | None = None) -> s
     if not report.manual_search_links:
         lines.append("|  |  |  |")
 
+    lines.extend(
+        [
+            "",
+            "## Provider outcomes",
+            "",
+            "| Source | Status | Queries | Failed queries | Results | Error |",
+            "|---|---|---:|---:|---:|---|",
+        ]
+    )
+    for outcome in report.provider_outcomes:
+        lines.append(
+            f"| {_md(outcome.source)} | {_md(outcome.status)} | {outcome.query_count} | "
+            f"{outcome.failed_query_count} | {outcome.result_count} | {_md(outcome.error)} |"
+        )
+    if not report.provider_outcomes:
+        lines.append("|  |  |  |  |  |  |")
+
     if report.errors:
         lines.extend(["", "## Source errors", "", "| Source | Error |", "|---|---|"])
         for error in report.errors:

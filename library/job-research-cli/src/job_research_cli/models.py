@@ -9,6 +9,7 @@ from .normalizer import canonicalize_url, normalize_job_title, parse_date_value
 
 SourceType = Literal["api", "manual_search_link"]
 RemoteMode = Literal["remote", "hybrid", "on-site"]
+ProviderOutcomeStatus = Literal["queried", "manual-only", "unavailable", "failed"]
 
 
 class JobPosting(BaseModel):
@@ -68,6 +69,19 @@ class SourceError(BaseModel):
     message: str
 
 
+class ProviderOutcome(BaseModel):
+    source: str
+    status: ProviderOutcomeStatus
+    query_count: int = 0
+    failed_query_count: int = 0
+    result_count: int = 0
+    error: str | None = None
+
+    @property
+    def provider(self) -> str:
+        return self.source
+
+
 class SearchParameters(BaseModel):
     titles: list[str]
     locations: list[str]
@@ -81,4 +95,9 @@ class SearchReport(BaseModel):
     parameters: SearchParameters
     structured_results: list[JobPosting] = Field(default_factory=list)
     manual_search_links: list[ManualSearchLink] = Field(default_factory=list)
+    provider_outcomes: list[ProviderOutcome] = Field(default_factory=list)
     errors: list[SourceError] = Field(default_factory=list)
+
+    @property
+    def source_outcomes(self) -> list[ProviderOutcome]:
+        return self.provider_outcomes

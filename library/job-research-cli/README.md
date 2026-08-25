@@ -28,7 +28,7 @@ Europe.
   then source-specific ID.
 - Stores structured job postings in SQLite.
 - Exports Markdown, CSV, JSON, or a copy of the SQLite database.
-- Keeps going when one source fails and reports source errors at the end.
+- Keeps going when one source fails and reports per-provider outcomes and source errors.
 - Uses timeouts, retries with exponential backoff, per-source cooldowns, and
   conservative rate limits.
 
@@ -218,6 +218,7 @@ Markdown exports include:
 - Search parameters
 - `## Structured results`
 - `## Manual search links`
+- `## Provider outcomes` with queried, manual-only, unavailable, or failed status
 - `## Source errors` when a source fails
 
 Manual links are included in CSV/JSON exports with

@@ -5,6 +5,7 @@ from enum import Enum
 import logging
 import os
 from pathlib import Path
+import re
 import webbrowser
 
 import typer
@@ -20,11 +21,10 @@ from .config import (
 )
 from .dedupe import dedupe_postings
 from .exporters import export_report, infer_format
-from .http_client import HttpClientError, PoliteHttpClient
-from .models import JobPosting, ManualSearchLink, SearchParameters, SearchReport, SourceError
+from .http_client import PoliteHttpClient
+from .models import JobPosting, ManualSearchLink, ProviderOutcome, SearchParameters, SearchReport, SourceError
 from .result_files import load_postings_from_files
 from .sources import SOURCE_REGISTRY, make_source
-from .sources.base import SourceAdapterError
 from .sources.manual_links import build_manual_link
 from .storage import JobStore
 
@@ -61,6 +61,13 @@ _SOURCE_CAPABILITIES = {
     "public_page": "permitted public-page",
     "permitted_public_page": "permitted public-page",
     "manual_search_link": "manual-only",
+}
+_SOURCE_TYPE_ORDER = {
+    "api": 0,
+    "rss": 1,
+    "public_page": 2,
+    "permitted_public_page": 2,
+    "manual_search_link": 3,
 }
 
 
@@ -121,7 +128,7 @@ def search_command(
     parameters = SearchParameters(titles=titles, locations=locations, remote=remote, days=days, limit=limit, sources=selected_sources)
 
     if dry_run:
-        diagnostic_sources = list(source_settings)
+        diagnostic_sources = _order_sources(source_settings, list(source_settings))
         _print_dry_run(source_settings, selected_sources, diagnostic_sources, parameters)
         return
 
@@ -142,6 +149,7 @@ def search_command(
     if resolved_format == "table":
         _print_structured_table(report.structured_results)
         _print_manual_links(report.manual_search_links)
+        _print_provider_outcomes(report.provider_outcomes)
         _print_errors(report.errors)
     else:
         console.print(export_report(report, resolved_format), markup=False, end="")
@@ -227,46 +235,104 @@ def _run_search(source_settings: dict[str, dict], selected_sources: list[str], p
     http = PoliteHttpClient()
     structured: list[JobPosting] = []
     manual_links: list[ManualSearchLink] = []
+    provider_outcomes: list[ProviderOutcome] = []
     errors: list[SourceError] = []
     try:
         for source_name in selected_sources:
-            settings = source_settings[source_name]
+            settings = source_settings.get(source_name)
             if not isinstance(settings, dict):
-                errors.append(SourceError(source=source_name, message="Source settings must be a mapping."))
-                continue
-            if _normalize_source_type(settings.get("type")) == "manual_search_link":
-                for title in parameters.titles:
-                    for location in parameters.locations:
-                        link = build_manual_link(source_name, title, location, parameters.remote, parameters.days)
-                        if link:
-                            manual_links.append(link)
+                message = "Source settings must be a mapping."
+                errors.append(SourceError(source=source_name, message=message))
+                provider_outcomes.append(ProviderOutcome(source=source_name, status="unavailable", error=message))
                 continue
 
-            if source_name not in SOURCE_REGISTRY:
-                errors.append(SourceError(source=source_name, message="No API adapter is implemented for this source."))
+            diagnostic = _diagnose_source(source_name, settings)
+            if diagnostic.status in {"misconfigured", "unavailable"}:
+                errors.append(SourceError(source=source_name, message=diagnostic.guidance))
+                provider_outcomes.append(ProviderOutcome(source=source_name, status="unavailable", error=diagnostic.guidance))
                 continue
-            adapter = make_source(source_name, settings, http)
-            if not adapter.is_configured():
-                errors.append(SourceError(source=source_name, message="Source is enabled but missing required API configuration."))
+
+            if _normalize_source_type(settings.get("type")) == "manual_search_link":
+                query_count = 0
+                failed_query_count = 0
+                result_count = 0
+                query_errors: list[str] = []
+                for title in parameters.titles:
+                    for location in parameters.locations:
+                        query_count += 1
+                        try:
+                            link = build_manual_link(source_name, title, location, parameters.remote, parameters.days)
+                            if link:
+                                manual_links.append(link)
+                                result_count += 1
+                        except Exception as exc:
+                            failed_query_count += 1
+                            message = f"{title} / {location}: {_safe_error_message(exc)}"
+                            query_errors.append(message)
+                            errors.append(SourceError(source=source_name, message=message))
+                provider_outcomes.append(
+                    ProviderOutcome(
+                        source=source_name,
+                        status="failed" if failed_query_count else "manual-only",
+                        query_count=query_count,
+                        failed_query_count=failed_query_count,
+                        result_count=result_count,
+                        error="; ".join(query_errors) if query_errors else None,
+                    )
+                )
+                continue
+
+            try:
+                adapter = make_source(source_name, settings, http)
+                if not adapter.is_configured():
+                    message = "Source is enabled but missing required API configuration."
+                    errors.append(SourceError(source=source_name, message=message))
+                    provider_outcomes.append(ProviderOutcome(source=source_name, status="unavailable", error=message))
+                    continue
+            except Exception as exc:
+                message = _safe_error_message(exc, settings)
+                errors.append(SourceError(source=source_name, message=message))
+                provider_outcomes.append(ProviderOutcome(source=source_name, status="failed", error=message))
                 continue
 
             per_query_limit = _per_query_limit(parameters)
-            source_failed = False
+            query_count = 0
+            failed_query_count = 0
+            result_count = 0
+            query_errors: list[str] = []
             for title in parameters.titles:
                 for location in parameters.locations:
+                    query_count += 1
                     try:
-                        structured.extend(adapter.search(title, location, parameters.remote, parameters.days, per_query_limit))
-                    except (SourceAdapterError, HttpClientError) as exc:
-                        errors.append(SourceError(source=source_name, message=str(exc)))
-                        source_failed = True
-                        break
-                if source_failed:
-                    break
+                        results = adapter.search(title, location, parameters.remote, parameters.days, per_query_limit)
+                        structured.extend(results)
+                        result_count += len(results)
+                    except Exception as exc:
+                        failed_query_count += 1
+                        message = f"{title} / {location}: {_safe_error_message(exc, settings)}"
+                        query_errors.append(message)
+                        errors.append(SourceError(source=source_name, message=message))
+            provider_outcomes.append(
+                ProviderOutcome(
+                    source=source_name,
+                    status="failed" if failed_query_count else "queried",
+                    query_count=query_count,
+                    failed_query_count=failed_query_count,
+                    result_count=result_count,
+                    error="; ".join(query_errors) if query_errors else None,
+                )
+            )
     finally:
         http.close()
 
     deduped = dedupe_postings(structured, limit=parameters.limit)
-    return SearchReport(parameters=parameters, structured_results=deduped, manual_search_links=manual_links, errors=errors)
+    return SearchReport(
+        parameters=parameters,
+        structured_results=deduped,
+        manual_search_links=manual_links,
+        provider_outcomes=provider_outcomes,
+        errors=errors,
+    )
 
 
 def _print_dry_run(
@@ -447,8 +513,26 @@ def _select_sources(source_settings: dict[str, dict], requested_sources: list[st
         unknown = [name for name in requested_sources if name not in source_settings]
         if unknown:
             raise typer.BadParameter(f"Unknown source(s): {', '.join(unknown)}")
-        return requested_sources
-    return [name for name, settings in source_settings.items() if isinstance(settings, dict) and settings.get("enabled") is True]
+        return _order_sources(source_settings, list(dict.fromkeys(requested_sources)))
+    enabled = [name for name, settings in source_settings.items() if isinstance(settings, dict) and settings.get("enabled") is True]
+    return _order_sources(source_settings, enabled)
+
+
+def _order_sources(source_settings: dict[str, dict], source_names: list[str]) -> list[str]:
+    registry_order = {name: index for index, name in enumerate(SOURCE_REGISTRY)}
+    return sorted(
+        source_names,
+        key=lambda name: (
+            _source_type_order(source_settings.get(name)),
+            registry_order.get(name, len(registry_order)),
+            name,
+        ),
+    )
+
+
+def _source_type_order(settings: object) -> int:
+    source_type = _normalize_source_type(settings.get("type")) if isinstance(settings, dict) else ""
+    return _SOURCE_TYPE_ORDER.get(source_type, len(_SOURCE_TYPE_ORDER))
 
 
 def _parse_source_filter(source: str | None) -> list[str] | None:
@@ -515,5 +599,46 @@ def _print_errors(errors: list[SourceError]) -> None:
     console.print(table)
 
 
+def _print_provider_outcomes(outcomes: list[ProviderOutcome]) -> None:
+    if not outcomes:
+        return
+    table = Table(title="Provider outcomes")
+    table.add_column("Source")
+    table.add_column("Status")
+    table.add_column("Queries", justify="right")
+    table.add_column("Failed", justify="right")
+    table.add_column("Results", justify="right")
+    table.add_column("Error")
+    for outcome in outcomes:
+        table.add_row(
+            outcome.source,
+            outcome.status,
+            str(outcome.query_count),
+            str(outcome.failed_query_count),
+            str(outcome.result_count),
+            outcome.error or "",
+        )
+    console.print(table)
+
+
 def _configure_logging(verbose: bool) -> None:
     logging.basicConfig(level=logging.DEBUG if verbose else logging.WARNING, format="%(levelname)s %(name)s: %(message)s")
+
+
+def _safe_error_message(exc: Exception, settings: object | None = None) -> str:
+    message = str(exc) or exc.__class__.__name__
+    secrets: list[str] = []
+    if isinstance(settings, dict):
+        for key in ("app_id_env", "app_key_env", "api_key_env"):
+            env_name = settings.get(key)
+            if env_name:
+                value = os.environ.get(str(env_name))
+                if value:
+                    secrets.append(value)
+    for secret in secrets:
+        message = message.replace(secret, "[redacted]")
+    return re.sub(
+        r"(?i)((?:app[_-]?key|api[_-]?key|token|secret|password)=)[^&\s'\"]+",
+        r"\1[redacted]",
+        message,
+    )

@@ -4,6 +4,7 @@ from dataclasses import dataclass
 import logging
 import time
 from typing import Any
+from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
 import httpx
 
@@ -57,7 +58,7 @@ class PoliteHttpClient:
         last_error: Exception | None = None
         for attempt in range(self.retries + 1):
             try:
-                LOGGER.debug("GET %s", self.build_url(url, params))
+                LOGGER.debug("GET %s", _redact_url(self.build_url(url, params)))
                 response = self._client.get(url, params=params, headers=headers)
                 if response.status_code in {429, 500, 502, 503, 504}:
                     if attempt < self.retries:
@@ -102,6 +103,16 @@ def _retry_after_seconds(value: str | None) -> float | None:
         return max(float(value), 0.0)
     except ValueError:
         return None
+
+
+def _redact_url(url: str) -> str:
+    parts = urlsplit(url)
+    sensitive = {"app_key", "api_key", "client_secret", "password", "secret", "token", "access_token"}
+    query = [
+        (key, "[redacted]" if key.lower() in sensitive else value)
+        for key, value in parse_qsl(parts.query, keep_blank_values=True)
+    ]
+    return urlunsplit((parts.scheme, parts.netloc, parts.path, urlencode(query), parts.fragment))
 
 
 def _is_retryable(exc: Exception) -> bool:
