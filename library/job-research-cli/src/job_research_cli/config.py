@@ -86,15 +86,6 @@ DEFAULT_SOURCES_CONFIG: dict[str, Any] = {
             "cooldown_seconds": 3,
         },
         "linkedin": {"enabled": True, "type": "manual_search_link"},
-        "xing": {"enabled": True, "type": "manual_search_link"},
-        "indeed": {"enabled": True, "type": "manual_search_link"},
-        "stepstone": {"enabled": True, "type": "manual_search_link"},
-        "glassdoor": {"enabled": True, "type": "manual_search_link"},
-        "monster": {"enabled": True, "type": "manual_search_link"},
-        "google_jobs": {"enabled": True, "type": "manual_search_link"},
-        "kununu": {"enabled": True, "type": "manual_search_link"},
-        "wellfound": {"enabled": False, "type": "manual_search_link"},
-        "github_jobs": {"enabled": False, "type": "manual_search_link"},
     }
 }
 

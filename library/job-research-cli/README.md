@@ -37,8 +37,7 @@ Europe.
 - It does not bypass captchas.
 - It does not use proxy rotation to evade bans.
 - It does not automate login sessions.
-- It does not scrape logged-in LinkedIn, XING, Indeed, StepStone, Glassdoor,
-  Kununu, Monster, or similar protected pages.
+- It does not scrape logged-in LinkedIn
 - It does not hammer websites.
 
 Restricted boards run in `manual_search_link` mode: the CLI creates URLs that
@@ -115,12 +114,6 @@ API adapters:
 | `remoteok` | disabled | Public JSON endpoint if you choose to enable it. |
 | `greenhouse` | disabled | Public Greenhouse Job Board API for configured board tokens. |
 | `lever` | disabled | Public Lever postings API for configured company slugs. |
-
-Manual/search-link sources:
-
-| Source | Mode |
-|---|---|
-| `linkedin` | `manual_search_link` |
 | `xing` | `manual_search_link` |
 | `indeed` | `manual_search_link` |
 | `stepstone` | `manual_search_link` |
@@ -130,6 +123,12 @@ Manual/search-link sources:
 | `kununu` | `manual_search_link` |
 | `wellfound` | disabled `manual_search_link` |
 | `github_jobs` | disabled `manual_search_link`; no current official GitHub Jobs API is configured |
+
+Manual/search-link sources:
+
+| Source | Mode |
+|---|---|
+| `linkedin` | `manual_search_link` |
 
 To enable Greenhouse or Lever, add company board identifiers to your user
 `sources.yaml`:
