@@ -294,7 +294,7 @@ def _print_dry_run(
     console.print(table)
     console.print("Setup guidance:")
     for diagnostic in diagnostics.values():
-        console.print(f"{diagnostic.name}: {diagnostic.guidance}", overflow="ignore")
+        console.print(f"{diagnostic.name}: {diagnostic.guidance}", overflow="fold")
 
     rows: list[tuple[str, str, str, str]] = []
     http = PoliteHttpClient()
