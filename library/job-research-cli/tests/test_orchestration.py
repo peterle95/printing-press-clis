@@ -84,18 +84,22 @@ def test_provider_errors_redact_configured_credentials(monkeypatch) -> None:
     monkeypatch.setenv("ADZUNA_APP_KEY", "secret-key")
 
     message = cli._safe_error_message(
-        RuntimeError("request failed for https://example.test?app_key=secret-key"),
+        RuntimeError("request failed for https://example.test?app_id=secret-id&app_key=secret-key"),
         {"app_key_env": "ADZUNA_APP_KEY"},
     )
 
+    assert "secret-id" not in message
     assert "secret-key" not in message
     assert "[redacted]" in message
 
 
 def test_http_debug_urls_redact_sensitive_query_values() -> None:
-    safe_url = _redact_url("https://example.test/jobs?what=frontend&app_key=secret-key&token=abc")
+    safe_url = _redact_url("https://example.test/jobs?what=frontend&app_id=secret-id&app_key=secret-key&token=abc#token=fragment-secret")
 
     assert "what=frontend" in safe_url
+    assert "secret-id" not in safe_url
     assert "secret-key" not in safe_url
+    assert "fragment-secret" not in safe_url
+    assert "app_id=%5Bredacted%5D" in safe_url
     assert "app_key=%5Bredacted%5D" in safe_url
     assert "token=%5Bredacted%5D" in safe_url

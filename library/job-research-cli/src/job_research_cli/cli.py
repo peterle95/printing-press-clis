@@ -6,6 +6,7 @@ import logging
 import os
 from pathlib import Path
 import re
+from urllib.parse import urlsplit
 import webbrowser
 
 import typer
@@ -21,7 +22,7 @@ from .config import (
 )
 from .dedupe import dedupe_postings
 from .exporters import export_report, infer_format
-from .http_client import PoliteHttpClient
+from .http_client import PoliteHttpClient, _redact_url
 from .models import JobPosting, ManualSearchLink, ProviderOutcome, SearchParameters, SearchReport, SourceError
 from .result_files import load_postings_from_files
 from .sources import SOURCE_REGISTRY, make_source
@@ -425,7 +426,7 @@ def _print_dry_run(
                         continue
                     if urls:
                         for url in urls:
-                            rows.append((source_name, "api", label, url))
+                            rows.append((source_name, "api", label, _redact_url(url)))
                     else:
                         rows.append((source_name, "api", label, "No configured boards/slugs to query"))
     finally:
@@ -469,7 +470,7 @@ def _diagnose_source(source_name: object, settings: object) -> SourceDiagnostic:
         issues.append(f"Unsupported source type: {source_type}.")
 
     if source_type in {"api", "rss", "public_page", "permitted_public_page"}:
-        if not isinstance(settings.get("base_url"), str) or not settings["base_url"].strip():
+        if not _is_public_base_url(settings.get("base_url")):
             issues.append("Set a public base_url.")
         if source_name not in SOURCE_REGISTRY:
             unavailable = True
@@ -518,6 +519,20 @@ def _source_setup_requirements(source_name: str, settings: dict) -> list[str]:
 
 def _configured_values(value: object) -> bool:
     return isinstance(value, list) and any(isinstance(item, str) and item.strip() for item in value)
+
+
+def _is_public_base_url(value: object) -> bool:
+    if not isinstance(value, str):
+        return False
+    try:
+        parsed = urlsplit(value.strip())
+    except ValueError:
+        return False
+    try:
+        parsed.port
+    except ValueError:
+        return False
+    return parsed.scheme in {"http", "https"} and bool(parsed.hostname) and not parsed.username and not parsed.password
 
 
 def _normalize_source_type(value: object) -> str:
@@ -667,6 +682,8 @@ def _print_provider_outcomes(outcomes: list[ProviderOutcome]) -> None:
 
 def _configure_logging(verbose: bool) -> None:
     logging.basicConfig(level=logging.DEBUG if verbose else logging.WARNING, format="%(levelname)s %(name)s: %(message)s")
+    for logger_name in ("httpx", "httpcore"):
+        logging.getLogger(logger_name).setLevel(logging.WARNING)
 
 
 def _safe_error_message(exc: Exception, settings: object | None = None) -> str:
@@ -682,7 +699,7 @@ def _safe_error_message(exc: Exception, settings: object | None = None) -> str:
     for secret in secrets:
         message = message.replace(secret, "[redacted]")
     return re.sub(
-        r"(?i)((?:app[_-]?key|api[_-]?key|token|secret|password)=)[^&\s'\"]+",
+        r"(?i)((?:app[_-]?(?:id|key)|api[_-]?key|token|secret|password)=)[^&\s'\"]+",
         r"\1[redacted]",
         message,
     )

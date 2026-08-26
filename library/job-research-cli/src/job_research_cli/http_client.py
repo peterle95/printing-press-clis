@@ -107,12 +107,21 @@ def _retry_after_seconds(value: str | None) -> float | None:
 
 def _redact_url(url: str) -> str:
     parts = urlsplit(url)
-    sensitive = {"app_key", "api_key", "client_secret", "password", "secret", "token", "access_token"}
+    sensitive = {
+        "app_id",
+        "app_key",
+        "api_key",
+        "client_secret",
+        "password",
+        "secret",
+        "token",
+        "access_token",
+    }
     query = [
-        (key, "[redacted]" if key.lower() in sensitive else value)
+        (key, "[redacted]" if key.lower().replace("-", "_") in sensitive else value)
         for key, value in parse_qsl(parts.query, keep_blank_values=True)
     ]
-    return urlunsplit((parts.scheme, parts.netloc, parts.path, urlencode(query), parts.fragment))
+    return urlunsplit((parts.scheme, parts.netloc, parts.path, urlencode(query), ""))
 
 
 def _is_retryable(exc: Exception) -> bool:
