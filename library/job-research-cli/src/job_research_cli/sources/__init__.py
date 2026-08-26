@@ -8,6 +8,7 @@ from .arbeitnow import ArbeitnowSource
 from .base import JobSource
 from .bundesagentur import BundesagenturSource
 from .greenhouse import GreenhouseSource
+from .germantechjobs import GermanTechJobsSource
 from .lever import LeverSource
 from .remoteok import RemoteOKSource
 from .themuse import TheMuseSource
@@ -20,6 +21,7 @@ SOURCE_REGISTRY: dict[str, type[JobSource]] = {
     "remoteok": RemoteOKSource,
     "greenhouse": GreenhouseSource,
     "lever": LeverSource,
+    "germantechjobs": GermanTechJobsSource,
 }
 
 

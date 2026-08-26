@@ -7,7 +7,7 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator, model_valida
 
 from .normalizer import canonicalize_url, normalize_job_title, parse_date_value
 
-SourceType = Literal["api", "manual_search_link"]
+SourceType = Literal["api", "rss", "manual_search_link"]
 RemoteMode = Literal["remote", "hybrid", "on-site"]
 ProviderOutcomeStatus = Literal["queried", "retried", "manual-only", "unavailable", "failed"]
 
