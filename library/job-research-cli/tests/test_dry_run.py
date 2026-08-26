@@ -80,3 +80,94 @@ sources:
     assert "public_board" in result.stdout
     assert "permitted public-page" in result.stdout
     assert "unavailable" in result.stdout
+
+
+def test_dry_run_reports_non_mapping_sources_configuration(tmp_path, monkeypatch) -> None:
+    config_dir = tmp_path / "config"
+    config_dir.mkdir()
+    (config_dir / "sources.yaml").write_text("sources: null\n", encoding="utf-8")
+    (config_dir / "titles.yaml").write_text("titles: [Frontend Developer]\nlocations: [Berlin]\n", encoding="utf-8")
+    monkeypatch.setattr(PoliteHttpClient, "get_json", lambda *args, **kwargs: (_ for _ in ()).throw(AssertionError("dry-run made an HTTP request")))
+    monkeypatch.setattr(cli, "JobStore", lambda *args, **kwargs: (_ for _ in ()).throw(AssertionError("dry-run opened storage")))
+
+    result = CliRunner().invoke(
+        app,
+        [
+            "search",
+            "--dry-run",
+            "--config-dir",
+            str(config_dir),
+            "--source",
+            "arbeitnow",
+            "--title",
+            "Frontend Developer",
+            "--location",
+            "Berlin",
+        ],
+    )
+
+    assert result.exit_code == 0, result.stdout
+    assert "sources" in result.stdout
+    assert "Source settings must be a mapping" in result.stdout
+    assert "misconfigured" in result.stdout
+
+
+def test_dry_run_reports_non_string_source_names(tmp_path) -> None:
+    config_dir = tmp_path / "config"
+    config_dir.mkdir()
+    (config_dir / "sources.yaml").write_text(
+        "sources:\n  123:\n    enabled: true\n    type: api\n    base_url: https://example.com/jobs\n",
+        encoding="utf-8",
+    )
+    (config_dir / "titles.yaml").write_text("titles: [Frontend Developer]\nlocations: [Berlin]\n", encoding="utf-8")
+
+    result = CliRunner().invoke(
+        app,
+        [
+            "search",
+            "--dry-run",
+            "--config-dir",
+            str(config_dir),
+            "--title",
+            "Frontend Developer",
+            "--location",
+            "Berlin",
+        ],
+    )
+
+    assert result.exit_code == 0, result.stdout
+    assert "123" in result.stdout
+    assert "Source names must be strings" in result.stdout
+    assert "misconfigured" in result.stdout
+
+
+def test_dry_run_reports_planner_failure_without_aborting(tmp_path, monkeypatch) -> None:
+    config_dir = tmp_path / "config"
+    config_dir.mkdir()
+    (config_dir / "titles.yaml").write_text("titles: [Frontend Developer]\nlocations: [Berlin]\n", encoding="utf-8")
+
+    def fail_planning(*args, **kwargs):
+        raise RuntimeError("planner failed")
+
+    monkeypatch.setattr(cli, "make_source", fail_planning)
+    monkeypatch.setattr(cli, "JobStore", lambda *args, **kwargs: (_ for _ in ()).throw(AssertionError("dry-run opened storage")))
+
+    result = CliRunner().invoke(
+        app,
+        [
+            "search",
+            "--dry-run",
+            "--config-dir",
+            str(config_dir),
+            "--source",
+            "arbeitnow",
+            "--title",
+            "Frontend Developer",
+            "--location",
+            "Berlin",
+        ],
+    )
+
+    assert result.exit_code == 0, result.stdout
+    assert "Unable to plan: planner" in result.stdout
+    assert "failed" in result.stdout

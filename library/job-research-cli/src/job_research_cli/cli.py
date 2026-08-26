@@ -124,13 +124,19 @@ def search_command(
     locations = [location] if location else list(titles_config.get("locations") or ["Berlin"])
     requested_sources = _parse_source_filter(source)
     source_settings = sources_config.get("sources", {})
-    selected_sources = _select_sources(source_settings, requested_sources)
+    source_config_error: str | None = None
+    if not isinstance(source_settings, dict):
+        source_settings = {}
+        source_config_error = "Source settings must be a mapping."
+    selected_sources = [] if source_config_error else _select_sources(source_settings, requested_sources)
     parameters = SearchParameters(titles=titles, locations=locations, remote=remote, days=days, limit=limit, sources=selected_sources)
 
     if dry_run:
         diagnostic_sources = _order_sources(source_settings, list(source_settings))
-        _print_dry_run(source_settings, selected_sources, diagnostic_sources, parameters)
+        _print_dry_run(source_settings, selected_sources, diagnostic_sources, parameters, source_config_error)
         return
+    if source_config_error:
+        raise typer.BadParameter(source_config_error)
 
     report = _run_search(source_settings, selected_sources, parameters)
     store = JobStore(db)
@@ -340,6 +346,7 @@ def _print_dry_run(
     selected_sources: list[str],
     diagnostic_sources: list[str],
     parameters: SearchParameters,
+    source_config_error: str | None = None,
 ) -> None:
     table = Table(title="Configuration diagnostics")
     table.add_column("Source")
@@ -350,6 +357,14 @@ def _print_dry_run(
         name: _diagnose_source(name, source_settings.get(name, {}))
         for name in diagnostic_sources
     }
+    if source_config_error:
+        diagnostics["sources"] = SourceDiagnostic(
+            name="sources",
+            enabled=False,
+            capability="unavailable",
+            status="misconfigured",
+            guidance=source_config_error,
+        )
     for diagnostic in diagnostics.values():
         table.add_row(
             diagnostic.name,
@@ -380,16 +395,33 @@ def _print_dry_run(
                     label = f"{title} / {location}"
                     source_type = _normalize_source_type(settings.get("type"))
                     if source_type == "manual_search_link":
-                        link = build_manual_link(source_name, title, location, parameters.remote, parameters.days)
-                        rows.append((source_name, "manual_search_link", label, link.url if link else "manual only"))
+                        try:
+                            link = build_manual_link(source_name, title, location, parameters.remote, parameters.days)
+                            rows.append((source_name, "manual_search_link", label, link.url if link else "manual only"))
+                        except Exception as exc:
+                            rows.append(
+                                (
+                                    source_name,
+                                    "manual_search_link",
+                                    label,
+                                    f"Unable to plan: {_safe_error_message(exc, settings)}",
+                                )
+                            )
                         continue
                     if source_name not in SOURCE_REGISTRY:
                         continue
-                    adapter = make_source(source_name, settings, http)
                     try:
+                        adapter = make_source(source_name, settings, http)
                         urls = adapter.dry_run_urls(title, location, parameters.remote, parameters.days, _per_query_limit(parameters))
-                    except (KeyError, TypeError, ValueError):
-                        rows.append((source_name, str(settings.get("type", "api")), label, "Unable to plan from source configuration"))
+                    except Exception as exc:
+                        rows.append(
+                            (
+                                source_name,
+                                str(settings.get("type", "api")),
+                                label,
+                                f"Unable to plan: {_safe_error_message(exc, settings)}",
+                            )
+                        )
                         continue
                     if urls:
                         for url in urls:
@@ -404,7 +436,15 @@ def _print_dry_run(
         console.print(table)
 
 
-def _diagnose_source(source_name: str, settings: object) -> SourceDiagnostic:
+def _diagnose_source(source_name: object, settings: object) -> SourceDiagnostic:
+    if not isinstance(source_name, str):
+        return SourceDiagnostic(
+            name=str(source_name),
+            enabled=False,
+            capability="unavailable",
+            status="misconfigured",
+            guidance="Source names must be strings.",
+        )
     if not isinstance(settings, dict):
         return SourceDiagnostic(
             name=source_name,
@@ -514,7 +554,11 @@ def _select_sources(source_settings: dict[str, dict], requested_sources: list[st
         if unknown:
             raise typer.BadParameter(f"Unknown source(s): {', '.join(unknown)}")
         return _order_sources(source_settings, list(dict.fromkeys(requested_sources)))
-    enabled = [name for name, settings in source_settings.items() if isinstance(settings, dict) and settings.get("enabled") is True]
+    enabled = [
+        name
+        for name, settings in source_settings.items()
+        if isinstance(name, str) and isinstance(settings, dict) and settings.get("enabled") is True
+    ]
     return _order_sources(source_settings, enabled)
 
 
@@ -525,7 +569,7 @@ def _order_sources(source_settings: dict[str, dict], source_names: list[str]) ->
         key=lambda name: (
             _source_type_order(source_settings.get(name)),
             registry_order.get(name, len(registry_order)),
-            name,
+            str(name),
         ),
     )
 
