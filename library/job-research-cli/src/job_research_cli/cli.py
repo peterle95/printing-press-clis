@@ -460,6 +460,8 @@ def _run_search(
                     )
                 except Exception as exc:
                     outcome.retry_outcome = "failed"
+                    if _is_access_control_error(exc):
+                        outcome.stop_reason = "access-control"
                     retry_error = _safe_error_message(exc, source_settings[source_name])
                     outcome.error = "; ".join(filter(None, [outcome.error, retry_error]))
                     errors.append(SourceError(source=source_name, message=f"stealth retry: {retry_error}"))
