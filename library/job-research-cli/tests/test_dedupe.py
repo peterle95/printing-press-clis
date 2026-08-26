@@ -53,3 +53,15 @@ def test_preferred_storage_key_uses_canonical_url_first() -> None:
     posting = job("Frontend Developer", url="https://example.com/jobs/1?utm_campaign=x")
 
     assert preferred_storage_key(posting) == "url:https://example.com/jobs/1"
+
+
+def test_dedupe_merges_provider_provenance() -> None:
+    postings = [
+        job("Frontend Developer", url="https://one.example/jobs/1", source="arbeitnow"),
+        job("Frontend Developer", url="https://two.example/jobs/2", source="greenhouse"),
+    ]
+
+    deduped = dedupe_postings(postings)
+
+    assert len(deduped) == 1
+    assert deduped[0].provenance == ["arbeitnow", "greenhouse"]

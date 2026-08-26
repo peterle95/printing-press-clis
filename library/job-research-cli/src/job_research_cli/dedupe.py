@@ -39,14 +39,17 @@ def preferred_storage_key(posting: JobPosting) -> str:
 
 
 def dedupe_postings(postings: Iterable[JobPosting], limit: int | None = None) -> list[JobPosting]:
-    seen: set[str] = set()
+    seen: dict[str, JobPosting] = {}
     deduped: list[JobPosting] = []
     for posting in postings:
         keys = posting_keys(posting)
-        if any(key in seen for key in keys):
+        existing = next((seen[key] for key in keys if key in seen), None)
+        if existing is not None:
+            existing.provenance = list(dict.fromkeys([*existing.provenance, *posting.provenance, posting.source_website]))
             continue
         deduped.append(posting)
-        seen.update(keys)
+        for key in keys:
+            seen[key] = posting
         if limit is not None and len(deduped) >= limit:
             break
     return deduped

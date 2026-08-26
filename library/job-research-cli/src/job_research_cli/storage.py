@@ -29,6 +29,7 @@ CREATE TABLE IF NOT EXISTS jobs (
   first_seen_at TEXT NOT NULL,
   last_seen_at TEXT NOT NULL,
   raw_payload_json TEXT NOT NULL,
+  provenance_json TEXT NOT NULL DEFAULT '[]',
   dedupe_key TEXT NOT NULL UNIQUE
 );
 
@@ -46,6 +47,9 @@ class JobStore:
     def init_db(self) -> None:
         with self.connect() as conn:
             conn.executescript(SCHEMA)
+            columns = {row["name"] for row in conn.execute("PRAGMA table_info(jobs)")}
+            if "provenance_json" not in columns:
+                conn.execute("ALTER TABLE jobs ADD COLUMN provenance_json TEXT NOT NULL DEFAULT '[]'")
 
     def connect(self) -> sqlite3.Connection:
         conn = sqlite3.connect(self.db_path)
@@ -67,11 +71,11 @@ class JobStore:
                         INSERT INTO jobs (
                           job_id, normalized_title, raw_title, company, location, date_of_posting,
                           source_website, source_type, url, canonical_url, search_term, remote_mode,
-                          first_seen_at, last_seen_at, raw_payload_json, dedupe_key
+                           first_seen_at, last_seen_at, raw_payload_json, provenance_json, dedupe_key
                         ) VALUES (
                           :job_id, :normalized_title, :raw_title, :company, :location, :date_of_posting,
                           :source_website, :source_type, :url, :canonical_url, :search_term, :remote_mode,
-                          :first_seen_at, :last_seen_at, :raw_payload_json, :dedupe_key
+                           :first_seen_at, :last_seen_at, :raw_payload_json, :provenance_json, :dedupe_key
                         )
                         """,
                         payload,
@@ -95,7 +99,8 @@ class JobStore:
                             search_term = :search_term,
                             remote_mode = :remote_mode,
                             last_seen_at = :last_seen_at,
-                            raw_payload_json = :raw_payload_json
+                             raw_payload_json = :raw_payload_json,
+                             provenance_json = :provenance_json
                         WHERE id = :row_id
                         """,
                         payload,
@@ -149,6 +154,7 @@ def _posting_row(posting: JobPosting, key: str, last_seen: str, first_seen: str)
         "first_seen_at": first_seen,
         "last_seen_at": last_seen,
         "raw_payload_json": json.dumps(posting.raw_payload, ensure_ascii=False),
+        "provenance_json": json.dumps(posting.provenance, ensure_ascii=False),
         "dedupe_key": key,
     }
 
@@ -158,6 +164,10 @@ def _row_to_posting(row: sqlite3.Row) -> JobPosting:
         raw_payload = json.loads(row["raw_payload_json"] or "{}")
     except json.JSONDecodeError:
         raw_payload = {}
+    try:
+        provenance = json.loads(row["provenance_json"] or "[]")
+    except (json.JSONDecodeError, IndexError):
+        provenance = []
     return JobPosting(
         job_id=row["job_id"],
         title=row["raw_title"],
@@ -172,6 +182,7 @@ def _row_to_posting(row: sqlite3.Row) -> JobPosting:
         raw_payload=raw_payload,
         normalized_title=row["normalized_title"],
         canonical_url=row["canonical_url"],
+        provenance=provenance if isinstance(provenance, list) else [],
     )
 
 

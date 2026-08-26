@@ -20,3 +20,20 @@ def test_storage_upserts_by_dedupe_key(tmp_path) -> None:
     inserted, updated = store.upsert_postings([posting])
     assert (inserted, updated) == (0, 1)
     assert len(store.latest_postings()) == 1
+
+
+def test_storage_round_trips_provenance(tmp_path) -> None:
+    store = JobStore(tmp_path / "jobs.db")
+    posting = JobPosting(
+        title="Frontend Developer",
+        company="Acme",
+        location="Berlin",
+        source_website="arbeitnow",
+        url="https://example.com/jobs/1",
+        search_term="Frontend Developer",
+        provenance=["arbeitnow", "greenhouse"],
+    )
+
+    store.upsert_postings([posting])
+
+    assert store.latest_postings()[0].provenance == ["arbeitnow", "greenhouse"]

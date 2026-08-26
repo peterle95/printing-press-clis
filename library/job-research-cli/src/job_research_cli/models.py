@@ -28,6 +28,7 @@ class JobPosting(BaseModel):
     raw_payload: dict[str, Any] = Field(default_factory=dict)
     normalized_title: str | None = None
     canonical_url: str | None = None
+    provenance: list[str] = Field(default_factory=list)
 
     @field_validator("date_of_posting", mode="before")
     @classmethod
@@ -49,6 +50,7 @@ class JobPosting(BaseModel):
             self.normalized_title = normalize_job_title(self.title)
         if self.canonical_url is None:
             self.canonical_url = canonicalize_url(self.url)
+        self.provenance = list(dict.fromkeys([*self.provenance, self.source_website]))
         return self
 
     @property

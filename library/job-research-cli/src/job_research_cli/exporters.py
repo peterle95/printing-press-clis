@@ -52,8 +52,8 @@ def to_markdown(report: SearchReport, generated_at: datetime | None = None) -> s
         "",
         "## Structured results",
         "",
-        "| Title | Company | Location | Posted | Website | Remote | Matched search term | Link |",
-        "|---|---|---|---|---|---|---|---|",
+        "| Title | Company | Location | Posted | Website | Provenance | Remote | Matched search term | Link |",
+        "|---|---|---|---|---|---|---|---|---|",
     ]
     for posting in report.structured_results:
         lines.append(
@@ -65,6 +65,7 @@ def to_markdown(report: SearchReport, generated_at: datetime | None = None) -> s
                     _md(posting.location),
                     _md(posting.date_of_posting.isoformat() if posting.date_of_posting else ""),
                     _md(posting.source_website),
+                    _md(", ".join(posting.provenance)),
                     _md(posting.remote_mode),
                     _md(posting.search_term),
                     _md_link(posting.url),
@@ -73,7 +74,7 @@ def to_markdown(report: SearchReport, generated_at: datetime | None = None) -> s
             + " |"
         )
     if not report.structured_results:
-        lines.append("|  |  |  |  |  |  |  |  |")
+        lines.append("|  |  |  |  |  |  |  |  |  |")
 
     lines.extend(
         [
@@ -122,6 +123,7 @@ def to_csv(postings: Iterable[JobPosting], manual_links: Iterable[ManualSearchLi
         "location",
         "date_of_posting",
         "source_website",
+        "provenance",
         "source_type",
         "link",
         "matched_search_term",
@@ -137,6 +139,7 @@ def to_csv(postings: Iterable[JobPosting], manual_links: Iterable[ManualSearchLi
                 "location": posting.location or "",
                 "date_of_posting": posting.date_of_posting.isoformat() if posting.date_of_posting else "",
                 "source_website": posting.source_website,
+                "provenance": ", ".join(posting.provenance),
                 "source_type": posting.source_type,
                 "link": posting.url,
                 "matched_search_term": posting.search_term,
