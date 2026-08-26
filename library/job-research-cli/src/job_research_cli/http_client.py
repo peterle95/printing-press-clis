@@ -60,7 +60,7 @@ class PoliteHttpClient:
             try:
                 LOGGER.debug("GET %s", _redact_url(self.build_url(url, params)))
                 response = self._client.get(url, params=params, headers=headers)
-                if response.status_code in {429, 500, 502, 503, 504}:
+                if response.status_code in {500, 502, 503, 504}:
                     if attempt < self.retries:
                         retry_after = _retry_after_seconds(response.headers.get("Retry-After"))
                         sleep_seconds = retry_after if retry_after is not None else backoff
@@ -128,5 +128,5 @@ def _is_retryable(exc: Exception) -> bool:
     if isinstance(exc, (httpx.TimeoutException, httpx.NetworkError)):
         return True
     if isinstance(exc, httpx.HTTPStatusError):
-        return exc.response.status_code in {429, 500, 502, 503, 504}
+        return exc.response.status_code in {500, 502, 503, 504}
     return False

@@ -6,6 +6,7 @@ import logging
 import os
 from pathlib import Path
 import re
+import sys
 from urllib.parse import urlsplit
 import webbrowser
 
@@ -118,6 +119,7 @@ def search_command(
     config_dir: Path | None = typer.Option(None, "--config-dir", help="Config directory."),
     db: Path | None = typer.Option(None, "--db", help="SQLite database path."),
     status: Path | None = typer.Option(None, "--status", help="Versioned job status JSON path."),
+    allow_stealth_retry: bool = typer.Option(False, "--allow-stealth-retry", help="Authorize one permitted retry for rejected providers."),
 ) -> None:
     """Search enabled safe sources and generate manual search links."""
     _configure_logging(verbose)
@@ -140,7 +142,7 @@ def search_command(
     if source_config_error:
         raise typer.BadParameter(source_config_error)
 
-    report = _run_search(source_settings, selected_sources, parameters)
+    report = _run_search(source_settings, selected_sources, parameters, allow_stealth_retry=allow_stealth_retry)
     store = JobStore(db)
     if report.structured_results:
         inserted, updated = store.upsert_postings(report.structured_results)
@@ -251,12 +253,19 @@ def export_command(
         console.print(text, markup=False, end="")
 
 
-def _run_search(source_settings: dict[str, dict], selected_sources: list[str], parameters: SearchParameters) -> SearchReport:
+def _run_search(
+    source_settings: dict[str, dict],
+    selected_sources: list[str],
+    parameters: SearchParameters,
+    *,
+    allow_stealth_retry: bool = False,
+) -> SearchReport:
     http = PoliteHttpClient()
     structured: list[JobPosting] = []
     manual_links: list[ManualSearchLink] = []
     provider_outcomes: list[ProviderOutcome] = []
     errors: list[SourceError] = []
+    rejected: list[tuple[str, object, list[tuple[str, str]]]] = []
     try:
         for source_name in selected_sources:
             settings = source_settings.get(source_name)
@@ -320,6 +329,8 @@ def _run_search(source_settings: dict[str, dict], selected_sources: list[str], p
             failed_query_count = 0
             result_count = 0
             query_errors: list[str] = []
+            rejected_queries: list[tuple[str, str]] = []
+            provider_rejected = False
             for title in parameters.titles:
                 for location in parameters.locations:
                     query_count += 1
@@ -332,16 +343,59 @@ def _run_search(source_settings: dict[str, dict], selected_sources: list[str], p
                         message = f"{title} / {location}: {_safe_error_message(exc, settings)}"
                         query_errors.append(message)
                         errors.append(SourceError(source=source_name, message=message))
-            provider_outcomes.append(
-                ProviderOutcome(
-                    source=source_name,
-                    status="failed" if failed_query_count else "queried",
-                    query_count=query_count,
-                    failed_query_count=failed_query_count,
-                    result_count=result_count,
-                    error="; ".join(query_errors) if query_errors else None,
-                )
+                        if _is_access_control_error(exc):
+                            rejected_queries.append((title, location))
+                            provider_rejected = True
+                            break
+                    if provider_rejected:
+                        break
+                if provider_rejected:
+                    break
+            outcome = ProviderOutcome(
+                source=source_name,
+                status="failed" if failed_query_count else "queried",
+                query_count=query_count,
+                failed_query_count=failed_query_count,
+                result_count=result_count,
+                error="; ".join(query_errors) if query_errors else None,
+                stop_reason="access-control" if provider_rejected else None,
             )
+            provider_outcomes.append(outcome)
+            if rejected_queries:
+                rejected.append((source_name, adapter, rejected_queries))
+
+        if rejected:
+            console.print(
+                "First pass complete. Rejected providers: " + ", ".join(name for name, _, _ in rejected)
+            )
+            authorized = allow_stealth_retry
+            authorization_source = "--allow-stealth-retry" if authorized else None
+            if not authorized and sys.stdin.isatty():
+                authorized = typer.confirm("Retry rejected providers with permitted public-page fetching?", default=False)
+                authorization_source = "interactive" if authorized else "interactive-declined"
+            for source_name, adapter, queries in rejected:
+                outcome = next(item for item in provider_outcomes if item.source == source_name)
+                outcome.retry_authorized = authorized
+                outcome.retry_authorization_source = authorization_source or "non-interactive"
+                if not authorized:
+                    outcome.retry_outcome = "declined"
+                    continue
+                stealth_search = getattr(adapter, "stealth_search", None)
+                if not callable(stealth_search):
+                    outcome.retry_outcome = "unavailable"
+                    continue
+                try:
+                    for title, location in queries:
+                        results = stealth_search(title, location, parameters.remote, parameters.days, _per_query_limit(parameters))
+                        structured.extend(results)
+                        outcome.result_count += len(results)
+                    outcome.status = "retried"
+                    outcome.retry_outcome = "succeeded"
+                except Exception as exc:
+                    outcome.retry_outcome = "failed"
+                    retry_error = _safe_error_message(exc, source_settings[source_name])
+                    outcome.error = "; ".join(filter(None, [outcome.error, retry_error]))
+                    errors.append(SourceError(source=source_name, message=f"stealth retry: {retry_error}"))
     finally:
         http.close()
 
@@ -680,6 +734,9 @@ def _print_provider_outcomes(outcomes: list[ProviderOutcome]) -> None:
     table.add_column("Queries", justify="right")
     table.add_column("Failed", justify="right")
     table.add_column("Results", justify="right")
+    table.add_column("Retry")
+    table.add_column("Authorization")
+    table.add_column("Stop reason")
     table.add_column("Error")
     for outcome in outcomes:
         table.add_row(
@@ -688,6 +745,9 @@ def _print_provider_outcomes(outcomes: list[ProviderOutcome]) -> None:
             str(outcome.query_count),
             str(outcome.failed_query_count),
             str(outcome.result_count),
+            outcome.retry_outcome or "",
+            outcome.retry_authorization_source or "",
+            outcome.stop_reason or "",
             outcome.error or "",
         )
     console.print(table)
@@ -716,3 +776,8 @@ def _safe_error_message(exc: Exception, settings: object | None = None) -> str:
         r"\1[redacted]",
         message,
     )
+
+
+def _is_access_control_error(exc: Exception) -> bool:
+    message = str(exc).lower()
+    return any(marker in message for marker in ("403", "429", "captcha", "login", "access denied", "forbidden", "denied"))

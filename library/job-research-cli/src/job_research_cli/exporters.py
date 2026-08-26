@@ -96,17 +96,18 @@ def to_markdown(report: SearchReport, generated_at: datetime | None = None) -> s
             "",
             "## Provider outcomes",
             "",
-            "| Source | Status | Queries | Failed queries | Results | Error |",
-            "|---|---|---:|---:|---:|---|",
+            "| Source | Status | Queries | Failed queries | Results | Retry | Authorization | Stop reason | Error |",
+            "|---|---|---:|---:|---:|---|---|---|---|",
         ]
     )
     for outcome in report.provider_outcomes:
         lines.append(
             f"| {_md(outcome.source)} | {_md(outcome.status)} | {outcome.query_count} | "
-            f"{outcome.failed_query_count} | {outcome.result_count} | {_md(outcome.error)} |"
+            f"{outcome.failed_query_count} | {outcome.result_count} | {_md(outcome.retry_outcome)} | "
+            f"{_md(outcome.retry_authorization_source)} | {_md(outcome.stop_reason)} | {_md(outcome.error)} |"
         )
     if not report.provider_outcomes:
-        lines.append("|  |  |  |  |  |  |")
+        lines.append("|  |  |  |  |  |  |  |  |  |")
 
     if report.errors:
         lines.extend(["", "## Source errors", "", "| Source | Error |", "|---|---|"])

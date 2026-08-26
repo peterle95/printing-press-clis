@@ -103,3 +103,84 @@ def test_http_debug_urls_redact_sensitive_query_values() -> None:
     assert "app_id=%5Bredacted%5D" in safe_url
     assert "app_key=%5Bredacted%5D" in safe_url
     assert "token=%5Bredacted%5D" in safe_url
+
+
+def test_rejected_provider_retries_once_when_explicitly_authorized(monkeypatch) -> None:
+    calls: list[tuple[str, str]] = []
+
+    class RejectedSource(FakeSource):
+        def search(self, title, location, remote, days, limit):
+            calls.append((self.name, f"normal:{title}/{location}"))
+            raise RuntimeError("403 forbidden")
+
+        def stealth_search(self, title, location, remote, days, limit):
+            calls.append((self.name, f"retry:{title}/{location}"))
+            return [
+                JobPosting(
+                    title=title,
+                    company="Acme",
+                    location=location,
+                    source_website=self.name,
+                    url="https://example.com/retried/1",
+                    search_term=title,
+                )
+            ]
+
+    class HealthySource(FakeSource):
+        pass
+
+    adapters = {
+        "rejected": RejectedSource("rejected", calls),
+        "healthy": HealthySource("healthy", calls),
+    }
+    settings = {
+        name: {"enabled": True, "type": "api", "base_url": f"https://{name}.example"}
+        for name in adapters
+    }
+    monkeypatch.setattr(cli, "SOURCE_REGISTRY", {"rejected": RejectedSource, "healthy": HealthySource})
+    monkeypatch.setattr(cli, "make_source", lambda name, settings, http: adapters[name])
+    monkeypatch.setattr(cli, "PoliteHttpClient", lambda: type("Http", (), {"close": lambda self: None})())
+
+    report = cli._run_search(
+        settings,
+        ["healthy", "rejected"],
+        SearchParameters(titles=["Frontend Developer"], locations=["Berlin"], limit=10),
+        allow_stealth_retry=True,
+    )
+
+    assert calls == [
+        ("healthy", "Frontend Developer/Berlin"),
+        ("rejected", "normal:Frontend Developer/Berlin"),
+        ("rejected", "retry:Frontend Developer/Berlin"),
+    ]
+    outcomes = {item.source: item for item in report.provider_outcomes}
+    assert outcomes["rejected"].status == "retried"
+    assert outcomes["rejected"].retry_authorization_source == "--allow-stealth-retry"
+    assert outcomes["rejected"].retry_outcome == "succeeded"
+    assert outcomes["healthy"].status == "queried"
+
+
+def test_rejected_provider_stops_remaining_queries_without_authorization(monkeypatch) -> None:
+    calls: list[str] = []
+
+    class RejectedSource(FakeSource):
+        def search(self, title, location, remote, days, limit):
+            calls.append(f"{title}/{location}")
+            raise RuntimeError("captcha challenge")
+
+    adapter = RejectedSource("rejected", [])
+    monkeypatch.setattr(cli, "SOURCE_REGISTRY", {"rejected": RejectedSource})
+    monkeypatch.setattr(cli, "make_source", lambda name, settings, http: adapter)
+    monkeypatch.setattr(cli, "PoliteHttpClient", lambda: type("Http", (), {"close": lambda self: None})())
+
+    report = cli._run_search(
+        {"rejected": {"enabled": True, "type": "api", "base_url": "https://rejected.example"}},
+        ["rejected"],
+        SearchParameters(titles=["One", "Two"], locations=["Berlin", "Munich"], limit=10),
+    )
+
+    assert calls == ["One/Berlin"]
+    outcome = report.provider_outcomes[0]
+    assert outcome.retry_authorization_source == "non-interactive"
+    assert outcome.retry_outcome == "declined"
+    assert outcome.stop_reason == "access-control"

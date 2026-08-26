@@ -9,7 +9,7 @@ from .normalizer import canonicalize_url, normalize_job_title, parse_date_value
 
 SourceType = Literal["api", "manual_search_link"]
 RemoteMode = Literal["remote", "hybrid", "on-site"]
-ProviderOutcomeStatus = Literal["queried", "manual-only", "unavailable", "failed"]
+ProviderOutcomeStatus = Literal["queried", "retried", "manual-only", "unavailable", "failed"]
 
 
 class JobPosting(BaseModel):
@@ -78,6 +78,10 @@ class ProviderOutcome(BaseModel):
     failed_query_count: int = 0
     result_count: int = 0
     error: str | None = None
+    retry_authorized: bool = False
+    retry_authorization_source: str | None = None
+    retry_outcome: str | None = None
+    stop_reason: str | None = None
 
     @property
     def provider(self) -> str:
