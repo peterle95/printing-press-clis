@@ -24,7 +24,7 @@ from .config import (
 from .dedupe import dedupe_postings
 from .exporters import export_report, infer_format
 from .http_client import PoliteHttpClient, _redact_url
-from .models import JobPosting, ManualSearchLink, ProviderOutcome, SearchParameters, SearchReport, SourceError
+from .models import AuditRecord, JobPosting, ManualSearchLink, ProviderOutcome, SearchParameters, SearchReport, SourceError
 from .result_files import load_postings_from_files
 from .sources import SOURCE_REGISTRY, make_source
 from .sources.manual_links import build_manual_link
@@ -264,6 +264,7 @@ def _run_search(
     structured: list[JobPosting] = []
     manual_links: list[ManualSearchLink] = []
     provider_outcomes: list[ProviderOutcome] = []
+    audit_records: list[AuditRecord] = []
     errors: list[SourceError] = []
     rejected: list[tuple[str, object, list[tuple[str, str]]]] = []
     try:
@@ -289,6 +290,7 @@ def _run_search(
                 for title in parameters.titles:
                     for location in parameters.locations:
                         query_count += 1
+                        link = None
                         try:
                             link = build_manual_link(source_name, title, location, parameters.remote, parameters.days)
                             if link:
@@ -299,6 +301,18 @@ def _run_search(
                             message = f"{title} / {location}: {_safe_error_message(exc)}"
                             query_errors.append(message)
                             errors.append(SourceError(source=source_name, message=message))
+                        audit_records.append(
+                            AuditRecord(
+                                event="query_attempt",
+                                provider=source_name,
+                                title=title,
+                                location=location,
+                                attempt="normal",
+                                outcome="succeeded" if link else "no-results",
+                                result_count=1 if link else 0,
+                                error=query_errors[-1] if link is None and query_errors else None,
+                            )
+                        )
                 provider_outcomes.append(
                     ProviderOutcome(
                         source=source_name,
@@ -338,11 +352,34 @@ def _run_search(
                         results = adapter.search(title, location, parameters.remote, parameters.days, per_query_limit)
                         structured.extend(results)
                         result_count += len(results)
+                        audit_records.append(
+                            AuditRecord(
+                                event="query_attempt",
+                                provider=source_name,
+                                title=title,
+                                location=location,
+                                attempt="normal",
+                                outcome="succeeded",
+                                result_count=len(results),
+                            )
+                        )
                     except Exception as exc:
                         failed_query_count += 1
                         message = f"{title} / {location}: {_safe_error_message(exc, settings)}"
                         query_errors.append(message)
                         errors.append(SourceError(source=source_name, message=message))
+                        audit_records.append(
+                            AuditRecord(
+                                event="query_attempt",
+                                provider=source_name,
+                                title=title,
+                                location=location,
+                                attempt="normal",
+                                outcome="failed",
+                                result_count=0,
+                                error=message,
+                            )
+                        )
                         if _is_access_control_error(exc):
                             rejected_queries.append((title, location))
                             provider_rejected = True
@@ -377,25 +414,72 @@ def _run_search(
                 outcome = next(item for item in provider_outcomes if item.source == source_name)
                 outcome.retry_authorized = authorized
                 outcome.retry_authorization_source = authorization_source or "non-interactive"
+                audit_records.append(
+                    AuditRecord(
+                        event="retry_authorization",
+                        provider=source_name,
+                        authorized=authorized,
+                        authorization_source=outcome.retry_authorization_source,
+                    )
+                )
                 if not authorized:
                     outcome.retry_outcome = "declined"
+                    audit_records.append(
+                        AuditRecord(event="retry_outcome", provider=source_name, outcome="declined")
+                    )
                     continue
                 stealth_search = getattr(adapter, "stealth_search", None)
                 if not callable(stealth_search):
                     outcome.retry_outcome = "unavailable"
+                    audit_records.append(
+                        AuditRecord(event="retry_outcome", provider=source_name, outcome="unavailable")
+                    )
                     continue
                 try:
                     for title, location in queries:
                         results = stealth_search(title, location, parameters.remote, parameters.days, _per_query_limit(parameters))
                         structured.extend(results)
                         outcome.result_count += len(results)
+                        audit_records.append(
+                            AuditRecord(
+                                event="query_attempt",
+                                provider=source_name,
+                                title=title,
+                                location=location,
+                                attempt="retry",
+                                outcome="succeeded",
+                                result_count=len(results),
+                            )
+                        )
                     outcome.status = "retried"
                     outcome.retry_outcome = "succeeded"
+                    audit_records.append(
+                        AuditRecord(event="retry_outcome", provider=source_name, outcome="succeeded")
+                    )
                 except Exception as exc:
                     outcome.retry_outcome = "failed"
                     retry_error = _safe_error_message(exc, source_settings[source_name])
                     outcome.error = "; ".join(filter(None, [outcome.error, retry_error]))
                     errors.append(SourceError(source=source_name, message=f"stealth retry: {retry_error}"))
+                    audit_records.append(
+                        AuditRecord(
+                            event="retry_outcome",
+                            provider=source_name,
+                            outcome="failed",
+                            error=retry_error,
+                        )
+                    )
+        for outcome in provider_outcomes:
+            audit_records.append(
+                AuditRecord(
+                    event="final",
+                    provider=outcome.source,
+                    final_status=outcome.status,
+                    result_count=outcome.result_count,
+                    stop_reason=outcome.stop_reason,
+                    error=outcome.error,
+                )
+            )
     finally:
         http.close()
 
@@ -405,6 +489,7 @@ def _run_search(
         structured_results=deduped,
         manual_search_links=manual_links,
         provider_outcomes=provider_outcomes,
+        audit_records=audit_records,
         errors=errors,
     )
 

@@ -78,6 +78,17 @@ def test_sources_are_ordered_and_failures_do_not_stop_queries_or_providers(monke
     assert outcomes["linkedin"].result_count == 4
     assert len(report.manual_search_links) == 4
     assert len(report.errors) == 3
+    assert any(
+        record.event == "query_attempt"
+        and record.provider == "provider_a"
+        and record.attempt == "normal"
+        and record.outcome == "failed"
+        and record.error == "Broken / Berlin: query failed"
+        for record in report.audit_records
+    )
+    final = next(record for record in report.audit_records if record.event == "final" and record.provider == "provider_a")
+    assert final.final_status == "failed"
+    assert final.result_count == 2
 
 
 def test_provider_errors_redact_configured_credentials(monkeypatch) -> None:
@@ -157,6 +168,12 @@ def test_rejected_provider_retries_once_when_explicitly_authorized(monkeypatch) 
     assert outcomes["rejected"].status == "retried"
     assert outcomes["rejected"].retry_authorization_source == "--allow-stealth-retry"
     assert outcomes["rejected"].retry_outcome == "succeeded"
+    authorization = next(record for record in report.audit_records if record.event == "retry_authorization")
+    assert authorization.authorized is True
+    assert authorization.authorization_source == "--allow-stealth-retry"
+    assert any(record.event == "query_attempt" and record.attempt == "retry" for record in report.audit_records)
+    final = next(record for record in report.audit_records if record.event == "final" and record.provider == "rejected")
+    assert final.final_status == "retried"
     assert outcomes["healthy"].status == "queried"
 
 
@@ -184,3 +201,10 @@ def test_rejected_provider_stops_remaining_queries_without_authorization(monkeyp
     assert outcome.retry_authorization_source == "non-interactive"
     assert outcome.retry_outcome == "declined"
     assert outcome.stop_reason == "access-control"
+    assert any(
+        record.event == "retry_authorization"
+        and record.authorization_source == "non-interactive"
+        and record.authorized is False
+        for record in report.audit_records
+    )
+    assert any(record.event == "retry_outcome" and record.outcome == "declined" for record in report.audit_records)

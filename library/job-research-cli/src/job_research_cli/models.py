@@ -88,6 +88,21 @@ class ProviderOutcome(BaseModel):
         return self.source
 
 
+class AuditRecord(BaseModel):
+    event: str
+    provider: str
+    title: str | None = None
+    location: str | None = None
+    attempt: str | None = None
+    authorized: bool | None = None
+    authorization_source: str | None = None
+    outcome: str | None = None
+    result_count: int | None = None
+    final_status: str | None = None
+    stop_reason: str | None = None
+    error: str | None = None
+
+
 class SearchParameters(BaseModel):
     titles: list[str]
     locations: list[str]
@@ -102,6 +117,7 @@ class SearchReport(BaseModel):
     structured_results: list[JobPosting] = Field(default_factory=list)
     manual_search_links: list[ManualSearchLink] = Field(default_factory=list)
     provider_outcomes: list[ProviderOutcome] = Field(default_factory=list)
+    audit_records: list[AuditRecord] = Field(default_factory=list)
     errors: list[SourceError] = Field(default_factory=list)
 
     @property

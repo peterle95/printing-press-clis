@@ -113,6 +113,16 @@ def to_markdown(report: SearchReport, generated_at: datetime | None = None) -> s
         lines.extend(["", "## Source errors", "", "| Source | Error |", "|---|---|"])
         for error in report.errors:
             lines.append(f"| {_md(error.source)} | {_md(error.message)} |")
+    if report.audit_records:
+        lines.extend(["", "## Audit records", "", "| Event | Provider | Query | Attempt | Authorization | Outcome | Results | Final status | Stop reason | Error |", "|---|---|---|---|---|---|---:|---|---|---|"])
+        for record in report.audit_records:
+            query = " / ".join(filter(None, [record.title, record.location]))
+            authorization = record.authorization_source or (str(record.authorized).lower() if record.authorized is not None else "")
+            lines.append(
+                f"| {_md(record.event)} | {_md(record.provider)} | {_md(query)} | {_md(record.attempt)} | "
+                f"{_md(authorization)} | {_md(record.outcome)} | {_md(record.result_count)} | "
+                f"{_md(record.final_status)} | {_md(record.stop_reason)} | {_md(record.error)} |"
+            )
     return "\n".join(lines) + "\n"
 
 
