@@ -438,7 +438,8 @@ def _run_search(
                     )
                     continue
                 try:
-                    for title, location in queries:
+                    max_retry_queries = max(1, int(source_settings[source_name].get("retry_max_queries") or 1))
+                    for title, location in queries[:max_retry_queries]:
                         results = stealth_search(title, location, parameters.remote, parameters.days, _per_query_limit(parameters))
                         structured.extend(results)
                         outcome.result_count += len(results)

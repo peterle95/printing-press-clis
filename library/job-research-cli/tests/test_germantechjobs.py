@@ -69,3 +69,12 @@ def test_public_page_retry_stops_on_access_control_signal() -> None:
         assert "access-control" in str(exc)
     else:
         raise AssertionError("access-control page was parsed")
+
+
+def test_public_page_retry_ignores_malformed_job_links() -> None:
+    source = GermanTechJobsSource({"base_url": "https://germantechjobs.de"}, FakeHttp('<a href="/jobs/ok">Frontend Developer</a><a>broken</a>'))
+
+    results = source.stealth_search("Frontend Developer", "Berlin", False, 7, 10)
+
+    assert len(results) == 1
+    assert results[0].url == "https://germantechjobs.de/jobs/ok"

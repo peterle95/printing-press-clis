@@ -74,7 +74,8 @@ class GermanTechJobsSource(JobSource):
         parser = _PublicJobParser(base_url)
         parser.feed(html)
         results: list[JobPosting] = []
-        for item in parser.jobs[: max(1, min(limit, int(self.settings.get("retry_max_results") or limit)))]:
+        max_results = max(1, min(limit, int(self.settings.get("retry_max_results") or limit)))
+        for item in parser.jobs:
             posting = JobPosting(
                 job_id=item.get("job_id"),
                 title=item.get("title") or "Untitled job",
@@ -86,11 +87,13 @@ class GermanTechJobsSource(JobSource):
                 url=item.get("url") or base_url,
                 search_term=title,
                 remote_mode=remote_mode_from_payload({}, item.get("location"), item.get("description"), item.get("title")),
-                raw_payload={key: value for key, value in item.items() if key != "description"},
+                raw_payload=dict(item),
             )
             if title_matches(posting.title, title) and within_days(posting.date_of_posting, days):
-                if location_matches(posting.location or posting.raw_payload.get("description"), location, posting.remote_mode) and (not remote or posting.remote_mode in {"remote", "hybrid"}):
+                if location_matches(posting.location or item.get("description"), location, posting.remote_mode) and (not remote or posting.remote_mode in {"remote", "hybrid"}):
                     results.append(posting)
+                    if len(results) >= max_results:
+                        break
         return results
 
     def _load_items(self) -> list[dict[str, str]]:
@@ -135,7 +138,9 @@ def _parse_rss_date(value: str | None):
 
 def _has_access_control_signal(html: str) -> bool:
     text = re.sub(r"<[^>]+>", " ", html).lower()
-    return any(marker in text for marker in ("captcha", "access denied", "forbidden", "too many requests", "verify you are human", "log in to continue"))
+    title = re.search(r"<title[^>]*>(.*?)</title>", html, re.IGNORECASE | re.DOTALL)
+    title_text = re.sub(r"<[^>]+>", " ", title.group(1)).lower() if title else ""
+    return any(marker in f"{title_text} {text}" for marker in ("captcha", "access denied", "forbidden", "too many requests", "verify you are human", "log in to continue", "cloudflare", "just a moment", "security check"))
 
 
 class _PublicJobParser(HTMLParser):
@@ -153,8 +158,9 @@ class _PublicJobParser(HTMLParser):
         if tag == "script" and attributes.get("type", "").lower() == "application/ld+json":
             self._json_depth = 1
             self._json_text = []
-        if tag == "a" and attributes.get("href", "").find("/jobs/") >= 0:
-            self._link = urljoin(self.base_url, attributes["href"] or "")
+        href = attributes.get("href") or ""
+        if tag == "a" and "/jobs/" in href:
+            self._link = urljoin(self.base_url, href)
             self._link_text = []
 
     def handle_endtag(self, tag: str) -> None:
