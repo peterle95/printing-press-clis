@@ -182,6 +182,18 @@ Search selected API sources and export CSV:
 jobs search --source bundesagentur,arbeitnow,adzuna --title "React Developer" --format csv --out jobs.csv
 ```
 
+If GermanTechJobs RSS access is rejected, preview first, then explicitly authorize
+one bounded public-page retry:
+
+```bash
+jobs search --source germantechjobs --title "Frontend Developer" --location Berlin --dry-run
+jobs search --source germantechjobs --title "Frontend Developer" --location Berlin --allow-stealth-retry
+```
+
+Optional live smoke test (never required by CI): run the second command with a
+temporary `--db` and `--status` path, confirm provider outcomes and audit records,
+then remove those temporary files. Access-control pages must remain stopped.
+
 Open the latest stored structured job links:
 
 ```bash
