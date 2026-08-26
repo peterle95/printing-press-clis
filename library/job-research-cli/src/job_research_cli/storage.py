@@ -5,11 +5,12 @@ import json
 from pathlib import Path
 import shutil
 import sqlite3
-from typing import Iterable
+from typing import Any, Iterable
 
 from .config import default_db_path
 from .dedupe import dedupe_postings, preferred_storage_key
 from .models import JobPosting
+from .normalizer import canonicalize_url, normalize_company, normalize_job_title, normalize_location
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS jobs (
@@ -37,6 +38,9 @@ CREATE INDEX IF NOT EXISTS idx_jobs_last_seen ON jobs(last_seen_at DESC);
 CREATE INDEX IF NOT EXISTS idx_jobs_source ON jobs(source_website);
 """
 
+STATUS_VERSION = 1
+DEFAULT_STATUS_PATH = Path("job-status.json")
+
 
 class JobStore:
     def __init__(self, db_path: Path | None = None) -> None:
@@ -63,8 +67,19 @@ class JobStore:
         with self.connect() as conn:
             for posting in postings:
                 key = preferred_storage_key(posting)
-                existing = conn.execute("SELECT id, first_seen_at FROM jobs WHERE dedupe_key = ?", (key,)).fetchone()
+                existing = conn.execute(
+                    "SELECT id, first_seen_at, provenance_json FROM jobs WHERE dedupe_key = ?", (key,)
+                ).fetchone()
                 payload = _posting_row(posting, key, now, now if existing is None else existing["first_seen_at"])
+                if existing is not None:
+                    payload["provenance_json"] = json.dumps(
+                        list(
+                            dict.fromkeys(
+                                [*_parse_provenance(existing["provenance_json"]), *posting.provenance]
+                            )
+                        ),
+                        ensure_ascii=False,
+                    )
                 if existing is None:
                     conn.execute(
                         """
@@ -137,6 +152,76 @@ class JobStore:
         shutil.copy2(self.db_path, out)
 
 
+class JobStatusStore:
+    def __init__(self, path: Path | None = None) -> None:
+        self.path = path or DEFAULT_STATUS_PATH
+
+    def record_postings(self, postings: Iterable[JobPosting]) -> None:
+        data = self._load()
+        jobs = {str(job.get("identity")): job for job in data["jobs"] if job.get("identity")}
+        now = _now()
+        for posting in postings:
+            identity = preferred_storage_key(posting)
+            existing = jobs.get(identity)
+            if existing is None:
+                existing = {
+                    "identity": identity,
+                    "title": posting.title,
+                    "company": posting.company,
+                    "location": posting.location,
+                    "source": posting.source_website,
+                    "url": posting.url,
+                    "status": "shown",
+                    "first_seen_at": now,
+                }
+                jobs[identity] = existing
+            else:
+                existing.update(
+                    title=posting.title,
+                    company=posting.company,
+                    location=posting.location,
+                    source=posting.source_website,
+                    url=posting.url,
+                )
+                existing.setdefault("first_seen_at", now)
+            existing["provenance"] = list(dict.fromkeys([*(existing.get("provenance") or []), *posting.provenance]))
+            existing["last_seen_at"] = now
+            existing.setdefault("status", "shown")
+        data["jobs"] = list(jobs.values())
+        self._write(data)
+
+    def mark_applied(self, identity_or_url: str) -> bool:
+        data = self._load()
+        for job in data["jobs"]:
+            if job.get("identity") == identity_or_url or job.get("url") == identity_or_url:
+                job["status"] = "applied"
+                job.setdefault("applied_at", _now())
+                self._write(data)
+                return True
+        return False
+
+    def _load(self) -> dict[str, Any]:
+        if not self.path.exists():
+            return {"version": STATUS_VERSION, "jobs": []}
+        raw = json.loads(self.path.read_text(encoding="utf-8"))
+        if not isinstance(raw, dict) or not isinstance(raw.get("jobs"), list):
+            raise ValueError(f"Invalid job status file: {self.path}")
+        jobs = []
+        for job in raw["jobs"]:
+            if not isinstance(job, dict):
+                continue
+            job = dict(job)
+            job.setdefault("identity", _status_identity(job))
+            jobs.append(job)
+        return {"version": STATUS_VERSION, "jobs": jobs}
+
+    def _write(self, data: dict[str, Any]) -> None:
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        temporary = self.path.with_name(f".{self.path.name}.tmp")
+        temporary.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+        temporary.replace(self.path)
+
+
 def _posting_row(posting: JobPosting, key: str, last_seen: str, first_seen: str) -> dict[str, object]:
     return {
         "job_id": posting.job_id,
@@ -188,3 +273,32 @@ def _row_to_posting(row: sqlite3.Row) -> JobPosting:
 
 def _now() -> str:
     return datetime.now(timezone.utc).replace(microsecond=0).isoformat()
+
+
+def _status_identity(job: dict[str, Any]) -> str:
+    try:
+        canonical = canonicalize_url(job.get("url"))
+    except ValueError:
+        canonical = None
+    if canonical:
+        return f"url:{canonical}"
+    source = str(job.get("source") or job.get("source_website") or "").lower()
+    if job.get("job_id"):
+        return f"source-id:{source}|{job['job_id']}"
+    fallback = "|".join(
+        [
+            normalize_company(job.get("company")),
+            normalize_job_title(job.get("title")),
+            normalize_location(job.get("location")),
+            source,
+        ]
+    )
+    return f"fallback:{fallback}"
+
+
+def _parse_provenance(value: object) -> list[str]:
+    try:
+        parsed = json.loads(value or "[]") if isinstance(value, str) else value
+    except json.JSONDecodeError:
+        return []
+    return [str(item) for item in parsed if str(item).strip()] if isinstance(parsed, list) else []

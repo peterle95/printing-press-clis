@@ -27,7 +27,7 @@ from .models import JobPosting, ManualSearchLink, ProviderOutcome, SearchParamet
 from .result_files import load_postings_from_files
 from .sources import SOURCE_REGISTRY, make_source
 from .sources.manual_links import build_manual_link
-from .storage import JobStore
+from .storage import JobStatusStore, JobStore
 
 app = typer.Typer(help="Safe job research CLI for Berlin/Germany software searches.")
 console = Console()
@@ -117,6 +117,7 @@ def search_command(
     verbose: bool = typer.Option(False, "--verbose", help="Enable debug logs."),
     config_dir: Path | None = typer.Option(None, "--config-dir", help="Config directory."),
     db: Path | None = typer.Option(None, "--db", help="SQLite database path."),
+    status: Path | None = typer.Option(None, "--status", help="Versioned job status JSON path."),
 ) -> None:
     """Search enabled safe sources and generate manual search links."""
     _configure_logging(verbose)
@@ -143,6 +144,7 @@ def search_command(
     store = JobStore(db)
     if report.structured_results:
         inserted, updated = store.upsert_postings(report.structured_results)
+        JobStatusStore(status).record_postings(report.structured_results)
         if verbose:
             console.print(f"Stored {inserted} new and updated {updated} existing rows in {store.db_path}")
 
@@ -160,6 +162,17 @@ def search_command(
         _print_errors(report.errors)
     else:
         console.print(export_report(report, resolved_format), markup=False, end="")
+
+
+@app.command("apply")
+def apply_command(
+    identity_or_url: str = typer.Argument(..., help="Stored job URL or identity."),
+    status: Path | None = typer.Option(None, "--status", help="Versioned job status JSON path."),
+) -> None:
+    """Mark one stored job applied after operator confirmation."""
+    if not JobStatusStore(status).mark_applied(identity_or_url):
+        raise typer.BadParameter("Job not found in status store.")
+    console.print(f"Marked applied: {identity_or_url}")
 
 
 @app.command("open")
