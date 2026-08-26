@@ -67,7 +67,7 @@ class BundesagenturSource(JobSource):
             "aenderungsdatum",
             "publicationDate",
         ) or _period_start(raw.get("veroeffentlichungszeitraum"))
-        url = first_value(raw, "externeUrl", "url")
+        url = first_value(raw, "externeURL", "externeUrl", "url")
         if not url and refnr:
             url = f"https://www.arbeitsagentur.de/jobsuche/jobdetail/{quote(str(refnr), safe='')}"
         return JobPosting(
