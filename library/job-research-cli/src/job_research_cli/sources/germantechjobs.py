@@ -25,7 +25,7 @@ class GermanTechJobsSource(JobSource):
                 continue
             seen.add(identity)
             item_title = item.get("title") or "Untitled job"
-            item_location = item.get("location") or (location if location_matches(item.get("description"), location) else None)
+            item_location = item.get("location")
             remote_mode = remote_mode_from_payload({}, item_location, item.get("description"), item_title)
             posting = JobPosting(
                 job_id=item.get("guid"),
@@ -41,7 +41,8 @@ class GermanTechJobsSource(JobSource):
                 raw_payload={key: value for key, value in item.items() if key != "description"},
             )
             if title_matches(posting.title, title) and within_days(posting.date_of_posting, days):
-                if location_matches(posting.location or posting.title, location, posting.remote_mode) and (not remote or posting.remote_mode in {"remote", "hybrid"}):
+                location_text = posting.location or item.get("description")
+                if location_matches(location_text, location, posting.remote_mode) and (not remote or posting.remote_mode in {"remote", "hybrid"}):
                     results.append(posting)
                     if len(results) >= limit:
                         break

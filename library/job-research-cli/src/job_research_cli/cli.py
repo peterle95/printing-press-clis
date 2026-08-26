@@ -291,6 +291,7 @@ def _run_search(
                     for location in parameters.locations:
                         query_count += 1
                         link = None
+                        query_error = None
                         try:
                             link = build_manual_link(source_name, title, location, parameters.remote, parameters.days)
                             if link:
@@ -300,6 +301,7 @@ def _run_search(
                             failed_query_count += 1
                             message = f"{title} / {location}: {_safe_error_message(exc)}"
                             query_errors.append(message)
+                            query_error = message
                             errors.append(SourceError(source=source_name, message=message))
                         audit_records.append(
                             AuditRecord(
@@ -310,7 +312,7 @@ def _run_search(
                                 attempt="normal",
                                 outcome="succeeded" if link else "no-results",
                                 result_count=1 if link else 0,
-                                error=query_errors[-1] if link is None and query_errors else None,
+                                error=query_error,
                             )
                         )
                 provider_outcomes.append(
