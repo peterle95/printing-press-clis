@@ -1,15 +1,15 @@
 # job-research-cli
 
 `job-research-cli` is a safe Printing Press CLI for job research. It searches
-API-first sources, deduplicates postings, stores structured results in SQLite,
-exports Markdown/CSV/JSON/SQLite, and generates manual search links for
-restricted job boards instead of scraping them.
+API and publicly permitted first-page sources, deduplicates postings, stores
+structured results in SQLite, exports Markdown/CSV/JSON/SQLite, and generates
+a manual LinkedIn search link.
 
 ## Search Workflow
 
-Every search uses all available job CLIs and sources. LinkedIn, XING, Indeed,
-and StepStone are searched by producing direct manual links; protected pages are
-not scraped. The operator reviews links and applies manually.
+Every search uses enabled sources. LinkedIn remains a manual-link source. XING,
+Indeed, StepStone, Glassdoor, Monster, Google Jobs, Kununu, and Wellfound use
+their first public search-results page only when robots.txt permits it.
 
 Results are always presented in a table and recorded in `job-status.json`.
 Recorded jobs use `status: "shown"` until the operator confirms an application,
@@ -22,8 +22,9 @@ Europe.
 
 ## What It Does
 
-- Searches compliant public/API-backed sources through adapters.
-- Generates direct manual search URLs for restricted sites.
+- Searches compliant API and public-page sources through adapters.
+- Uses Scrapling for public first-page results, including available snippets.
+- Generates a direct manual LinkedIn search URL.
 - Deduplicates by canonical URL, then company + normalized title + location,
   then source-specific ID.
 - Stores structured job postings in SQLite.
@@ -34,15 +35,16 @@ Europe.
 
 ## What It Does Not Do
 
-- It does not bypass captchas.
+- It does not bypass captchas or anti-bot challenges.
 - It does not use proxy rotation to evade bans.
 - It does not automate login sessions.
 - It does not scrape logged-in LinkedIn
 - It does not hammer websites.
 
-Restricted boards run in `manual_search_link` mode: the CLI creates URLs that
-you can open manually, but it does not parse those pages. This keeps job
-research useful without risking account or IP bans.
+Public-page sources stop when robots.txt disallows their search URL or cannot
+be fetched. On source failure, an interactive run can authorize one normal
+browser-rendered retry. Browser retries do not log in, solve challenges, or use
+proxies. If needed, install browser binaries with `scrapling install`.
 
 ## Install
 
@@ -114,15 +116,15 @@ API adapters:
 | `remoteok` | disabled | Public JSON endpoint if you choose to enable it. |
 | `greenhouse` | disabled | Public Greenhouse Job Board API for configured board tokens. |
 | `lever` | disabled | Public Lever postings API for configured company slugs. |
-| `xing` | `manual_search_link` |
-| `indeed` | `manual_search_link` |
-| `stepstone` | `manual_search_link` |
-| `glassdoor` | `manual_search_link` |
-| `monster` | `manual_search_link` |
-| `google_jobs` | `manual_search_link` |
-| `kununu` | `manual_search_link` |
-| `wellfound` | disabled `manual_search_link` |
-| `github_jobs` | disabled `manual_search_link`; no current official GitHub Jobs API is configured |
+| `xing` | enabled public-page | First public results page when robots.txt permits. |
+| `indeed` | enabled public-page | First public results page when robots.txt permits. |
+| `stepstone` | enabled public-page | First public results page when robots.txt permits. |
+| `glassdoor` | enabled public-page | First public results page when robots.txt permits. |
+| `monster` | enabled public-page | First public results page when robots.txt permits. |
+| `google_jobs` | enabled public-page | First public Google results page when robots.txt permits. |
+| `kununu` | enabled public-page | First public results page when robots.txt permits. |
+| `wellfound` | enabled public-page | First public results page when robots.txt permits. |
+| `github_jobs` | unavailable | GitHub Jobs was retired; reported without a request. |
 
 Manual/search-link sources:
 
@@ -182,8 +184,8 @@ Search selected API sources and export CSV:
 jobs search --source bundesagentur,arbeitnow,adzuna --title "React Developer" --format csv --out jobs.csv
 ```
 
-If GermanTechJobs RSS access is rejected, preview first, then explicitly authorize
-one bounded public-page retry:
+If a public-page source fails, preview first, then explicitly authorize one
+bounded normal browser-rendered retry:
 
 ```bash
 jobs search --source germantechjobs --title "Frontend Developer" --location Berlin --dry-run
@@ -220,8 +222,8 @@ jobs export --format sqlite --out results/jobs.db
 Terminal table:
 
 ```text
-| # | Title | Company | Location | Posted | Website | Link |
-|---|-------|---------|----------|--------|---------|------|
+| # | Title | Company | Location | Posted | Remote | Source | URL |
+|---|-------|---------|----------|--------|--------|--------|-----|
 ```
 
 Markdown exports include:

@@ -10,6 +10,17 @@ from .bundesagentur import BundesagenturSource
 from .greenhouse import GreenhouseSource
 from .germantechjobs import GermanTechJobsSource
 from .lever import LeverSource
+from .public_pages import (
+    GitHubJobsSource,
+    GlassdoorSource,
+    GoogleJobsSource,
+    IndeedSource,
+    KununuSource,
+    MonsterSource,
+    StepstoneSource,
+    WellfoundSource,
+    XingSource,
+)
 from .remoteok import RemoteOKSource
 from .themuse import TheMuseSource
 
@@ -22,6 +33,15 @@ SOURCE_REGISTRY: dict[str, type[JobSource]] = {
     "greenhouse": GreenhouseSource,
     "lever": LeverSource,
     "germantechjobs": GermanTechJobsSource,
+    "xing": XingSource,
+    "indeed": IndeedSource,
+    "stepstone": StepstoneSource,
+    "glassdoor": GlassdoorSource,
+    "monster": MonsterSource,
+    "google_jobs": GoogleJobsSource,
+    "kununu": KununuSource,
+    "wellfound": WellfoundSource,
+    "github_jobs": GitHubJobsSource,
 }
 
 

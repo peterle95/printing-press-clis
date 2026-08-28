@@ -104,6 +104,15 @@ class PoliteHttpClient:
         except (httpx.TimeoutException, httpx.NetworkError, httpx.HTTPStatusError) as exc:
             raise HttpClientError(f"{source_name}: request failed: {exc}") from exc
 
+    def wait_for_slot(
+        self,
+        source_name: str,
+        *,
+        rate_limit_per_minute: int = 20,
+        cooldown_seconds: float = 0,
+    ) -> None:
+        self._wait_for_slot(source_name, rate_limit_per_minute, cooldown_seconds)
+
     def _wait_for_slot(self, source_name: str, rate_limit_per_minute: int, cooldown_seconds: float) -> None:
         state = self._states.setdefault(source_name, RateState())
         min_interval = 60.0 / max(rate_limit_per_minute, 1)

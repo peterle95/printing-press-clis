@@ -1,4 +1,5 @@
 {
+  "version": 1,
   "jobs": [
     {
       "title": "Senior/Staff Product Engineer (Frontend) (m/f/d)",
@@ -6,7 +7,8 @@
       "location": "Remote",
       "source": "arbeitnow",
       "url": "https://www.arbeitnow.com/jobs/companies/epilot-gmbh/remote-senior-staff-product-engineer-frontend-koln-102759",
-      "status": "shown"
+      "status": "shown",
+      "identity": "url:https://www.arbeitnow.com/jobs/companies/epilot-gmbh/remote-senior-staff-product-engineer-frontend-koln-102759"
     },
     {
       "title": "Senior/Staff Product Engineer (Full Stack) (m/f/d)",
@@ -14,7 +16,8 @@
       "location": "Remote",
       "source": "arbeitnow",
       "url": "https://www.arbeitnow.com/jobs/companies/epilot-gmbh/remote-senior-staff-product-engineer-full-stack-koln-89000",
-      "status": "shown"
+      "status": "shown",
+      "identity": "url:https://www.arbeitnow.com/jobs/companies/epilot-gmbh/remote-senior-staff-product-engineer-full-stack-koln-89000"
     },
     {
       "title": "Web-Administration / Webmaster TYPO3",
@@ -22,7 +25,8 @@
       "location": "Berlin",
       "source": "arbeitnow",
       "url": "https://www.arbeitnow.com/jobs/companies/projektron-gmbh/web-administration-webmaster-typo3-berlin-269948",
-      "status": "shown"
+      "status": "shown",
+      "identity": "url:https://www.arbeitnow.com/jobs/companies/projektron-gmbh/web-administration-webmaster-typo3-berlin-269948"
     },
     {
       "title": "Junior Webentwickler (m/w/d) - Quereinsteiger willkommen",
@@ -30,7 +34,8 @@
       "location": "Dortmund",
       "source": "arbeitnow",
       "url": "https://www.arbeitnow.com/jobs/companies/atz-ag/junior-webentwickler-quereinsteiger-willkommen-dortmund-215250",
-      "status": "shown"
+      "status": "shown",
+      "identity": "url:https://www.arbeitnow.com/jobs/companies/atz-ag/junior-webentwickler-quereinsteiger-willkommen-dortmund-215250"
     },
     {
       "title": "Senior Software Engineer (m/f/d)",
@@ -38,7 +43,8 @@
       "location": "Berlin",
       "source": "arbeitnow",
       "url": "https://www.arbeitnow.com/jobs/companies/flix/senior-software-engineer-berlin-374571",
-      "status": "shown"
+      "status": "shown",
+      "identity": "url:https://www.arbeitnow.com/jobs/companies/flix/senior-software-engineer-berlin-374571"
     },
     {
       "title": "(Senior) Talent Acquisition Manager - Tech",
@@ -46,7 +52,274 @@
       "location": "Remote",
       "source": "arbeitnow",
       "url": "https://www.arbeitnow.co.uk/jobs/companies/career-site-bei-lobster/remote-senior-talent-acquisition-manager-tech-435621",
-      "status": "shown"
+      "status": "shown",
+      "identity": "url:https://www.arbeitnow.co.uk/jobs/companies/career-site-bei-lobster/remote-senior-talent-acquisition-manager-tech-435621"
+    },
+    {
+      "identity": "url:https://www.jobexport.de/job/5226489.html?cid=48879b28-63e5-4e99-a2b9-944efbba588b&exp=81",
+      "title": "Senior Frontend Angular Developer (all genders)",
+      "company": "]init[ AG",
+      "location": "Berlin, BERLIN, DEUTSCHLAND",
+      "source": "bundesagentur",
+      "url": "https://www.jobexport.de/job/5226489.html?exp=81&cid=48879b28-63e5-4e99-a2b9-944efbba588b",
+      "status": "shown",
+      "first_seen_at": "2026-08-26T19:47:47+00:00",
+      "provenance": [
+        "bundesagentur"
+      ],
+      "last_seen_at": "2026-08-28T13:34:35+00:00"
+    },
+    {
+      "identity": "url:https://gute-jobs.de/viewjob-k69zx",
+      "title": "Senior Web Developer BundesMessenger (m/w/d)",
+      "company": "BWI GmbH",
+      "location": "Berlin, BERLIN, DEUTSCHLAND",
+      "source": "bundesagentur",
+      "url": "https://gute-jobs.de/viewjob-k69zx?utm_source=jsba-premium&utm_medium=n-a&utm_campaign=jsba-premium&utm_term=senior-web-developer-bundesmessenger-m-w-d",
+      "status": "shown",
+      "first_seen_at": "2026-08-28T13:25:36+00:00",
+      "provenance": [
+        "bundesagentur"
+      ],
+      "last_seen_at": "2026-08-28T13:25:36+00:00"
+    },
+    {
+      "identity": "url:https://www.arbeitsagentur.de/jobsuche/jobdetail/10001-1003613387-S",
+      "title": "Software Engineer",
+      "company": "JetBrains GmbH",
+      "location": "Berlin, BERLIN, DEUTSCHLAND",
+      "source": "bundesagentur",
+      "url": "https://www.arbeitsagentur.de/jobsuche/jobdetail/10001-1003613387-S",
+      "status": "shown",
+      "first_seen_at": "2026-08-28T13:25:36+00:00",
+      "provenance": [
+        "bundesagentur"
+      ],
+      "last_seen_at": "2026-08-28T13:25:36+00:00"
+    },
+    {
+      "identity": "url:https://www.xing.com/jobs/berlin-interim-frontend-entwickler-gn-157272514",
+      "title": "INTERIM Frontend Entwickler (gn)",
+      "company": null,
+      "location": null,
+      "source": "xing",
+      "url": "https://www.xing.com/jobs/berlin-interim-frontend-entwickler-gn-157272514",
+      "status": "shown",
+      "first_seen_at": "2026-08-28T13:34:35+00:00",
+      "provenance": [
+        "xing"
+      ],
+      "last_seen_at": "2026-08-28T13:34:35+00:00"
+    },
+    {
+      "identity": "url:https://www.xing.com/jobs/berlin-softwareentwickler-frontend-157339744",
+      "title": "Softwareentwickler Frontend",
+      "company": null,
+      "location": null,
+      "source": "xing",
+      "url": "https://www.xing.com/jobs/berlin-softwareentwickler-frontend-157339744",
+      "status": "shown",
+      "first_seen_at": "2026-08-28T13:34:35+00:00",
+      "provenance": [
+        "xing"
+      ],
+      "last_seen_at": "2026-08-28T13:34:35+00:00"
+    },
+    {
+      "identity": "url:https://www.xing.com/jobs/berlin-frontend-entwickler-design-technologist-157301887",
+      "title": "Frontend-Entwickler & Design-Technologist*",
+      "company": null,
+      "location": null,
+      "source": "xing",
+      "url": "https://www.xing.com/jobs/berlin-frontend-entwickler-design-technologist-157301887",
+      "status": "shown",
+      "first_seen_at": "2026-08-28T13:34:35+00:00",
+      "provenance": [
+        "xing"
+      ],
+      "last_seen_at": "2026-08-28T13:34:35+00:00"
+    },
+    {
+      "identity": "url:https://www.xing.com/jobs/berlin-data-and-digital-services-tax-technology-senior-frontend-entwickler-fokus-tax-technology-157131103",
+      "title": "Data and Digital Services, Tax Technology (Senior) Frontend Entwickler - Fokus Tax Technology (m/w/d)",
+      "company": null,
+      "location": null,
+      "source": "xing",
+      "url": "https://www.xing.com/jobs/berlin-data-and-digital-services-tax-technology-senior-frontend-entwickler-fokus-tax-technology-157131103",
+      "status": "shown",
+      "first_seen_at": "2026-08-28T13:34:35+00:00",
+      "provenance": [
+        "xing"
+      ],
+      "last_seen_at": "2026-08-28T13:34:35+00:00"
+    },
+    {
+      "identity": "url:https://www.xing.com/jobs/berlin-senior-frontend-entwickler-gn-157478502",
+      "title": "Senior Frontend Entwickler (gn)",
+      "company": null,
+      "location": null,
+      "source": "xing",
+      "url": "https://www.xing.com/jobs/berlin-senior-frontend-entwickler-gn-157478502",
+      "status": "shown",
+      "first_seen_at": "2026-08-28T13:34:35+00:00",
+      "provenance": [
+        "xing"
+      ],
+      "last_seen_at": "2026-08-28T13:34:35+00:00"
+    },
+    {
+      "identity": "url:https://www.xing.com/jobs/berlin-senior-frontend-entwickler-155788259",
+      "title": "Senior Frontend Entwickler:in (d/m/w)",
+      "company": null,
+      "location": null,
+      "source": "xing",
+      "url": "https://www.xing.com/jobs/berlin-senior-frontend-entwickler-155788259",
+      "status": "shown",
+      "first_seen_at": "2026-08-28T13:34:35+00:00",
+      "provenance": [
+        "xing"
+      ],
+      "last_seen_at": "2026-08-28T13:34:35+00:00"
+    },
+    {
+      "identity": "url:https://www.xing.com/jobs/berlin-senior-frontend-developer-146720052",
+      "title": "Senior Frontend Developer",
+      "company": null,
+      "location": null,
+      "source": "xing",
+      "url": "https://www.xing.com/jobs/berlin-senior-frontend-developer-146720052",
+      "status": "shown",
+      "first_seen_at": "2026-08-28T13:34:35+00:00",
+      "provenance": [
+        "xing"
+      ],
+      "last_seen_at": "2026-08-28T13:34:35+00:00"
+    },
+    {
+      "identity": "url:https://www.xing.com/jobs/berlin-fullstack-frontend-developer-155717354",
+      "title": "Fullstack/Frontend Developer (m/w/d)",
+      "company": null,
+      "location": null,
+      "source": "xing",
+      "url": "https://www.xing.com/jobs/berlin-fullstack-frontend-developer-155717354",
+      "status": "shown",
+      "first_seen_at": "2026-08-28T13:34:35+00:00",
+      "provenance": [
+        "xing"
+      ],
+      "last_seen_at": "2026-08-28T13:34:35+00:00"
+    },
+    {
+      "identity": "url:https://www.xing.com/jobs/berlin-trainee-frontend-development-157180251",
+      "title": "Trainee Frontend Development (m/w/d)",
+      "company": null,
+      "location": null,
+      "source": "xing",
+      "url": "https://www.xing.com/jobs/berlin-trainee-frontend-development-157180251",
+      "status": "shown",
+      "first_seen_at": "2026-08-28T13:34:35+00:00",
+      "provenance": [
+        "xing"
+      ],
+      "last_seen_at": "2026-08-28T13:34:35+00:00"
+    },
+    {
+      "identity": "url:https://www.xing.com/jobs/berlin-trainee-frontend-development-157197833",
+      "title": "Trainee Frontend Development (m/w/d)",
+      "company": null,
+      "location": null,
+      "source": "xing",
+      "url": "https://www.xing.com/jobs/berlin-trainee-frontend-development-157197833",
+      "status": "shown",
+      "first_seen_at": "2026-08-28T13:34:35+00:00",
+      "provenance": [
+        "xing"
+      ],
+      "last_seen_at": "2026-08-28T13:34:35+00:00"
+    },
+    {
+      "identity": "url:https://www.xing.com/jobs/berlin-senior-frontend-entwickler-all-genders-157492807",
+      "title": "Senior Frontend Entwickler (all genders)",
+      "company": null,
+      "location": null,
+      "source": "xing",
+      "url": "https://www.xing.com/jobs/berlin-senior-frontend-entwickler-all-genders-157492807",
+      "status": "shown",
+      "first_seen_at": "2026-08-28T13:34:35+00:00",
+      "provenance": [
+        "xing"
+      ],
+      "last_seen_at": "2026-08-28T13:34:35+00:00"
+    },
+    {
+      "identity": "url:https://www.xing.com/jobs/berlin-midtier-frontend-engineer-154563139",
+      "title": "Midtier Frontend Engineer (f/m/d)",
+      "company": null,
+      "location": null,
+      "source": "xing",
+      "url": "https://www.xing.com/jobs/berlin-midtier-frontend-engineer-154563139",
+      "status": "shown",
+      "first_seen_at": "2026-08-28T13:34:35+00:00",
+      "provenance": [
+        "xing"
+      ],
+      "last_seen_at": "2026-08-28T13:34:35+00:00"
+    },
+    {
+      "identity": "url:https://www.xing.com/jobs/berlin-frontend-engineer-react-typescript-156687634",
+      "title": "Frontend Engineer (React / TypeScript) (m/f/d)",
+      "company": null,
+      "location": null,
+      "source": "xing",
+      "url": "https://www.xing.com/jobs/berlin-frontend-engineer-react-typescript-156687634",
+      "status": "shown",
+      "first_seen_at": "2026-08-28T13:34:35+00:00",
+      "provenance": [
+        "xing"
+      ],
+      "last_seen_at": "2026-08-28T13:34:35+00:00"
+    },
+    {
+      "identity": "url:https://www.xing.com/jobs/berlin-frontend-entwickler-react-typescript-berlin-hybrid-156556601",
+      "title": "Frontend Entwickler React & TypeScript (w/m/d) in Berlin (hybrid)",
+      "company": null,
+      "location": null,
+      "source": "xing",
+      "url": "https://www.xing.com/jobs/berlin-frontend-entwickler-react-typescript-berlin-hybrid-156556601",
+      "status": "shown",
+      "first_seen_at": "2026-08-28T13:34:35+00:00",
+      "provenance": [
+        "xing"
+      ],
+      "last_seen_at": "2026-08-28T13:34:35+00:00"
+    },
+    {
+      "identity": "url:https://www.xing.com/jobs/berlin-senior-frontend-entwickler-angular-typescript-ref-nr-46660-153792898",
+      "title": "Senior Frontend-Entwickler Angular/TypeScript (Ref.Nr.: 46660)",
+      "company": null,
+      "location": null,
+      "source": "xing",
+      "url": "https://www.xing.com/jobs/berlin-senior-frontend-entwickler-angular-typescript-ref-nr-46660-153792898",
+      "status": "shown",
+      "first_seen_at": "2026-08-28T13:34:35+00:00",
+      "provenance": [
+        "xing"
+      ],
+      "last_seen_at": "2026-08-28T13:34:35+00:00"
+    },
+    {
+      "identity": "url:https://www.xing.com/jobs/berlin-senior-frontend-entwickler-react-typescript-100-remote-ki-first-153784213",
+      "title": "Senior Frontend-Entwickler:in React / TypeScript, 100 % Remote, KI-First",
+      "company": null,
+      "location": null,
+      "source": "xing",
+      "url": "https://www.xing.com/jobs/berlin-senior-frontend-entwickler-react-typescript-100-remote-ki-first-153784213",
+      "status": "shown",
+      "first_seen_at": "2026-08-28T13:34:35+00:00",
+      "provenance": [
+        "xing"
+      ],
+      "last_seen_at": "2026-08-28T13:34:35+00:00"
     }
   ]
 }

@@ -20,6 +20,7 @@ class JobPosting(BaseModel):
     company: str | None = None
     location: str | None = None
     date_of_posting: date | None = None
+    description: str | None = None
     source_website: str
     source_type: SourceType = "api"
     url: str

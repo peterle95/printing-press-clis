@@ -67,3 +67,33 @@ def test_csv_export_includes_manual_rows_marked_as_manual_search_link() -> None:
 
     assert "manual_search_link" in csv_text
     assert "React Developer" in csv_text
+
+
+def test_csv_export_neutralizes_formula_cells() -> None:
+    posting = JobPosting(
+        title="=HYPERLINK(\"https://attacker.example\")",
+        description="@SUM(A1:A2)",
+        source_website="indeed",
+        source_type="public_page",
+        url="https://example.com/jobs/1",
+        search_term="Frontend Developer",
+    )
+
+    csv_text = to_csv([posting])
+
+    assert "'=HYPERLINK" in csv_text
+    assert "'@SUM(A1:A2)" in csv_text
+
+
+def test_csv_export_neutralizes_whitespace_prefixed_formula_cells() -> None:
+    posting = JobPosting(
+        title="\t=1+1",
+        source_website="indeed",
+        source_type="public_page",
+        url="https://example.com/jobs/1",
+        search_term="Frontend Developer",
+    )
+
+    csv_text = to_csv([posting])
+
+    assert "'\t=1+1" in csv_text

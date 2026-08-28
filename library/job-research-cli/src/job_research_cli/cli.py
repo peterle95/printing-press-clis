@@ -119,7 +119,7 @@ def search_command(
     config_dir: Path | None = typer.Option(None, "--config-dir", help="Config directory."),
     db: Path | None = typer.Option(None, "--db", help="SQLite database path."),
     status: Path | None = typer.Option(None, "--status", help="Versioned job status JSON path."),
-    allow_stealth_retry: bool = typer.Option(False, "--allow-stealth-retry", help="Authorize one permitted retry for rejected providers."),
+    allow_stealth_retry: bool = typer.Option(False, "--allow-stealth-retry", help="Authorize one normal browser-rendered retry for rejected providers."),
 ) -> None:
     """Search enabled safe sources and generate manual search links."""
     _configure_logging(verbose)
@@ -329,6 +329,12 @@ def _run_search(
 
             try:
                 adapter = make_source(source_name, settings, http)
+                unavailable_reason = getattr(adapter, "unavailable_reason", None)
+                if unavailable_reason:
+                    message = str(unavailable_reason)
+                    errors.append(SourceError(source=source_name, message=message))
+                    provider_outcomes.append(ProviderOutcome(source=source_name, status="unavailable", error=message))
+                    continue
                 if not adapter.is_configured():
                     message = "Source is enabled but missing required API configuration."
                     errors.append(SourceError(source=source_name, message=message))
@@ -347,6 +353,7 @@ def _run_search(
             query_errors: list[str] = []
             rejected_queries: list[tuple[str, str]] = []
             provider_rejected = False
+            provider_stop_reason: str | None = None
             for title in parameters.titles:
                 for location in parameters.locations:
                     query_count += 1
@@ -382,9 +389,14 @@ def _run_search(
                                 error=message,
                             )
                         )
-                        if _is_access_control_error(exc):
+                        if _is_robots_error(exc):
+                            provider_rejected = True
+                            provider_stop_reason = "robots"
+                            break
+                        if _is_access_control_error(exc) or getattr(adapter, "source_type", None) == "public_page":
                             rejected_queries.append((title, location))
                             provider_rejected = True
+                            provider_stop_reason = "access-control" if _is_access_control_error(exc) else "browser-render"
                             break
                     if provider_rejected:
                         break
@@ -397,7 +409,7 @@ def _run_search(
                 failed_query_count=failed_query_count,
                 result_count=result_count,
                 error="; ".join(query_errors) if query_errors else None,
-                stop_reason="access-control" if provider_rejected else None,
+                stop_reason=provider_stop_reason,
             )
             provider_outcomes.append(outcome)
             if rejected_queries:
@@ -405,12 +417,15 @@ def _run_search(
 
         if rejected:
             console.print(
-                "First pass complete. Rejected providers: " + ", ".join(name for name, _, _ in rejected)
+                "First pass complete. Providers eligible for browser retry: " + ", ".join(name for name, _, _ in rejected)
             )
             authorized = allow_stealth_retry
             authorization_source = "--allow-stealth-retry" if authorized else None
             if not authorized and sys.stdin.isatty():
-                authorized = typer.confirm("Retry rejected providers with permitted public-page fetching?", default=False)
+                authorized = typer.confirm(
+                    "Retry rejected providers with a normal browser renderer (no login or challenge bypass)?",
+                    default=False,
+                )
                 authorization_source = "interactive" if authorized else "interactive-declined"
             for source_name, adapter, queries in rejected:
                 outcome = next(item for item in provider_outcomes if item.source == source_name)
@@ -583,9 +598,9 @@ def _print_dry_run(
                         continue
                     if urls:
                         for url in urls:
-                            rows.append((source_name, "api", label, _redact_url(url)))
+                            rows.append((source_name, source_type, label, _redact_url(url)))
                     else:
-                        rows.append((source_name, "api", label, "No configured boards/slugs to query"))
+                        rows.append((source_name, source_type, label, "No configured boards/slugs to query"))
     finally:
         http.close()
     if rows:
@@ -638,6 +653,10 @@ def _diagnose_source(source_name: object, settings: object) -> SourceDiagnostic:
                 unavailable = True
                 issues.append(f"No {capability} adapter is implemented for this source.")
             issues.extend(_source_setup_requirements(source_name, settings))
+            unavailable_reason = getattr(SOURCE_REGISTRY[source_name], "unavailable_reason", None)
+            if unavailable_reason:
+                unavailable = True
+                issues.append(str(unavailable_reason))
     elif source_type == "manual_search_link" and build_manual_link(source_name, "", "", False, 0) is None:
         unavailable = True
         issues.append("No manual search-link builder is available for this source.")
@@ -774,8 +793,9 @@ def _print_structured_table(postings: list[JobPosting]) -> None:
     table.add_column("Company")
     table.add_column("Location")
     table.add_column("Posted")
-    table.add_column("Website")
-    table.add_column("Link")
+    table.add_column("Remote")
+    table.add_column("Source")
+    table.add_column("URL")
     for index, posting in enumerate(postings, start=1):
         table.add_row(
             str(index),
@@ -783,11 +803,12 @@ def _print_structured_table(postings: list[JobPosting]) -> None:
             posting.company or "",
             posting.location or "",
             posting.date_of_posting.isoformat() if posting.date_of_posting else "",
+            posting.remote_mode or "",
             posting.source_website,
             posting.url,
         )
     if not postings:
-        table.add_row("", "No structured results", "", "", "", "", "")
+        table.add_row("", "No structured results", "", "", "", "", "", "")
     console.print(table)
 
 
@@ -871,3 +892,7 @@ def _safe_error_message(exc: Exception, settings: object | None = None) -> str:
 def _is_access_control_error(exc: Exception) -> bool:
     message = str(exc).lower()
     return any(marker in message for marker in ("403", "429", "captcha", "login", "access denied", "forbidden", "denied"))
+
+
+def _is_robots_error(exc: Exception) -> bool:
+    return "robots.txt" in str(exc).lower()

@@ -41,6 +41,24 @@ def test_storage_round_trips_provenance(tmp_path) -> None:
     assert store.latest_postings()[0].provenance == ["arbeitnow", "greenhouse"]
 
 
+def test_storage_round_trips_description(tmp_path) -> None:
+    store = JobStore(tmp_path / "jobs.db")
+    posting = JobPosting(
+        title="Frontend Developer",
+        company="Acme",
+        location="Berlin",
+        description="Build accessible web apps.",
+        source_website="indeed",
+        source_type="public_page",
+        url="https://example.com/jobs/1",
+        search_term="Frontend Developer",
+    )
+
+    store.upsert_postings([posting])
+
+    assert store.latest_postings()[0].description == "Build accessible web apps."
+
+
 def test_status_store_versions_writes_and_preserves_applied(tmp_path) -> None:
     path = tmp_path / "job-status.json"
     store = JobStatusStore(path)

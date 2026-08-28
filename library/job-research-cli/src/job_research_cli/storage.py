@@ -21,6 +21,7 @@ CREATE TABLE IF NOT EXISTS jobs (
   company TEXT,
   location TEXT,
   date_of_posting TEXT,
+  description TEXT,
   source_website TEXT NOT NULL,
   source_type TEXT NOT NULL,
   url TEXT NOT NULL,
@@ -54,6 +55,8 @@ class JobStore:
             columns = {row["name"] for row in conn.execute("PRAGMA table_info(jobs)")}
             if "provenance_json" not in columns:
                 conn.execute("ALTER TABLE jobs ADD COLUMN provenance_json TEXT NOT NULL DEFAULT '[]'")
+            if "description" not in columns:
+                conn.execute("ALTER TABLE jobs ADD COLUMN description TEXT")
 
     def connect(self) -> sqlite3.Connection:
         conn = sqlite3.connect(self.db_path)
@@ -84,11 +87,11 @@ class JobStore:
                     conn.execute(
                         """
                         INSERT INTO jobs (
-                          job_id, normalized_title, raw_title, company, location, date_of_posting,
+                          job_id, normalized_title, raw_title, company, location, date_of_posting, description,
                           source_website, source_type, url, canonical_url, search_term, remote_mode,
                            first_seen_at, last_seen_at, raw_payload_json, provenance_json, dedupe_key
                         ) VALUES (
-                          :job_id, :normalized_title, :raw_title, :company, :location, :date_of_posting,
+                          :job_id, :normalized_title, :raw_title, :company, :location, :date_of_posting, :description,
                           :source_website, :source_type, :url, :canonical_url, :search_term, :remote_mode,
                            :first_seen_at, :last_seen_at, :raw_payload_json, :provenance_json, :dedupe_key
                         )
@@ -105,8 +108,9 @@ class JobStore:
                             normalized_title = :normalized_title,
                             raw_title = :raw_title,
                             company = :company,
-                            location = :location,
-                            date_of_posting = :date_of_posting,
+                             location = :location,
+                             date_of_posting = :date_of_posting,
+                             description = :description,
                             source_website = :source_website,
                             source_type = :source_type,
                             url = :url,
@@ -230,6 +234,7 @@ def _posting_row(posting: JobPosting, key: str, last_seen: str, first_seen: str)
         "company": posting.company,
         "location": posting.location,
         "date_of_posting": posting.date_of_posting.isoformat() if posting.date_of_posting else None,
+        "description": posting.description,
         "source_website": posting.source_website,
         "source_type": posting.source_type,
         "url": posting.url,
@@ -259,6 +264,7 @@ def _row_to_posting(row: sqlite3.Row) -> JobPosting:
         company=row["company"],
         location=row["location"],
         date_of_posting=row["date_of_posting"],
+        description=row["description"] if "description" in row.keys() else None,
         source_website=row["source_website"],
         source_type=row["source_type"],
         url=row["url"],

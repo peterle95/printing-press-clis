@@ -133,6 +133,7 @@ def to_csv(postings: Iterable[JobPosting], manual_links: Iterable[ManualSearchLi
         "company",
         "location",
         "date_of_posting",
+        "description",
         "source_website",
         "provenance",
         "source_type",
@@ -143,12 +144,13 @@ def to_csv(postings: Iterable[JobPosting], manual_links: Iterable[ManualSearchLi
     writer = csv.DictWriter(output, fieldnames=fieldnames)
     writer.writeheader()
     for posting in postings:
-        writer.writerow(
+        writer.writerow(_csv_row(
             {
                 "title": posting.title,
                 "company": posting.company or "",
                 "location": posting.location or "",
                 "date_of_posting": posting.date_of_posting.isoformat() if posting.date_of_posting else "",
+                "description": posting.description or "",
                 "source_website": posting.source_website,
                 "provenance": ", ".join(posting.provenance),
                 "source_type": posting.source_type,
@@ -156,21 +158,22 @@ def to_csv(postings: Iterable[JobPosting], manual_links: Iterable[ManualSearchLi
                 "matched_search_term": posting.search_term,
                 "remote_mode": posting.remote_mode or "",
             }
-        )
+        ))
     for link in manual_links:
-        writer.writerow(
+        writer.writerow(_csv_row(
             {
                 "title": "",
                 "company": "",
                 "location": link.location or "",
                 "date_of_posting": "",
+                "description": "",
                 "source_website": link.website,
                 "source_type": link.source_type,
                 "link": link.url,
                 "matched_search_term": link.search_term,
                 "remote_mode": "",
             }
-        )
+        ))
     return output.getvalue()
 
 
@@ -186,3 +189,12 @@ def _md(value: object) -> str:
 def _md_link(url: str) -> str:
     safe_url = _md(url)
     return f"[open]({safe_url})"
+
+
+def _csv_row(row: dict[str, object]) -> dict[str, str]:
+    return {key: _csv_cell(value) for key, value in row.items()}
+
+
+def _csv_cell(value: object) -> str:
+    text = "" if value is None else str(value)
+    return f"'{text}" if text.lstrip(" \t\r\n").startswith(("=", "+", "-", "@")) else text
