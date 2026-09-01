@@ -319,7 +319,161 @@
       "provenance": [
         "xing"
       ],
-      "last_seen_at": "2026-08-28T13:34:35+00:00"
+      "last_seen_at": "2026-09-01T14:56:28+00:00"
+    },
+    {
+      "identity": "url:https://www.xing.com/jobs/homeoffice-frontend-entwickler-cro-experimentation-remote-157197746",
+      "title": "Frontend Entwickler*in CRO & Experimentation (m/w/d) – Remote",
+      "company": null,
+      "location": null,
+      "source": "xing",
+      "url": "https://www.xing.com/jobs/homeoffice-frontend-entwickler-cro-experimentation-remote-157197746",
+      "status": "shown",
+      "first_seen_at": "2026-09-01T14:51:34+00:00",
+      "provenance": [
+        "xing"
+      ],
+      "last_seen_at": "2026-09-01T14:56:28+00:00"
+    },
+    {
+      "identity": "url:https://www.xing.com/jobs/mannheim-senior-frontend-entwickler-100-remote-153227815",
+      "title": "Senior Frontend Entwickler/in (100% Remote)",
+      "company": null,
+      "location": null,
+      "source": "xing",
+      "url": "https://www.xing.com/jobs/mannheim-senior-frontend-entwickler-100-remote-153227815",
+      "status": "shown",
+      "first_seen_at": "2026-09-01T14:51:34+00:00",
+      "provenance": [
+        "xing"
+      ],
+      "last_seen_at": "2026-09-01T14:56:28+00:00"
+    },
+    {
+      "identity": "url:https://www.xing.com/jobs/hamburg-frontend-developer-vue-js-100-remote-155283573",
+      "title": "Frontend Developer - Vue.JS [m/w/d] - 100% Remote",
+      "company": null,
+      "location": null,
+      "source": "xing",
+      "url": "https://www.xing.com/jobs/hamburg-frontend-developer-vue-js-100-remote-155283573",
+      "status": "shown",
+      "first_seen_at": "2026-09-01T14:51:34+00:00",
+      "provenance": [
+        "xing"
+      ],
+      "last_seen_at": "2026-09-01T14:56:28+00:00"
+    },
+    {
+      "identity": "url:https://germantechjobs.de/jobs/x1F-GmbH-Senior-Software-Developer--Software-Architect-mwd--Java--Integrations-Solutions",
+      "title": "Senior Software Developer / Software Architect (m/w/d) – Java & Integrations Solutions @ x1F GmbH [64.000 - 104.000 €]",
+      "company": null,
+      "location": null,
+      "source": "germantechjobs",
+      "url": "https://germantechjobs.de/jobs/x1F-GmbH-Senior-Software-Developer--Software-Architect-mwd--Java--Integrations-Solutions?utm_source=our_rss_feed&utm_medium=our_rss_feed",
+      "status": "shown",
+      "first_seen_at": "2026-09-01T15:00:05+00:00",
+      "provenance": [
+        "germantechjobs"
+      ],
+      "last_seen_at": "2026-09-01T15:02:28+00:00"
+    },
+    {
+      "identity": "url:https://www.xing.com/jobs/halle-saale-software-developer-sap-remote-de-157452628",
+      "title": "Software Developer SAP - remote DE",
+      "company": null,
+      "location": null,
+      "source": "xing",
+      "url": "https://www.xing.com/jobs/halle-saale-software-developer-sap-remote-de-157452628",
+      "status": "shown",
+      "first_seen_at": "2026-09-01T15:00:05+00:00",
+      "provenance": [
+        "xing"
+      ],
+      "last_seen_at": "2026-09-01T15:00:05+00:00"
+    },
+    {
+      "identity": "url:https://www.xing.com/jobs/halle-saale-software-developer-sap-remote-de-155759112",
+      "title": "Software Developer (m/w/d) SAP - remote DE",
+      "company": null,
+      "location": null,
+      "source": "xing",
+      "url": "https://www.xing.com/jobs/halle-saale-software-developer-sap-remote-de-155759112",
+      "status": "shown",
+      "first_seen_at": "2026-09-01T15:00:05+00:00",
+      "provenance": [
+        "xing"
+      ],
+      "last_seen_at": "2026-09-01T15:00:05+00:00"
+    },
+    {
+      "identity": "url:https://www.xing.com/jobs/landshut-fullstack-software-developer-156686696",
+      "title": "Fullstack Software Developer (m/w/d)",
+      "company": null,
+      "location": null,
+      "source": "xing",
+      "url": "https://www.xing.com/jobs/landshut-fullstack-software-developer-156686696",
+      "status": "shown",
+      "first_seen_at": "2026-09-01T15:02:28+00:00",
+      "provenance": [
+        "xing"
+      ],
+      "last_seen_at": "2026-09-01T15:02:28+00:00"
+    },
+    {
+      "identity": "url:https://www.xing.com/jobs/ulm-lead-software-engineer-developer-mission-system-157236391",
+      "title": "Lead Software Engineer / Developer - Mission System (w/m/d)",
+      "company": null,
+      "location": null,
+      "source": "xing",
+      "url": "https://www.xing.com/jobs/ulm-lead-software-engineer-developer-mission-system-157236391",
+      "status": "shown",
+      "first_seen_at": "2026-09-01T15:02:28+00:00",
+      "provenance": [
+        "xing"
+      ],
+      "last_seen_at": "2026-09-01T15:02:28+00:00"
+    },
+    {
+      "identity": "url:https://www.xing.com/jobs/hamburg-senior-embedded-software-developer-156968349",
+      "title": "Senior Embedded Software Developer",
+      "company": null,
+      "location": null,
+      "source": "xing",
+      "url": "https://www.xing.com/jobs/hamburg-senior-embedded-software-developer-156968349",
+      "status": "shown",
+      "first_seen_at": "2026-09-01T15:02:28+00:00",
+      "provenance": [
+        "xing"
+      ],
+      "last_seen_at": "2026-09-01T15:02:28+00:00"
+    },
+    {
+      "identity": "url:https://www.xing.com/jobs/muenchen-software-developer-157550926",
+      "title": "Software Developer (w/m/d)",
+      "company": null,
+      "location": null,
+      "source": "xing",
+      "url": "https://www.xing.com/jobs/muenchen-software-developer-157550926",
+      "status": "shown",
+      "first_seen_at": "2026-09-01T15:02:28+00:00",
+      "provenance": [
+        "xing"
+      ],
+      "last_seen_at": "2026-09-01T15:02:28+00:00"
+    },
+    {
+      "identity": "url:https://www.xing.com/jobs/hamburg-software-developer-155654810",
+      "title": "Software Developer*in",
+      "company": null,
+      "location": null,
+      "source": "xing",
+      "url": "https://www.xing.com/jobs/hamburg-software-developer-155654810",
+      "status": "shown",
+      "first_seen_at": "2026-09-01T15:02:28+00:00",
+      "provenance": [
+        "xing"
+      ],
+      "last_seen_at": "2026-09-01T15:02:28+00:00"
     }
   ]
 }
