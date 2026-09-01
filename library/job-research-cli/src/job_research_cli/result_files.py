@@ -90,6 +90,7 @@ def _posting_from_mapping(row: dict[str, Any]) -> JobPosting:
         search_term=_pick(row, "matched_search_term", "search_term", "Matched search term") or "",
         remote_mode=_pick(row, "remote_mode", "remote", "Remote") or None,
         raw_payload=dict(row),
+        provenance=_provenance(_pick(row, "provenance", "Provenance")),
     )
 
 
@@ -114,3 +115,11 @@ def _extract_markdown_link(value: str) -> str:
 
 def _normalize_header(value: str) -> str:
     return value.lower().strip().replace(" ", "_")
+
+
+def _provenance(value: Any) -> list[str]:
+    if isinstance(value, list):
+        return [str(item) for item in value if str(item).strip()]
+    if isinstance(value, str):
+        return [item.strip() for item in value.split(",") if item.strip()]
+    return []

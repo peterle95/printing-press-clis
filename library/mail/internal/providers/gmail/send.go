@@ -3,7 +3,6 @@ package gmail
 import (
 	"context"
 	"net/http"
-	"net/url"
 	"strings"
 
 	ppmail "mail-pp-cli/internal/mail"
@@ -41,7 +40,7 @@ func (p *Provider) sendDraft(ctx context.Context, rawID string) (*ppmail.SendRes
 		ID       string `json:"id"`
 		ThreadID string `json:"threadId"`
 	}
-	if err := p.do(ctx, http.MethodPost, "/users/me/drafts/"+url.PathEscape(rawID)+"/send", nil, nil, &result); err != nil {
+	if err := p.do(ctx, http.MethodPost, "/users/me/drafts/send", nil, map[string]string{"id": rawID}, &result); err != nil {
 		return nil, err
 	}
 	return &ppmail.SendResult{

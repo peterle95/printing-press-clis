@@ -85,6 +85,13 @@ DEFAULT_SOURCES_CONFIG: dict[str, Any] = {
             "rate_limit_per_minute": 20,
             "cooldown_seconds": 3,
         },
+        "germantechjobs": {
+            "enabled": True,
+            "type": "rss",
+            "base_url": "https://germantechjobs.de",
+            "rate_limit_per_minute": 20,
+            "cooldown_seconds": 3,
+        },
         "linkedin": {"enabled": True, "type": "manual_search_link"},
     }
 }

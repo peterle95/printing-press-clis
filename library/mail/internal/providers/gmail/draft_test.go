@@ -49,17 +49,15 @@ func TestSendDraftUsesDraftSendEndpointAndMarksDraftDeleted(t *testing.T) {
 	provider := NewProvider(accounts.Account{Name: "gmail-main", Address: "user@example.com"}, "", 0)
 	provider = provider.withScopes(ScopeSend)
 	provider.httpClient = &http.Client{Transport: roundTripFunc(func(req *http.Request) (*http.Response, error) {
-		if req.Method != http.MethodPost || req.URL.Path != "/gmail/v1/users/me/drafts/draft-123/send" {
-			t.Fatalf("request = %s %s, want POST /gmail/v1/users/me/drafts/draft-123/send", req.Method, req.URL.Path)
+		if req.Method != http.MethodPost || req.URL.Path != "/gmail/v1/users/me/drafts/send" {
+			t.Fatalf("request = %s %s, want POST /gmail/v1/users/me/drafts/send", req.Method, req.URL.Path)
 		}
-		if req.Body != nil {
-			body, err := io.ReadAll(req.Body)
-			if err != nil {
-				t.Fatal(err)
-			}
-			if len(body) != 0 {
-				t.Fatalf("request body = %q, want empty", body)
-			}
+		body, err := io.ReadAll(req.Body)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if string(body) != `{"id":"draft-123"}` {
+			t.Fatalf("request body = %q, want {\"id\":\"draft-123\"}", body)
 		}
 		return &http.Response{
 			StatusCode: http.StatusOK,

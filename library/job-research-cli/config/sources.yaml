@@ -37,8 +37,8 @@ sources:
     enabled: false
     type: api
     base_url: "https://remoteok.com/api"
-    rate_limit_per_minute: 10
-    cooldown_seconds: 6
+    rate_limit_per_minute: 20
+    cooldown_seconds: 3
 
   greenhouse:
     enabled: false
@@ -56,42 +56,76 @@ sources:
     rate_limit_per_minute: 20
     cooldown_seconds: 3
 
+  germantechjobs:
+    enabled: true
+    type: rss
+    base_url: "https://germantechjobs.de"
+    rate_limit_per_minute: 20
+    cooldown_seconds: 3
+
   linkedin:
     enabled: true
     type: manual_search_link
 
   xing:
     enabled: true
-    type: manual_search_link
+    type: public_page
+    base_url: "https://www.xing.com"
+    rate_limit_per_minute: 20
+    cooldown_seconds: 3
 
   indeed:
     enabled: true
-    type: manual_search_link
+    type: public_page
+    base_url: "https://de.indeed.com"
+    rate_limit_per_minute: 20
+    cooldown_seconds: 3
 
   stepstone:
     enabled: true
-    type: manual_search_link
+    type: public_page
+    base_url: "https://www.stepstone.de"
+    rate_limit_per_minute: 20
+    cooldown_seconds: 3
 
   glassdoor:
     enabled: true
-    type: manual_search_link
+    type: public_page
+    base_url: "https://www.glassdoor.com"
+    rate_limit_per_minute: 20
+    cooldown_seconds: 3
 
   monster:
     enabled: true
-    type: manual_search_link
+    type: public_page
+    base_url: "https://www.monster.de"
+    rate_limit_per_minute: 10
+    cooldown_seconds: 6
 
   google_jobs:
     enabled: true
-    type: manual_search_link
+    type: public_page
+    base_url: "https://www.google.com"
+    rate_limit_per_minute: 10
+    cooldown_seconds: 6
 
   kununu:
     enabled: true
-    type: manual_search_link
+    type: public_page
+    base_url: "https://www.kununu.com"
+    rate_limit_per_minute: 20
+    cooldown_seconds: 3
 
   wellfound:
-    enabled: false
-    type: manual_search_link
+    enabled: true
+    type: public_page
+    base_url: "https://wellfound.com"
+    rate_limit_per_minute: 20
+    cooldown_seconds: 3
 
   github_jobs:
-    enabled: false
-    type: manual_search_link
+    enabled: true
+    type: public_page
+    base_url: "https://jobs.github.com"
+    rate_limit_per_minute: 20
+    cooldown_seconds: 3

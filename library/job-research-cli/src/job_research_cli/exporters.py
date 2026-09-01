@@ -52,8 +52,8 @@ def to_markdown(report: SearchReport, generated_at: datetime | None = None) -> s
         "",
         "## Structured results",
         "",
-        "| Title | Company | Location | Posted | Website | Remote | Matched search term | Link |",
-        "|---|---|---|---|---|---|---|---|",
+        "| Title | Company | Location | Posted | Website | Provenance | Remote | Matched search term | Link |",
+        "|---|---|---|---|---|---|---|---|---|",
     ]
     for posting in report.structured_results:
         lines.append(
@@ -65,6 +65,7 @@ def to_markdown(report: SearchReport, generated_at: datetime | None = None) -> s
                     _md(posting.location),
                     _md(posting.date_of_posting.isoformat() if posting.date_of_posting else ""),
                     _md(posting.source_website),
+                    _md(", ".join(posting.provenance)),
                     _md(posting.remote_mode),
                     _md(posting.search_term),
                     _md_link(posting.url),
@@ -73,7 +74,7 @@ def to_markdown(report: SearchReport, generated_at: datetime | None = None) -> s
             + " |"
         )
     if not report.structured_results:
-        lines.append("|  |  |  |  |  |  |  |  |")
+        lines.append("|  |  |  |  |  |  |  |  |  |")
 
     lines.extend(
         [
@@ -90,10 +91,38 @@ def to_markdown(report: SearchReport, generated_at: datetime | None = None) -> s
     if not report.manual_search_links:
         lines.append("|  |  |  |")
 
+    lines.extend(
+        [
+            "",
+            "## Provider outcomes",
+            "",
+            "| Source | Status | Queries | Failed queries | Results | Retry | Authorization | Stop reason | Error |",
+            "|---|---|---:|---:|---:|---|---|---|---|",
+        ]
+    )
+    for outcome in report.provider_outcomes:
+        lines.append(
+            f"| {_md(outcome.source)} | {_md(outcome.status)} | {outcome.query_count} | "
+            f"{outcome.failed_query_count} | {outcome.result_count} | {_md(outcome.retry_outcome)} | "
+            f"{_md(outcome.retry_authorization_source)} | {_md(outcome.stop_reason)} | {_md(outcome.error)} |"
+        )
+    if not report.provider_outcomes:
+        lines.append("|  |  |  |  |  |  |  |  |  |")
+
     if report.errors:
         lines.extend(["", "## Source errors", "", "| Source | Error |", "|---|---|"])
         for error in report.errors:
             lines.append(f"| {_md(error.source)} | {_md(error.message)} |")
+    if report.audit_records:
+        lines.extend(["", "## Audit records", "", "| Event | Provider | Query | Attempt | Authorization | Outcome | Results | Final status | Stop reason | Error |", "|---|---|---|---|---|---|---:|---|---|---|"])
+        for record in report.audit_records:
+            query = " / ".join(filter(None, [record.title, record.location]))
+            authorization = record.authorization_source or (str(record.authorized).lower() if record.authorized is not None else "")
+            lines.append(
+                f"| {_md(record.event)} | {_md(record.provider)} | {_md(query)} | {_md(record.attempt)} | "
+                f"{_md(authorization)} | {_md(record.outcome)} | {_md(record.result_count)} | "
+                f"{_md(record.final_status)} | {_md(record.stop_reason)} | {_md(record.error)} |"
+            )
     return "\n".join(lines) + "\n"
 
 
@@ -104,7 +133,9 @@ def to_csv(postings: Iterable[JobPosting], manual_links: Iterable[ManualSearchLi
         "company",
         "location",
         "date_of_posting",
+        "description",
         "source_website",
+        "provenance",
         "source_type",
         "link",
         "matched_search_term",
@@ -113,33 +144,36 @@ def to_csv(postings: Iterable[JobPosting], manual_links: Iterable[ManualSearchLi
     writer = csv.DictWriter(output, fieldnames=fieldnames)
     writer.writeheader()
     for posting in postings:
-        writer.writerow(
+        writer.writerow(_csv_row(
             {
                 "title": posting.title,
                 "company": posting.company or "",
                 "location": posting.location or "",
                 "date_of_posting": posting.date_of_posting.isoformat() if posting.date_of_posting else "",
+                "description": posting.description or "",
                 "source_website": posting.source_website,
+                "provenance": ", ".join(posting.provenance),
                 "source_type": posting.source_type,
                 "link": posting.url,
                 "matched_search_term": posting.search_term,
                 "remote_mode": posting.remote_mode or "",
             }
-        )
+        ))
     for link in manual_links:
-        writer.writerow(
+        writer.writerow(_csv_row(
             {
                 "title": "",
                 "company": "",
                 "location": link.location or "",
                 "date_of_posting": "",
+                "description": "",
                 "source_website": link.website,
                 "source_type": link.source_type,
                 "link": link.url,
                 "matched_search_term": link.search_term,
                 "remote_mode": "",
             }
-        )
+        ))
     return output.getvalue()
 
 
@@ -155,3 +189,12 @@ def _md(value: object) -> str:
 def _md_link(url: str) -> str:
     safe_url = _md(url)
     return f"[open]({safe_url})"
+
+
+def _csv_row(row: dict[str, object]) -> dict[str, str]:
+    return {key: _csv_cell(value) for key, value in row.items()}
+
+
+def _csv_cell(value: object) -> str:
+    text = "" if value is None else str(value)
+    return f"'{text}" if text.lstrip(" \t\r\n").startswith(("=", "+", "-", "@")) else text

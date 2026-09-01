@@ -4,6 +4,7 @@ from dataclasses import dataclass
 import logging
 import time
 from typing import Any
+from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
 import httpx
 
@@ -57,9 +58,9 @@ class PoliteHttpClient:
         last_error: Exception | None = None
         for attempt in range(self.retries + 1):
             try:
-                LOGGER.debug("GET %s", self.build_url(url, params))
+                LOGGER.debug("GET %s", _redact_url(self.build_url(url, params)))
                 response = self._client.get(url, params=params, headers=headers)
-                if response.status_code in {429, 500, 502, 503, 504}:
+                if response.status_code in {500, 502, 503, 504}:
                     if attempt < self.retries:
                         retry_after = _retry_after_seconds(response.headers.get("Retry-After"))
                         sleep_seconds = retry_after if retry_after is not None else backoff
@@ -85,6 +86,33 @@ class PoliteHttpClient:
                 break
         raise HttpClientError(f"{source_name}: request failed: {last_error}") from last_error
 
+    def get_text(
+        self,
+        source_name: str,
+        url: str,
+        *,
+        headers: dict[str, str] | None = None,
+        rate_limit_per_minute: int = 20,
+        cooldown_seconds: float = 0,
+    ) -> str:
+        self._wait_for_slot(source_name, rate_limit_per_minute, cooldown_seconds)
+        try:
+            LOGGER.debug("GET %s", _redact_url(url))
+            response = self._client.get(url, headers=headers)
+            response.raise_for_status()
+            return response.text
+        except (httpx.TimeoutException, httpx.NetworkError, httpx.HTTPStatusError) as exc:
+            raise HttpClientError(f"{source_name}: request failed: {exc}") from exc
+
+    def wait_for_slot(
+        self,
+        source_name: str,
+        *,
+        rate_limit_per_minute: int = 20,
+        cooldown_seconds: float = 0,
+    ) -> None:
+        self._wait_for_slot(source_name, rate_limit_per_minute, cooldown_seconds)
+
     def _wait_for_slot(self, source_name: str, rate_limit_per_minute: int, cooldown_seconds: float) -> None:
         state = self._states.setdefault(source_name, RateState())
         min_interval = 60.0 / max(rate_limit_per_minute, 1)
@@ -104,9 +132,28 @@ def _retry_after_seconds(value: str | None) -> float | None:
         return None
 
 
+def _redact_url(url: str) -> str:
+    parts = urlsplit(url)
+    sensitive = {
+        "app_id",
+        "app_key",
+        "api_key",
+        "client_secret",
+        "password",
+        "secret",
+        "token",
+        "access_token",
+    }
+    query = [
+        (key, "[redacted]" if key.lower().replace("-", "_") in sensitive else value)
+        for key, value in parse_qsl(parts.query, keep_blank_values=True)
+    ]
+    return urlunsplit((parts.scheme, parts.netloc, parts.path, urlencode(query), ""))
+
+
 def _is_retryable(exc: Exception) -> bool:
     if isinstance(exc, (httpx.TimeoutException, httpx.NetworkError)):
         return True
     if isinstance(exc, httpx.HTTPStatusError):
-        return exc.response.status_code in {429, 500, 502, 503, 504}
+        return exc.response.status_code in {500, 502, 503, 504}
     return False
